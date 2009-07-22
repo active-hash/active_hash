@@ -1,27 +1,13 @@
 module ActiveYaml
 
-  class Base < ActiveHash::Base
-    class_inheritable_accessor :filename, :root_path
-
+  class Base < ActiveFile::Base
     class << self
-      def set_filename(name)
-        write_inheritable_attribute :filename, name
+      def load_file
+        YAML.load_file(full_path)
       end
 
-      def set_root_path(path)
-        write_inheritable_attribute :root_path, path
-      end
-
-      def all
-        load
-        super
-      end
-
-      def load
-        root_path = read_inheritable_attribute(:root_path)  || File.dirname(__FILE__)
-        filename  = read_inheritable_attribute(:filename)   || name.tableize
-        yml = YAML.load_file(File.join(root_path, "#{filename}.yml"))
-        self.data = yml
+      def extension
+        "yml"
       end
     end
   end

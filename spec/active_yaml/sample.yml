@@ -2,3 +2,5 @@
   name: US
 - id: 2
   name: Canada
+- id: 3
+  name: Mexico
