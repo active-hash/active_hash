@@ -9,7 +9,7 @@ describe ActiveHash::Base do
 
   describe ".fields" do
     before do
-      Country.send :fields, :name, :iso_name
+      Country.fields :name, :iso_name
     end
 
     it "defines a reader for each field" do
@@ -20,6 +20,16 @@ describe ActiveHash::Base do
     it "defines interrogator methods for each field" do
       Country.new.should respond_to(:name?)
       Country.new.should respond_to(:iso_name?)
+    end
+
+    it "defines single finder methods for each field" do
+      Country.should respond_to(:find_by_name)
+      Country.should respond_to(:find_by_iso_name)
+    end
+
+    it "defines array finder methods for each field" do
+      Country.should respond_to(:find_all_by_name)
+      Country.should respond_to(:find_all_by_iso_name)
     end
   end
 
@@ -46,7 +56,7 @@ describe ActiveHash::Base do
 
   describe ".all" do
     before do
-      Country.send :field, :name
+      Country.field :name
       Country.data = [
         {:id => 1, :name => "US"},
         {:id => 2, :name => "Canada"}
@@ -86,6 +96,32 @@ describe ActiveHash::Base do
 
     it "returns the number of elements in the array" do
       Country.count.should == 2
+    end
+  end
+
+  describe ".first" do
+    before do
+      Country.data = [
+        {:id => 1, :name => "US"},
+        {:id => 2, :name => "Canada"}
+      ]
+    end
+
+    it "returns the first object" do
+      Country.first.should == Country.new(:id => 1)
+    end
+  end
+
+  describe ".last" do
+    before do
+      Country.data = [
+        {:id => 1, :name => "US"},
+        {:id => 2, :name => "Canada"}
+      ]
+    end
+
+    it "returns the last object" do
+      Country.last.should == Country.new(:id => 2)
     end
   end
 
@@ -162,6 +198,54 @@ describe ActiveHash::Base do
     end
   end
 
+  describe "custom finders" do
+    before do
+      Country.field :name
+      Country.data = [
+        {:id => 1, :name => "US"},
+        {:id => 2, :name => "US"},
+        {:id => 3, :name => "Canada"}
+      ]
+    end
+
+    describe "find_by_<field_name>" do
+      context "with a name" do
+        it "returns the first record matching that name" do
+          Country.find_by_name("US").id.should == 1
+        end
+      end
+
+      context "with nil" do
+        it "returns nil" do
+          Country.find_by_name(nil).should be_nil
+        end
+      end
+
+      context "with a name not present" do
+        it "returns nil" do
+          Country.find_by_name("foo").should be_nil
+        end
+      end
+    end
+
+    describe "find_all_by_<field_name>" do
+      context "with a name" do
+        it "returns the records matching that name" do
+          countries = Country.find_all_by_name("US")
+          countries.length.should == 2
+          countries.first.name.should == "US"
+          countries.last.name.should == "US"
+        end
+      end
+
+      context "with a name not present" do
+        it "returns an empty array" do
+          Country.find_all_by_name("foo").should be_empty
+        end
+      end
+    end
+  end
+
 
   describe "#attributes" do
     it "returns the hash passed in the initializer" do
@@ -178,7 +262,7 @@ describe ActiveHash::Base do
   describe "reader methods" do
     context "for regular fields" do
       before do
-        Country.send :fields, :name, :iso_name
+        Country.fields :name, :iso_name
       end
 
       it "returns the given attribute when present" do
@@ -194,7 +278,7 @@ describe ActiveHash::Base do
 
     context "for fields with default values" do
       before do
-        Country.send :field, :name, :default => "foobar"
+        Country.field :name, :default => "foobar"
       end
 
       it "returns the given attribute when present" do
@@ -211,7 +295,7 @@ describe ActiveHash::Base do
 
   describe "interrogator methods" do
     before do
-      Country.send :fields, :name, :iso_name
+      Country.fields :name, :iso_name
     end
 
     it "returns true if the given attribute is non-blank" do

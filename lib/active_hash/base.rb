@@ -1,18 +1,7 @@
 module ActiveHash
   class Base
     class_inheritable_accessor :data
-    #class_inheritable_accessor :filename
-    #
     class << self
-
-      #  def set_filename(name)
-      #    self.filename = name
-      #  end
-      #
-      #  def data_source=(yaml)
-      #    @enumerated_values = nil
-      #    @yaml = yaml
-      #  end
 
       def data=(array_of_hashes)
         @records = nil
@@ -38,17 +27,11 @@ module ActiveHash
         end
       end
 
-      #  def find_by_name(name)
-      #    all.detect {|record| record.name == name}
-      #  end
+      def find_by_id(id)
+        all.detect {|record| record.id == id.to_i}
+      end
 
-        def find_by_id(id)
-          all.detect {|record| record.id == id.to_i}
-        end
-
-      #  delegate :first, :last, :to => :all
-      #
-      protected
+      delegate :first, :last, :to => :all
 
       def fields(*args)
         options = args.extract_options!
@@ -58,28 +41,57 @@ module ActiveHash
       end
 
       def field(field_name, options = {})
-        define_getter(field_name, options[:default])
-        define_interrogator(field_name)
+        define_getter_method(field_name, options[:default])
+        define_interrogator_method(field_name)
+        define_custom_find_method(field_name)
+        define_custom_find_all_method(field_name)
       end
 
-      private
-
-      def define_getter(field, default_value)
+      def define_getter_method(field, default_value)
         define_method field do
           attributes[field] || default_value
         end
       end
 
-      def define_interrogator(field)
+      private :define_getter_method
+
+      def define_interrogator_method(field)
         define_method "#{field}?" do
           attributes[field].present?
         end
       end
 
-      #  def data_source
-      #    file_to_load = filename || File.join(RAILS_ROOT, "config/activeyaml/#{name.tableize}.yml")
-      #    @yaml ||= YAML.load_file(file_to_load)
-      #  end
+      private :define_interrogator_method
+
+      def define_custom_find_method(field_name)
+        meta_class.instance_eval do
+          define_method "find_by_#{field_name}" do |name|
+            all.detect {|record| record.send(field_name) == name }
+          end
+        end
+      end
+
+      private :define_custom_find_method
+
+      def define_custom_find_all_method(field_name)
+        meta_class.instance_eval do
+          define_method "find_all_by_#{field_name}" do |name|
+            all.select {|record| record.send(field_name) == name }
+          end
+        end
+      end
+
+      private :define_custom_find_all_method
+
+
+      def meta_class
+        class << self
+          self
+        end
+      end
+
+      private :meta_class
+
     end
 
     attr_reader :attributes
