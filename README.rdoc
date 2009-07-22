@@ -1,0 +1,7 @@
+= active_hash
+
+Description goes here.
+
+== Copyright
+
+Copyright (c) 2009 Jeff Dean. See LICENSE for details.
