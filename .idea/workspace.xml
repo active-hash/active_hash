@@ -2,16 +2,7 @@
 <project relativePaths="false" version="4">
   <component name="ChangeListManager">
     <list default="true" readonly="true" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/active_yaml/base.rb" afterPath="$PROJECT_DIR$/lib/active_yaml/base.rb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/active_file/base.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spec/active_yaml/base_spec.rb" afterPath="$PROJECT_DIR$/spec/active_yaml/base_spec.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spec/active_yaml/sample.yml" afterPath="$PROJECT_DIR$/spec/active_yaml/sample.yml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/spec/active_hash_spec.rb" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/active_hash/base.rb" afterPath="$PROJECT_DIR$/lib/active_hash/base.rb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/spec/active_file/base_spec.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/active_hash.rb" afterPath="$PROJECT_DIR$/lib/active_hash.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spec/active_hash/base_spec.rb" afterPath="$PROJECT_DIR$/spec/active_hash/base_spec.rb" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/README.rdoc" afterPath="$PROJECT_DIR$/README.md" />
     </list>
     <ignored path="active_hash.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,10 +20,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="README.rdoc" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/README.rdoc">
+      <file leaf-file-name="README.md" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+            <state line="157" column="10" selection-start="5807" selection-end="5807" vertical-scroll-proportion="2.060215">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="base_spec.rb" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/spec/active_file/base_spec.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="100" column="40" selection-start="2232" selection-end="2462" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -388,51 +388,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/spec/active_hash/base_spec.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="0" selection-start="0" selection-end="122" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///opt/local/lib/ruby/gems/1.8/gems/activesupport-2.3.2/lib/active_support/core_ext/class/inheritable_attributes.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state line="111" column="32" selection-start="4869" selection-end="4895" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/active_hash/base.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="0" selection-start="87" selection-end="87" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/spec/active_yaml/base_spec.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="6" selection-start="180" selection-end="180" vertical-scroll-proportion="0.25591397">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/spec/active_file/base_spec.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="6" selection-start="105" selection-end="105" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/active_yaml/base.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="0" selection-start="89" selection-end="89" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/active_file/base.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="29" selection-start="436" selection-end="436" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -451,9 +409,58 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.rdoc">
+    <entry file="file://$PROJECT_DIR$/lib/active_yaml/base.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="0" selection-start="89" selection-end="89" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/active_file/base.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="29" selection-start="436" selection-end="436" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LICENSE">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/spec/active_hash/base_spec.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="43" column="59" selection-start="1026" selection-end="1071" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/active_hash/base.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="84" column="0" selection-start="2095" selection-end="2095" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/spec/active_yaml/base_spec.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="0" selection-start="124" selection-end="279" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/spec/active_file/base_spec.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="100" column="40" selection-start="2232" selection-end="2462" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="157" column="10" selection-start="5807" selection-end="5807" vertical-scroll-proportion="2.060215">
           <folding />
         </state>
       </provider>

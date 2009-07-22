@@ -98,7 +98,7 @@ describe ActiveFile::Base do
     end
 
     it "does not re-fetch the data if the file's mtime has not changed" do
-      class SomeSampleClass < ActiveYaml::Base
+      class SomeSampleClass < ActiveFile::Base
         class << self
           def extension
             "myfile"
@@ -117,7 +117,7 @@ describe ActiveFile::Base do
     end
 
     it "does re-fetch the data if the yaml file's mtime has changed" do
-      class SomeSampleClass2 < ActiveYaml::Base
+      class SomeSampleClass2 < ActiveFile::Base
         class << self
           def extension
             "myfile"

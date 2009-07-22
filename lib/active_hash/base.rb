@@ -83,7 +83,6 @@ module ActiveHash
 
       private :define_custom_find_all_method
 
-
       def meta_class
         class << self
           self
