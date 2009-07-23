@@ -28,12 +28,15 @@ To use ActiveHash, you need to:
 A quick example would be:
 
     class Country < ActiveHash::Base
-      field :name
       self.data = [
         {:id => 1, :name => "US"},
         {:id => 2, :name => "Canada"}
       ]
     end
+
+    country = Country.new(:name => "Mexico")
+    country.name  # => "Mexico"
+    country.name? # => true
 
 ## Auto-Defined fields
 
