@@ -9,7 +9,12 @@ module ActiveHash
       end
 
       def all
-        @records ||= read_inheritable_attribute(:data).collect {|hash| new(hash)}
+        unless @records
+          records = read_inheritable_attribute(:data)
+          @records = records.collect {|hash| new(hash)}
+          auto_assign_fields( records )
+        end
+        @records
       end
 
       def count
@@ -95,6 +100,22 @@ module ActiveHash
       end
 
       private :define_custom_find_all_method
+
+      def auto_assign_fields(array_of_hashes)
+        array_of_hashes.inject([]) do |array, row|
+          row.symbolize_keys!
+          row.keys.each do |key|
+            unless key.to_s == "id"
+              array << key
+            end
+          end
+          array
+        end.uniq.each do |key|
+          field key
+        end
+      end
+
+      private :auto_assign_fields
 
     end
 

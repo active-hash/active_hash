@@ -1,1 +1,5 @@
-2
+2009-07-23
+  - Added support for auto-defining methods based on hash keys in ActiveYaml::Base
+  - Changed the :field and :fields API so that they don't overwrite existing methods (useful when ActiveYaml auto-defines methods)
+  - Fixed a bug where ActiveFile incorrectly set the root_path to be the path in the gem directory, not the current working directory
+  

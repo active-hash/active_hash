@@ -415,4 +415,55 @@ describe ActiveHash, "Base" do
     end
   end
 
+  describe "auto-discovery of fields" do
+    it "dynamically creates fields for all keys in the hash" do
+      Country.data = [
+        {:field1 => "foo"},
+        {:field2 => "bar"},
+        {:field3 => "biz"}
+      ]
+
+      Country.all
+
+      [:field1, :field2, :field3].each do |field|
+        Country.should respond_to("find_by_#{field}")
+        Country.should respond_to("find_all_by_#{field}")
+        Country.new.should respond_to(field)
+        Country.new.should respond_to("#{field}?")
+      end
+    end
+
+    it "doesn't override methods already defined" do
+      Country.class_eval do
+        class << self
+          def find_by_name(name)
+            "find_by_name defined manually"
+          end
+
+          def find_all_by_name(name)
+            "find_all_by_name defined manually"
+          end
+        end
+
+        def name
+          "name defined manually"
+        end
+
+        def name?
+          "name? defined manually"
+        end
+      end
+
+      Country.data = [
+        {:name => "foo"}
+      ]
+
+      Country.all
+      Country.find_by_name("foo").should == "find_by_name defined manually"
+      Country.find_all_by_name("foo").should == "find_all_by_name defined manually"
+      Country.new.name.should == "name defined manually"
+      Country.new.name?.should == "name? defined manually"
+    end
+  end
+
 end
