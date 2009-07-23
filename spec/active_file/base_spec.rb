@@ -70,6 +70,16 @@ describe ActiveFile::Base do
     end
   end
 
+  describe ".full_path" do
+    it "defaults to the directory of the calling file" do
+      class FileShouldBeHere < ActiveFile::Base
+        def self.extension() "foo" end
+      end
+
+      FileShouldBeHere.full_path.should == "#{Dir.pwd}/file_should_be_heres.foo"
+    end
+  end
+
   describe ".all" do
     before do
       class MyClass

@@ -33,8 +33,6 @@ module ActiveFile
         raise "Override Me"
       end
 
-      protected :load_file
-
       def extension
         raise "Override Me"
       end
@@ -42,12 +40,10 @@ module ActiveFile
       protected :extension
 
       def full_path
-        root_path = read_inheritable_attribute(:root_path)  || File.dirname(__FILE__)
+        root_path = read_inheritable_attribute(:root_path)  || Dir.pwd
         filename  = read_inheritable_attribute(:filename)   || name.tableize
         File.join(root_path, "#{filename}.#{extension}")
       end
-
-      private :full_path
 
       def should_reload?
         if (mtime = File.mtime(full_path)) == read_inheritable_attribute(:cached_mtime)
