@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{active_hash}
-  s.version = "0.1.0"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jeff Dean", "Mike Dalessio"]
-  s.date = %q{2009-07-22}
+  s.date = %q{2009-07-23}
   s.email = %q{jeff@zilkey.com}
   s.extra_rdoc_files = [
     "LICENSE",
@@ -15,10 +15,12 @@ Gem::Specification.new do |s|
   s.files = [
     ".document",
      ".gitignore",
+     "CHANGELOG",
      "LICENSE",
      "README.md",
      "Rakefile",
      "VERSION",
+     "active_hash.gemspec",
      "lib/active_file/base.rb",
      "lib/active_hash.rb",
      "lib/active_hash/base.rb",
