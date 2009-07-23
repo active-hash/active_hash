@@ -13,29 +13,6 @@ ActiveHash also ships with:
   * ActiveFile: a base class that will reload data from a flat file every time the flat file is changed
   * ActiveYaml: a base class that will turn YAML into a hash and load the data into an ActiveHash object
 
-### Auto discover of fields
-
-ActiveYaml can auto-discover fields for you.  For example, if you have the following yaml:
-
-    # custom_fields.yml
-    - id: 1
-      custom_field_1: value1
-    - id: 2
-      custom_field_2: value2
-    - id: 3
-      custom_field_3: value3
-
-And the following class:
-
-    class CustomField < ActiveYaml::Base
-    end
-
-Once you call CustomField.load_file, you will have fields, as if you declared this:
-
-    class CustomField < ActiveYaml::Base
-      fields :custom_field_1, :custom_field_2, :custom_field_3
-    end
-
 ## Installation
 
     sudo gem install zilkey-active_hash
@@ -45,8 +22,8 @@ Once you call CustomField.load_file, you will have fields, as if you declared th
 To use ActiveHash, you need to:
 
  * Inherit from ActiveHash::Base
- * Define your fields
  * Define your data
+ * (optionally) Define your fields and/or default values
 
 A quick example would be:
 
@@ -58,12 +35,33 @@ A quick example would be:
       ]
     end
 
-## Defining Fields
+## Auto-Defined fields
 
-You can define fields in 2 ways, using the :fields method, or using the :field method, which allows you to specify a default value for the field:
+ActiveHash will auto-define all fields for you when you load the hash.  For example, if you have the following class:
+
+    class CustomField < ActiveYaml::Base
+      self.data = [
+        {:custom_field_1 => "foo"},
+        {:custom_field_2 => "foo"},
+        {:custom_field_3 => "foo"}
+      ]
+    end
+
+Once you call CustomField.all it will define methods for :custom_field_1, :custom_field_2 etc...
+
+If you need the fields at load time, as opposed to after .all is called, you can also define them manually, like so:
+
+    class CustomField < ActiveYaml::Base
+      fields :custom_field_1, :custom_field_2, :custom_field_3
+    end
+
+NOTE: auto-defined fields will _not_ override fields you've defined, either on the class or on the instance.
+
+## Defining Fields with default values
+
+If some of your hash values contain nil, and you want to provide a default, you can specify defaults with the :field method:
 
     class Country < ActiveHash::Base
-      fields  :name, :population
       field   :is_axis_of_evil, :default => false
     end
 
@@ -73,7 +71,6 @@ You can define data inside your class or outside.  For example, you might have a
 
     # app/models/country.rb
     class Country < ActiveHash::Base
-      fields  :name, :population
     end
 
     # config/initializers/data.rb
@@ -125,7 +122,6 @@ ActiveHash also gives you methods related to the fields you defined.  For exampl
 You can create .belongs_to associations from rails objects, like so:
 
     class Country < ActiveHash::Base
-      fields  :name, :population
     end
 
     class Person < ActiveRecord::Base
@@ -141,7 +137,6 @@ You can also use standard rails view helpers, like #collection_select:
 If you want to store your data in YAML files, just inherit from ActiveYaml and specify your path information:
 
     class Country < ActiveYaml::Base
-      field :name
     end
 
 By default, this class will look for a yml file named "countries.yml" in the same directory as the file.  You can either change the directory it looks in, the filename it looks for, or both:
@@ -149,12 +144,13 @@ By default, this class will look for a yml file named "countries.yml" in the sam
     class Country < ActiveYaml::Base
       set_root_path "/u/data"
       set_filename "sample"
-      field :name
     end
 
 The above example will look for the file "/u/data/sample.yml".
 
 ActiveYaml, as well as ActiveFile, check the mtime of the file you specified, and reloads the data if the mtime has changed.  So you can replace the data in the files even if your app is running in production mode in rails.
+
+Since ActiveYaml just creates a hash from the YAML file, you will have all fields specified in YAML auto-defined for you once you call all.
 
 ## ActiveFile
 
@@ -163,7 +159,6 @@ If you store encrypted data, or you'd like to store your flat files as CSV or XM
     class Country < ActiveFile::Base
       set_root_path "/u/data"
       set_filename "sample"
-      field :name
 
       class << self
         def extension
@@ -176,7 +171,9 @@ If you store encrypted data, or you'd like to store your flat files as CSV or XM
       end
     end
 
-The two methods you need to implement are load_file, which needs to return a hash, and .extension, which returns the file extension you are using.  You have full_path available to you if you wish, or you can provide your own path.
+The two methods you need to implement are load_file, which needs to return an array of hashes, and .extension, which returns the file extension you are using.  You have full_path available to you if you wish, or you can provide your own path.
+
+NOTE:  By default, .full_path refers to the current working directory.  In a rails app, this will be RAILS_ROOT.
 
 ## Authors
 
