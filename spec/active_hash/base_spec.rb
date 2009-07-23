@@ -1,10 +1,14 @@
 require 'spec/spec_helper'
 
-describe ActiveHash::Base do
+describe ActiveHash, "Base" do
 
   before do
     class Country < ActiveHash::Base
     end
+  end
+
+  after do
+    Object.send :remove_const, :Country
   end
 
   describe ".fields" do

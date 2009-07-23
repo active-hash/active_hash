@@ -33,6 +33,37 @@ describe ActiveYaml::Base do
         AutoDiscoverer.new.should respond_to("#{field}?")
       end
     end
+
+    it "doesn't override methods already defined" do
+      class AlreadyDefined < ActiveYaml::Base
+        set_root_path File.dirname(__FILE__)
+        set_filename "sample"
+
+        class << self
+          def find_by_name(name)
+            "find_by_name defined manually"
+          end
+
+          def find_all_by_name(name)
+            "find_all_by_name defined manually"
+          end
+        end
+
+        def name
+          "name defined manually"
+        end
+
+        def name?
+          "name? defined manually"
+        end
+      end
+
+      AlreadyDefined.all
+      AlreadyDefined.find_by_name("foo").should == "find_by_name defined manually"
+      AlreadyDefined.find_all_by_name("foo").should == "find_all_by_name defined manually"
+      AlreadyDefined.new.name.should == "name defined manually"
+      AlreadyDefined.new.name?.should == "name? defined manually"
+    end
   end
 
 end

@@ -48,25 +48,33 @@ module ActiveHash
       end
 
       def define_getter_method(field, default_value)
-        define_method field do
-          attributes[field] || default_value
+        unless instance_methods.include?(field.to_s)
+          define_method(field) do
+            attributes[field] || default_value
+          end
         end
       end
 
       private :define_getter_method
 
       def define_interrogator_method(field)
-        define_method "#{field}?" do
-          attributes[field].present?
+        method_name = "#{field}?"
+        unless instance_methods.include?(method_name)
+          define_method(method_name) do
+            attributes[field].present?
+          end
         end
       end
 
       private :define_interrogator_method
 
       def define_custom_find_method(field_name)
-        meta_class.instance_eval do
-          define_method "find_by_#{field_name}" do |name|
-            all.detect {|record| record.send(field_name) == name }
+        method_name = "find_by_#{field_name}"
+        unless singleton_methods.include?(method_name)
+          metaclass.instance_eval do
+            define_method(method_name) do |name|
+              all.detect {|record| record.send(field_name) == name }
+            end
           end
         end
       end
@@ -74,22 +82,19 @@ module ActiveHash
       private :define_custom_find_method
 
       def define_custom_find_all_method(field_name)
-        meta_class.instance_eval do
-          define_method "find_all_by_#{field_name}" do |name|
-            all.select {|record| record.send(field_name) == name }
+        method_name = "find_all_by_#{field_name}"
+        unless singleton_methods.include?(method_name)
+          metaclass.instance_eval do
+            unless singleton_methods.include?(method_name)
+              define_method(method_name) do |name|
+                all.select {|record| record.send(field_name) == name }
+              end
+            end
           end
         end
       end
 
       private :define_custom_find_all_method
-
-      def meta_class
-        class << self
-          self
-        end
-      end
-
-      private :meta_class
 
     end
 
