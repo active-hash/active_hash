@@ -16,4 +16,23 @@ describe ActiveYaml::Base do
       records.first.name.should == "US"
     end
   end
+
+  describe "auto-discovery of fields" do
+    it "dynamically creates fields for all keys in the hash" do
+      class AutoDiscoverer < ActiveYaml::Base
+        set_root_path File.dirname(__FILE__)
+        set_filename "sample"
+      end
+
+      AutoDiscoverer.load_file
+
+      [:name, :independence_date, :created_at, :custom_field_1, :custom_field_2, :custom_field_3].each do |field|
+        AutoDiscoverer.should respond_to("find_by_#{field}")
+        AutoDiscoverer.should respond_to("find_all_by_#{field}")
+        AutoDiscoverer.new.should respond_to(field)
+        AutoDiscoverer.new.should respond_to("#{field}?")
+      end
+    end
+  end
+
 end

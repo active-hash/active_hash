@@ -1,6 +1,15 @@
 - id: 1
   name: US
+  independence_date: 1776-07-04
+  created_at: Wed Jul 22 22:41:44 -0400 2009
+  custom_field_1: value1
 - id: 2
   name: Canada
+  independence_date: 1867-07-01
+  created_at: Wed Jul 22 22:41:44 -0400 2009
+  custom_field_2: value2
 - id: 3
   name: Mexico
+  independence_date: 1810-09-16
+  created_at: Wed Jul 22 22:41:44 -0400 2009
+  custom_field_3: value3

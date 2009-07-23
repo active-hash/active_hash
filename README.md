@@ -13,6 +13,29 @@ ActiveHash also ships with:
   * ActiveFile: a base class that will reload data from a flat file every time the flat file is changed
   * ActiveYaml: a base class that will turn YAML into a hash and load the data into an ActiveHash object
 
+### Auto discover of fields
+
+ActiveYaml can auto-discover fields for you.  For example, if you have the following yaml:
+
+    # custom_fields.yml
+    - id: 1
+      custom_field_1: value1
+    - id: 2
+      custom_field_2: value2
+    - id: 3
+      custom_field_3: value3
+
+And the following class:
+
+    class CustomField < ActiveYaml::Base
+    end
+
+Once you call CustomField.load_file, you will have fields, as if you declared this:
+
+    class CustomField < ActiveYaml::Base
+      fields :custom_field_1, :custom_field_2, :custom_field_3
+    end
+
 ## Installation
 
     sudo gem install zilkey-active_hash
