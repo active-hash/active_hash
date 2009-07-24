@@ -7,3 +7,4 @@
   - ActiveFile no longer reloads files by default
   - Added ActiveFile.reload_active_file= so you can cause ActiveFile to reload
   - Setting data to nil correctly causes .all to return an empty array
+  - Added reload(force) method, so that you can force a reload from files in ActiveFile, useful for tests

@@ -9,8 +9,8 @@ module ActiveFile
         super
       end
 
-      def reload
-        if should_reload?
+      def reload(force = false)
+        if force || should_reload?
           self.data = load_file
         end
       end
@@ -19,8 +19,6 @@ module ActiveFile
         write_inheritable_attribute :data_has_been_set, true
         super
       end
-
-      protected :reload
 
       def set_filename(name)
         write_inheritable_attribute :filename, name

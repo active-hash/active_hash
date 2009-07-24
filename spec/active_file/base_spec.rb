@@ -239,6 +239,26 @@ describe ActiveFile::Base do
         Country.data = nil
         Country.all
       end
+
+      it "does re-fetch data if force is true" do
+        class Country < ActiveFile::Base
+          class << self
+            def extension
+              "myfile"
+            end
+
+            def load_file
+              MyClass.load_file(full_path)
+            end
+          end
+        end
+
+        MyClass.should_receive(:load_file).once.and_return([{:foo => :bar}])
+        Country.data = nil
+        Country.reload(true)
+        Country.all.first.foo.should == :bar
+      end
+
     end
   end
 
