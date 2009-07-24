@@ -1,7 +1,7 @@
 module ActiveFile
 
   class Base < ActiveHash::Base
-    class_inheritable_accessor :filename, :root_path, :cached_mtime, :reload_active_file
+    class_inheritable_accessor :filename, :root_path, :cached_mtime, :reload_active_file, :data_has_been_set
 
     class << self
       def all
@@ -13,6 +13,11 @@ module ActiveFile
         if should_reload?
           self.data = load_file
         end
+      end
+
+      def data=(array_of_hashes)
+        write_inheritable_attribute :data_has_been_set, true
+        super
       end
 
       protected :reload
@@ -36,7 +41,7 @@ module ActiveFile
       end
 
       def should_reload?
-        return false if read_inheritable_attribute(:data) && ! read_inheritable_attribute(:reload_active_file)
+        return false if read_inheritable_attribute(:data_has_been_set) && ! read_inheritable_attribute(:reload_active_file)
         return false if (mtime = File.mtime(full_path)) == read_inheritable_attribute(:cached_mtime)
 
         write_inheritable_attribute :cached_mtime, mtime

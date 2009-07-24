@@ -10,7 +10,7 @@ module ActiveHash
 
       def all
         unless @records
-          records = read_inheritable_attribute(:data)
+          records = read_inheritable_attribute(:data) || []
           @records = records.collect {|hash| new(hash)}
           auto_assign_fields( records )
         end

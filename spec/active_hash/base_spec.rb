@@ -67,6 +67,11 @@ describe ActiveHash, "Base" do
       ]
     end
 
+    it "returns an empty array if data is nil" do
+      Country.data = nil
+      Country.all.should be_empty
+    end
+
     it "returns all data as inflated objects" do
       Country.all.all?{|country| country.should be_kind_of(Country)}
     end

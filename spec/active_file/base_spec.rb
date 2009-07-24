@@ -204,7 +204,7 @@ describe ActiveFile::Base do
         Country.all
       end
 
-      it "does not fetch data if data has been set" do
+      it "does not fetch data if data has been set to non-nil" do
         class Country < ActiveFile::Base
           class << self
             def extension
@@ -219,6 +219,24 @@ describe ActiveFile::Base do
 
         MyClass.should_not_receive(:load_file)
         Country.data = [{:foo => :bar}]
+        Country.all
+      end
+
+      it "does not fetch data if data has been set to nil" do
+        class Country < ActiveFile::Base
+          class << self
+            def extension
+              "myfile"
+            end
+
+            def load_file
+              MyClass.load_file(full_path)
+            end
+          end
+        end
+
+        MyClass.should_not_receive(:load_file)
+        Country.data = nil
         Country.all
       end
     end
