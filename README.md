@@ -176,11 +176,22 @@ If you store encrypted data, or you'd like to store your flat files as CSV or XM
 
 The two methods you need to implement are load_file, which needs to return an array of hashes, and .extension, which returns the file extension you are using.  You have full_path available to you if you wish, or you can provide your own path.
 
+Setting the default file location in Rails:
+
+    # config/initializers/active_file.rb
+    ActiveFile.set_root_path "config/activefiles"
+
+By default, ActiveFile will not reload data from the file when it changes.  You can enable this by setting:
+
+    ActiveFile.reload_active_file = true
+
+In Rails, in development mode, it reloads the entire class, which reloads the file, so you don't need to turn this on in development.
+
 NOTE:  By default, .full_path refers to the current working directory.  In a rails app, this will be RAILS_ROOT.
 
 ## Authors
 
-Written by Mike Dalessio and Jeff Dean
+Written by Jeff Dean, Mike Dalessio and Ben Woosley 
 
 ## Development
 
