@@ -6,3 +6,4 @@
 2009-07-24
   - ActiveFile no longer reloads files by default
   - Added ActiveFile.reload_active_file= so you can cause ActiveFile to reload
+  - Setting data to nil correctly causes .all to return an empty array
