@@ -2,6 +2,7 @@ module ActiveHash
   class Base
     class_inheritable_accessor :data
     class << self
+      attr_reader :field_names
 
       def data=(array_of_hashes)
         @records = nil
@@ -46,10 +47,40 @@ module ActiveHash
       end
 
       def field(field_name, options = {})
+        @field_names ||= []
+        @field_names << field_name
+
         define_getter_method(field_name, options[:default])
         define_interrogator_method(field_name)
         define_custom_find_method(field_name)
         define_custom_find_all_method(field_name)
+      end
+
+      def respond_to?(method_name)
+        super ||
+          begin
+            config = configuration_for_custom_finder(method_name)
+            config && config[:fields].all? { |field| field_names.include?(field.to_sym) }
+          end
+      end
+
+      def method_missing(method_name, *args)
+        config = configuration_for_custom_finder(method_name)
+
+        return super unless config
+
+        attribute_pairs = config[:fields].zip(args)
+        matches = all.select { |base| attribute_pairs.all? { |field, value| base.send(field) == value } }
+        config[:all?] ? matches : matches.first
+      end
+
+      def configuration_for_custom_finder(finder_name)
+        if finder_name.to_s.match(/^find_(all_)?by_(.*)/)
+          {
+            :all?   => !!$1,
+            :fields => $2.split('_and_')
+          }
+        end
       end
 
       def define_getter_method(field, default_value)

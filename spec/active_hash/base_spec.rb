@@ -35,6 +35,16 @@ describe ActiveHash, "Base" do
       Country.should respond_to(:find_all_by_name)
       Country.should respond_to(:find_all_by_iso_name)
     end
+
+    it "defines single finder methods for all combinations of fields" do
+      Country.should respond_to(:find_by_name_and_iso_name)
+      Country.should respond_to(:find_by_iso_name_and_name)
+    end
+
+    it "defines array finder methods for all combinations of fields" do
+      Country.should respond_to(:find_all_by_name_and_iso_name)
+      Country.should respond_to(:find_all_by_iso_name_and_name)
+    end
   end
 
   describe ".data=" do
@@ -209,47 +219,96 @@ describe ActiveHash, "Base" do
 
   describe "custom finders" do
     before do
-      Country.field :name
+      Country.fields :name, :monarch
+
+      # Start ids above 4 lest we get nil and think it's an AH::Base model with id=4.
       Country.data = [
-        {:id => 1, :name => "US"},
-        {:id => 2, :name => "US"},
-        {:id => 3, :name => "Canada"}
+        {:id => 11, :name => nil, :monarch => nil, :language => "Latin"},
+        {:id => 12, :name => "US", :monarch => nil, :language => "English"},
+        {:id => 13, :name => "Canada", :monarch => "The Crown of England", :language => "English"},
+        {:id => 14, :name => "UK", :monarch => "The Crown of England", :language => "English"}
       ]
     end
 
     describe "find_by_<field_name>" do
-      context "with a name" do
-        it "returns the first record matching that name" do
-          Country.find_by_name("US").id.should == 1
+      describe "with a match" do
+        context "for a non-nil argument" do
+          it "returns the first matching record" do
+            Country.find_by_name("US").id.should == 12
+          end
+        end
+
+        context "for a nil argument" do
+          it "returns the first matching record" do
+            Country.find_by_name(nil).id.should == 11
+          end
         end
       end
 
-      context "with nil" do
-        it "returns nil" do
-          Country.find_by_name(nil).should be_nil
+      describe "without a match" do
+        before do
+          Country.data = []
         end
-      end
 
-      context "with a name not present" do
-        it "returns nil" do
-          Country.find_by_name("foo").should be_nil
+        context "for a non-nil argument" do
+          it "returns nil" do
+            Country.find_by_name("Mexico").should be_nil
+          end
+        end
+
+        context "for a nil argument" do
+          it "returns nil" do
+            Country.find_by_name(nil).should be_nil
+          end
         end
       end
     end
 
     describe "find_all_by_<field_name>" do
-      context "with a name" do
-        it "returns the records matching that name" do
-          countries = Country.find_all_by_name("US")
+      describe "with matches" do
+        it "returns all matching records" do
+          countries = Country.find_all_by_monarch("The Crown of England")
           countries.length.should == 2
-          countries.first.name.should == "US"
-          countries.last.name.should == "US"
+          countries.first.name.should == "Canada"
+          countries.last.name.should == "UK"
         end
       end
 
-      context "with a name not present" do
+      describe "without matches" do
         it "returns an empty array" do
-          Country.find_all_by_name("foo").should be_empty
+          Country.find_all_by_name("Mexico").should be_empty
+        end
+      end
+    end
+
+    describe "find_by_<field_one>_and_<field_two>" do
+      describe "with a match" do
+        it "returns the first matching record" do
+          Country.find_by_name_and_monarch("Canada", "The Crown of England").id.should == 13
+          Country.find_by_monarch_and_name("The Crown of England", "Canada").id.should == 13
+        end
+      end
+
+      describe "without a match" do
+        it "returns nil" do
+          Country.find_by_name_and_monarch("US", "The Crown of England").should be_nil
+        end
+      end
+    end
+
+    describe "find_all_by_<field_one>_and_<field_two>" do
+      describe "with matches" do
+        it "returns all matching records" do
+          countries = Country.find_all_by_monarch_and_language("The Crown of England", "English")
+          countries.length.should == 2
+          countries.first.name.should == "Canada"
+          countries.last.name.should == "UK"
+        end
+      end
+
+      describe "without matches" do
+        it "returns an empty array" do
+          Country.find_all_by_monarch_and_language("Shaka Zulu", "Zulu").should be_empty
         end
       end
     end
