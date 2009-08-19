@@ -1,3 +1,6 @@
+2009-08-19
+  - Added custom finders for multiple fields, such as .find_all_by_name_and_age
+
 2009-07-23
   - Added support for auto-defining methods based on hash keys in ActiveHash::Base
   - Changed the :field and :fields API so that they don't overwrite existing methods (useful when ActiveHash auto-defines methods)
