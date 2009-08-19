@@ -219,7 +219,7 @@ describe ActiveHash, "Base" do
 
   describe "custom finders" do
     before do
-      Country.fields :name, :monarch
+      Country.fields :name, :monarch, :language
 
       # Start ids above 4 lest we get nil and think it's an AH::Base model with id=4.
       Country.data = [
@@ -292,6 +292,14 @@ describe ActiveHash, "Base" do
       describe "without a match" do
         it "returns nil" do
           Country.find_by_name_and_monarch("US", "The Crown of England").should be_nil
+        end
+      end
+
+      describe "for fields the class doesn't have" do
+        it "raises a NoMethodError" do
+          lambda {
+            Country.find_by_name_and_shoe_size("US", 10)
+          }.should raise_error(NoMethodError, "undefined method `find_by_name_and_shoe_size' for Country:Class")
         end
       end
     end

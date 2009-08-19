@@ -65,10 +65,9 @@ module ActiveHash
       end
 
       def method_missing(method_name, *args)
+        return super unless respond_to? method_name
+
         config = configuration_for_custom_finder(method_name)
-
-        return super unless config
-
         attribute_pairs = config[:fields].zip(args)
         matches = all.select { |base| attribute_pairs.all? { |field, value| base.send(field) == value } }
         config[:all?] ? matches : matches.first
