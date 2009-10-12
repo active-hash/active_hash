@@ -185,7 +185,7 @@ describe ActiveHash, "Base" do
       end
 
       it "returns all matching ids" do
-        Country.find([1,3]).should =~ [Country.new(:id => 1), Country.new(:id => 3)]
+        Country.find([1, 3]).should =~ [Country.new(:id => 1), Country.new(:id => 3)]
       end
     end
   end
@@ -533,6 +533,34 @@ describe ActiveHash, "Base" do
       Country.new.name.should == "name defined manually"
       Country.new.name?.should == "name? defined manually"
     end
+  end
+
+  describe "using with belongs_to in ActiveRecord" do
+    before do
+      Country.data = [
+        {:id => 1, :name => "foo"}
+      ]
+
+      build_model :books do
+        text :subject_type
+        integer :subject_id
+        belongs_to :subject, :polymorphic => true
+        belongs_to :country
+      end
+    end
+
+    it "should be possible to use it as a parent" do
+      book = Book.new
+      book.country = Country.first
+      book.country.should == Country.first
+    end
+
+    it "should be possible to use it as a polymorphic parent" do
+      book = Book.new
+      book.subject = Country.first
+      book.subject.should == Country.first
+    end
+
   end
 
 end

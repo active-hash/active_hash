@@ -151,6 +151,11 @@ module ActiveHash
 
       private :auto_assign_fields
 
+      # Needed for ActiveRecord polymorphic associations
+      def base_class
+        ActiveHash::Base
+      end
+
     end
 
     attr_reader :attributes

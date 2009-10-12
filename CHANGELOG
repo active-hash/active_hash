@@ -3,6 +3,8 @@
   - remove require 'rubygems', so folks with non-gem setups can still use AH
   - added more specific activesupport dependency to ensure that metaclass is available
   - AH no longer calls to_i on ids.  If you pass in a string as an id, you'll get a string back
+  - Fancy finders, such as find_all_by_id_and_name, will compare the to_s values of the fields, so you can pass in strings
+  - You can now use ActiveHash models as the parents of polymorphic belongs_to associations
 
 2009-08-19
   - Added custom finders for multiple fields, such as .find_all_by_name_and_age
