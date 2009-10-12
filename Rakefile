@@ -5,12 +5,11 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "active_hash"
-    gem.summary = %Q{An ActiveRecord-like model that uses a hash as a datasource}
+    gem.summary = %Q{An ActiveRecord-like model that uses a hash or file as a datasource}
     gem.email = "jeff@zilkey.com"
     gem.homepage = "http://github.com/zilkey/active_hash"
     gem.authors = ["Jeff Dean", "Mike Dalessio", "Corey Innis", "Peter Jaros"]
-    gem.add_dependency('activesupport')
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
+    gem.add_dependency('activesupport', [">= 2.2.2"])
   end
 
 rescue LoadError
