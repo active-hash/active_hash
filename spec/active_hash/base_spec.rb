@@ -289,6 +289,12 @@ describe ActiveHash, "Base" do
         end
       end
 
+      describe "with a match based on to_s" do
+        it "returns the first matching record" do
+          Country.find_by_name_and_id("Canada", "13").id.should == 13
+        end
+      end
+
       describe "without a match" do
         it "returns nil" do
           Country.find_by_name_and_monarch("US", "The Crown of England").should be_nil
@@ -390,12 +396,6 @@ describe ActiveHash, "Base" do
   end
 
   describe "#id" do
-    context "when passed an id" do
-      it "returns the id as an integer" do
-        country = Country.new :id => "1"
-        country.id.should == 1
-      end
-    end
     context "when not passed an id" do
       it "returns nil" do
         country = Country.new

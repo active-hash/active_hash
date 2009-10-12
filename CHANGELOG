@@ -1,3 +1,9 @@
+2009-10-12
+  - auto-assign fields after calling data= instead of after calling .all
+  - remove require 'rubygems', so folks with non-gem setups can still use AH
+  - added more specific activesupport dependency to ensure that metaclass is available
+  - AH no longer calls to_i on ids.  If you pass in a string as an id, you'll get a string back
+
 2009-08-19
   - Added custom finders for multiple fields, such as .find_all_by_name_and_age
 

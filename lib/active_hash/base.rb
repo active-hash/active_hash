@@ -60,7 +60,9 @@ module ActiveHash
         super ||
           begin
             config = configuration_for_custom_finder(method_name)
-            config && config[:fields].all? { |field| field_names.include?(field.to_sym) }
+            config && config[:fields].all? do |field| 
+              field_names.include?(field.to_sym) || field.to_sym == :id
+            end
           end
       end
 
@@ -69,7 +71,7 @@ module ActiveHash
 
         config = configuration_for_custom_finder(method_name)
         attribute_pairs = config[:fields].zip(args)
-        matches = all.select { |base| attribute_pairs.all? { |field, value| base.send(field) == value } }
+        matches = all.select { |base| attribute_pairs.all? { |field, value| base.send(field).to_s == value.to_s } }
         config[:all?] ? matches : matches.first
       end
 
@@ -81,6 +83,8 @@ module ActiveHash
           }
         end
       end
+
+      private :configuration_for_custom_finder
 
       def define_getter_method(field, default_value)
         unless instance_methods.include?(field.to_s)
@@ -157,7 +161,7 @@ module ActiveHash
     end
 
     def id
-      attributes[:id] ? attributes[:id].to_i : nil
+      attributes[:id] ? attributes[:id] : nil
     end
 
     alias quoted_id id
