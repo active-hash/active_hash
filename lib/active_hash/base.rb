@@ -96,7 +96,7 @@ module ActiveHash
         method_name = "#{field}?"
         unless instance_methods.include?(method_name)
           define_method(method_name) do
-            attributes[field].present?
+            send(field).present?
           end
         end
       end

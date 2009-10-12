@@ -380,7 +380,7 @@ describe ActiveHash, "Base" do
 
     it "returns false if the given attribute is blank" do
       country = Country.new(:name => " ")
-      country.should_not be_name
+      country.name?.should == false
     end
 
     it "returns false if the given attribute was not passed" do
