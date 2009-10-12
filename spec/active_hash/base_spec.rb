@@ -322,7 +322,6 @@ describe ActiveHash, "Base" do
     end
   end
 
-
   describe "#attributes" do
     it "returns the hash passed in the initializer" do
       country = Country.new(:foo => :bar)
@@ -494,8 +493,6 @@ describe ActiveHash, "Base" do
         {:field2 => "bar"},
         {:field3 => "biz"}
       ]
-
-      Country.all
 
       [:field1, :field2, :field3].each do |field|
         Country.should respond_to("find_by_#{field}")

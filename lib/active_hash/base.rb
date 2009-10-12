@@ -7,13 +7,13 @@ module ActiveHash
       def data=(array_of_hashes)
         @records = nil
         write_inheritable_attribute(:data, array_of_hashes)
+        auto_assign_fields( array_of_hashes )
       end
 
       def all
         unless @records
           records = read_inheritable_attribute(:data) || []
           @records = records.collect {|hash| new(hash)}
-          auto_assign_fields( records )
         end
         @records
       end
@@ -132,7 +132,7 @@ module ActiveHash
       private :define_custom_find_all_method
 
       def auto_assign_fields(array_of_hashes)
-        array_of_hashes.inject([]) do |array, row|
+        (array_of_hashes || []).inject([]) do |array, row|
           row.symbolize_keys!
           row.keys.each do |key|
             unless key.to_s == "id"
