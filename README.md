@@ -193,10 +193,6 @@ NOTE:  By default, .full_path refers to the current working directory.  In a rai
 
 Written by Jeff Dean, Mike Dalessio and Ben Woosley 
 
-## Development
-
-The only thing I think I'd really like to add here is support for typecasting the fields.
-
 == Copyright
 
 Copyright (c) 2009 Jeff Dean. See LICENSE for details.
