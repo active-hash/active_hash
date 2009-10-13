@@ -11,7 +11,18 @@ module ActiveHash
       end
 
       def insert(record)
+        @records ||= []
+        record.attributes[:id] ||= next_id
         @records << record
+      end
+
+      def next_id
+        max_record = all.max {|a, b| a.id <=> b.id }
+        if max_record.nil?
+          1
+        elsif max_record.id.is_a?(Numeric)
+          max_record.id.succ
+        end
       end
 
       def create(attributes)
@@ -41,9 +52,9 @@ module ActiveHash
       def transaction
         yield
       rescue ActiveRecord::Rollback
-        
+
       end
-      
+
       def find(id, *args)
         case id
           when :all
@@ -82,7 +93,7 @@ module ActiveHash
         super ||
           begin
             config = configuration_for_custom_finder(method_name)
-            config && config[:fields].all? do |field| 
+            config && config[:fields].all? do |field|
               field_names.include?(field.to_sym) || field.to_sym == :id
             end
           end
@@ -194,7 +205,7 @@ module ActiveHash
     alias quoted_id id
 
     def new_record?
-      ! self.class.all.include?(self) 
+      ! self.class.all.include?(self)
     end
 
     def readonly?

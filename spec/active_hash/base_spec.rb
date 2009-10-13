@@ -593,6 +593,32 @@ describe ActiveHash, "Base" do
       Country.all.should == [country]
     end
 
+    it "adds an auto-incrementing id if the id is nil" do
+      country1 = Country.new :name => "foo"
+      country1.save
+      country1.id.should == 1
+
+      country2 = Country.new :name => "bar"
+      country2.save
+      country2.id.should == 2
+    end
+
+    it "does not add auto-incrementing id if the id is present" do
+      country1 = Country.new :id => 456, :name => "foo"
+      country1.save
+      country1.id.should == 456
+    end
+
+    it "does not blow up with strings" do
+      country1 = Country.new :id => "foo", :name => "foo"
+      country1.save
+      country1.id.should == "foo"
+
+      country2 = Country.new :name => "foo"
+      country2.save
+      country2.id.should be_nil
+    end
+
     it "adds the new object to the data collection" do
       Country.all.should be_empty
       country = Country.create! :id => 1, :name => "foo"
