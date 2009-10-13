@@ -1,3 +1,6 @@
+2009-10-13
+  - added ActiveHash::Base.has_many
+
 2009-10-12
   - auto-assign fields after calling data= instead of after calling .all
   - remove require 'rubygems', so folks with non-gem setups can still use AH
