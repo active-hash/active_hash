@@ -54,17 +54,17 @@ describe ActiveHash, "Base" do
       end
     end
 
-    it "populates the object with data" do
+    it "populates the object with data and auto-assigns keys" do
       Country.data = [{:name => "US"}, {:name => "Canada"}]
-      Country.data.should == [{:name => "US"}, {:name => "Canada"}]
+      Country.data.should == [{:name => "US", :id => 1}, {:name => "Canada", :id => 2}]
     end
 
     it "allows each of it's subclasses to have it's own data" do
       Country.data = [{:name => "US"}, {:name => "Canada"}]
       Region.data = [{:description => "A big region"}, {:description => "A remote region"}]
 
-      Country.data.should == [{:name => "US"}, {:name => "Canada"}]
-      Region.data.should == [{:description => "A big region"}, {:description => "A remote region"}]
+      Country.data.should == [{:name => "US", :id => 1}, {:name => "Canada", :id => 2}]
+      Region.data.should == [{:description => "A big region", :id => 1}, {:description => "A remote region", :id => 2}]
     end
   end
 

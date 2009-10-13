@@ -7,7 +7,12 @@ module ActiveHash
       def data=(array_of_hashes)
         @records = nil
         write_inheritable_attribute(:data, array_of_hashes)
-        auto_assign_fields( array_of_hashes )
+        if array_of_hashes
+          auto_assign_fields( array_of_hashes )
+          array_of_hashes.each do |hash|
+            insert new(hash)
+          end
+        end
       end
 
       def insert(record)
@@ -38,11 +43,7 @@ module ActiveHash
       end
 
       def all
-        unless @records
-          records = read_inheritable_attribute(:data) || []
-          @records = records.collect {|hash| new(hash)}
-        end
-        @records
+        @records || []
       end
 
       def count
