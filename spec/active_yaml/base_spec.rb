@@ -5,7 +5,7 @@ describe ActiveYaml::Base do
   describe ".all" do
     it "loads the data from the yml file" do
       class SomeArbitraryClass < ActiveYaml::Base
-        set_root_path File.dirname(__FILE__)
+        set_root_path File.expand_path(File.dirname(__FILE__) + "/../fixtures")
         set_filename "sample"
         field :name
       end
