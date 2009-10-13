@@ -404,12 +404,6 @@ describe ActiveHash, "Base" do
     end
   end
 
-  describe "#new_record?" do
-    it "should be false" do
-      Country.new.should_not be_new_record
-    end
-  end
-
   describe "#quoted_id" do
     it "should return id" do
       Country.new(:id => 2).quoted_id.should == 2
@@ -613,6 +607,24 @@ describe ActiveHash, "Base" do
 
     it "should return true" do
       Country.new.should be_valid
+    end
+
+  end
+
+  describe "#new_record?" do
+    before do
+      Country.field :name
+      Country.data = [
+        :id => 1, :name => "foo"
+      ]
+    end
+
+    it "returns false when the object is already part of the collection" do
+      Country.new(:id => 1).should_not be_new_record
+    end
+    
+    it "returns true when the object is not part of the collection" do
+      Country.new(:id => 2).should be_new_record
     end
 
   end

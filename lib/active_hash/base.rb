@@ -188,7 +188,7 @@ module ActiveHash
     alias quoted_id id
 
     def new_record?
-      false
+      ! self.class.all.include?(self) 
     end
 
     def readonly?
