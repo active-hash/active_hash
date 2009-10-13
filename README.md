@@ -145,6 +145,10 @@ Notice that when adding records to the collection, it will auto-increment the id
 
 As such, ActiveHash::Base and its descendants should work with Fixjour or FactoryGirl, so you can treat ActiveHash records the same way you would any other ActiveRecord model in tests.
 
+To clear all records from the in-memory array, call delete_all:
+
+    Country.delete_all  # => does not affect the yaml files in any way - just clears the in-memory array which can be useful for testing
+
 ## Associations
 
 You can create has_many and belongs_to associations to and from ActiveRecord.  Out of the box, you can create .belongs_to associations from rails objects, like so:

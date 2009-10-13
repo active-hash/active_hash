@@ -689,6 +689,18 @@ describe ActiveHash, "Base" do
 
   end
 
+  describe ".delete_all" do
+
+    it "clears out all record" do
+      country1 = Country.create
+      country2 = Country.create
+      Country.all.should == [country1, country2]
+      Country.delete_all
+      Country.all.should be_empty
+    end
+
+  end
+
   describe "using with Fixjour" do
 
     before do

@@ -55,6 +55,10 @@ module ActiveHash
 
       end
 
+      def delete_all
+        @records = []
+      end
+
       def find(id, *args)
         case id
           when :all
