@@ -194,6 +194,8 @@ NOTE:  You cannot use ActiveHash objects as children of ActiveRecord and I don't
 
 Also, the implementation of has_many and belongs_to is very simple - I hope to add better support for it later - it will only work in the trivial cases for now.
 
+Thanks to baldwindavid for the ideas and code on that one.
+
 ## ActiveYaml
 
 If you want to store your data in YAML files, just inherit from ActiveYaml and specify your path information:

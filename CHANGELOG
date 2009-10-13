@@ -1,6 +1,6 @@
 2009-10-13
-  - added ActiveHash::Base.has_many, which works with ActiveRecord or ActiveHash classes
-  - added ActiveHash::Base.belongs_to, which works with ActiveRecord or ActiveHash classes
+  - added ActiveHash::Base.has_many, which works with ActiveRecord or ActiveHash classes (thanks to baldwindavid)
+  - added ActiveHash::Base.belongs_to, which works with ActiveRecord or ActiveHash classes (thanks to baldwindavid)
 
 2009-10-12
   - auto-assign fields after calling data= instead of after calling .all
