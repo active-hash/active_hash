@@ -3,10 +3,11 @@ require 'spec/spec_helper'
 describe ActiveHash::Base, "associations" do
 
   before do
-    build_model :publishers do
+    build_model :countries do
     end
 
     class City < ActiveHash::Base
+      field :country_id
       include ActiveHash::Associations
     end
 
@@ -52,6 +53,28 @@ describe ActiveHash::Base, "associations" do
         City.has_many :authors
         city = City.create :id => 1
         city.authors.should =~ [@included_author_1, @included_author_2]
+      end
+    end
+
+  end
+
+  describe "#belongs_to" do
+
+    context "with an ActiveRecord parent" do
+      it "find the correct records" do
+        City.belongs_to :country
+        country = Country.create
+        city = City.create :country_id => country.id
+        city.country.should == country
+      end
+    end
+
+    context "with an ActiveHash parent" do
+      it "find the correct records" do
+        Author.belongs_to :city
+        city = City.create
+        author = Author.create :city_id => city.id
+        author.city.should == city
       end
     end
 
