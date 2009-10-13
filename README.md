@@ -100,8 +100,10 @@ ActiveHash gives you ActiveRecord-esque methods like:
 
 It also gives you a few dynamic finder methods.  For example, if you defined :name as a field, you'd get:
 
-    Country.find_by_name "foo"      # => returns the first object matching that name
-    Country.find_all_by_name "foo"  # => returns an array of the objects with matching names
+    Country.find_by_name "foo"                    # => returns the first object matching that name
+    Country.find_all_by_name "foo"                # => returns an array of the objects with matching names
+    Country.find_by_id_and_name 1, "Germany"      # => returns the first object matching that id and name
+    Country.find_all_by_id_and_name 1, "Germany"  # => returns an array of objects matching that name and id
 
 ## Instance Methods
 
@@ -110,7 +112,7 @@ ActiveHash objects implement enough of the ActiveRecord api to satisfy most comm
     Country#id          # => returns the numeric id or nil
     Country#quoted_id   # => returns the numeric id
     Country#to_param    # => returns the id as a string
-    Country#new_record? # => false
+    Country#new_record? # => returns true if is not part of Country.all, false otherwise
     Country#readonly?   # => true
     Country#hash        # => the hash of the id (or the hash of nil)
     Country#eql?        # => compares type and id, returns false if id is nil
@@ -120,9 +122,32 @@ ActiveHash also gives you methods related to the fields you defined.  For exampl
     Country#name        # => returns the passed in name
     Country#name?       # => returns true if the name is not blank
 
-## Integration with Rails
+## Saving in-memory records
 
-You can create .belongs_to associations from rails objects, like so:
+The ActiveHash::Base.all method functions like an in-memory data store.  You can save your records to the the .all array by using standard ActiveRecord create and save methods:
+
+    Country.all             # => []
+    Country.create
+    Country.all             # [ <Country :id => 1> ]
+    country = Country.new
+    country.new_record?     # => true
+    country.save
+    country.new_record?     # => false
+    Country.all             # [ <Country :id => 1>, <Country :id => 2>  ]
+
+Notice that when adding records to the collection, it will auto-increment the id for you by default.  If you use string ids, it will not auto-increment the id.  Available methods are:
+
+    Country.insert( record )
+    Country#save
+    Country#save!
+    Country.create
+    Country.create!
+
+As such, ActiveHash::Base and its descendants should work with Fixjour or FactoryGirl, so you can treat ActiveHash records the same way you would any other ActiveRecord model in tests.
+
+## Associations
+
+You can create has_many and belongs_to associations to and from ActiveRecord.  Out of the box, you can create .belongs_to associations from rails objects, like so:
 
     class Country < ActiveHash::Base
     end
@@ -131,9 +156,43 @@ You can create .belongs_to associations from rails objects, like so:
       belongs_to :country
     end
 
+ActiveHash will also work as a polymorphic parent:
+
+    class Country < ActiveHash::Base
+    end
+
+    class Person < ActiveRecord::Base
+      belongs_to :location, :polymorphic => true
+    end
+
+    person = Person.new
+    person.location = Country.first
+    person.save
+    person.location # => Country.first
+
 You can also use standard rails view helpers, like #collection_select:
 
     <%= collection_select :person, :country_id, Country.all, :id, :name %>
+
+If you include the ActiveHash::Associations module, you can also create associations from your ActiveHash classes, like so:
+
+    class Country < ActiveHash::Base
+      include ActiveHash::Associations
+      has_many :people
+    end
+
+    class Person < ActiveHash::Base
+      include ActiveHash::Associations
+      belongs_to :country
+      has_many :pets
+    end
+
+    class Pet < ActiveRecord::Base
+    end
+
+NOTE:  You cannot use ActiveHash objects as children of ActiveRecord and I don't plan on adding support for that.  It doesn't really make any sense, since you'd have to hard-code your database ids in your class or yaml files, which is a dependency inversion.
+
+Also, the implementation of has_many and belongs_to is very simple - I hope to add better support for it later - it will only work in the trivial cases for now.
 
 ## ActiveYaml
 
@@ -191,7 +250,7 @@ NOTE:  By default, .full_path refers to the current working directory.  In a rai
 
 ## Authors
 
-Written by Jeff Dean, Mike Dalessio and Ben Woosley 
+Written by Jeff Dean, Mike Dalessio and Ben Woosley
 
 == Copyright
 
