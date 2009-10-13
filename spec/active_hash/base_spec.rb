@@ -563,4 +563,58 @@ describe ActiveHash, "Base" do
 
   end
 
+  describe "#save" do
+
+    before do
+      Country.field :name
+    end
+
+    it "adds the new object to the data collection" do
+      Country.all.should be_empty
+      country = Country.new :id => 1, :name => "foo"
+      country.save.should be_true
+      Country.all.should == [country] 
+    end
+
+    it "adds the new object to the data collection" do
+      Country.all.should be_empty
+      country = Country.new :id => 1, :name => "foo"
+      country.save!.should be_true
+      Country.all.should == [country]
+    end
+
+  end
+
+  describe ".create" do
+
+    before do
+      Country.field :name
+    end
+
+    it "adds the new object to the data collection" do
+      Country.all.should be_empty
+      country = Country.create :id => 1, :name => "foo"
+      country.id.should == 1
+      country.name.should == "foo"
+      Country.all.should == [country]
+    end
+
+    it "adds the new object to the data collection" do
+      Country.all.should be_empty
+      country = Country.create! :id => 1, :name => "foo"
+      country.id.should == 1
+      country.name.should == "foo"
+      Country.all.should == [country]
+    end
+
+  end
+
+  describe "#valid?" do
+
+    it "should return true" do
+      Country.new.should be_valid
+    end
+
+  end
+
 end

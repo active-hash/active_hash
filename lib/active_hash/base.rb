@@ -10,6 +10,22 @@ module ActiveHash
         auto_assign_fields( array_of_hashes )
       end
 
+      def insert(record)
+        @records << record
+      end
+
+      def create(attributes)
+        record = new(attributes)
+        record.save
+        record
+      end
+
+      def create!(attributes)
+        record = new(attributes)
+        record.save!
+        record
+      end
+
       def all
         unless @records
           records = read_inheritable_attribute(:data) || []
@@ -191,6 +207,17 @@ module ActiveHash
 
     def hash
       id.hash
+    end
+
+    def save
+      self.class.insert(self)
+      true
+    end
+
+    alias save! save
+
+    def valid?
+      true
     end
 
   end
