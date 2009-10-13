@@ -54,6 +54,12 @@ describe ActiveHash::Base, "associations" do
         city = City.create :id => 1
         city.authors.should =~ [@included_author_1, @included_author_2]
       end
+
+      it "uses the correct class name when passed" do
+        City.has_many :writers, :class_name => "Author"
+        city = City.create :id => 1
+        city.writers.should =~ [@included_author_1, @included_author_2]
+      end
     end
 
   end
