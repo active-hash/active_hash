@@ -567,7 +567,7 @@ describe ActiveHash, "Base" do
       Country.all.should be_empty
       country = Country.new :id => 1, :name => "foo"
       country.save.should be_true
-      Country.all.should == [country] 
+      Country.all.should == [country]
     end
 
     it "adds the new object to the data collection" do
@@ -583,6 +583,12 @@ describe ActiveHash, "Base" do
 
     before do
       Country.field :name
+    end
+
+    it "works with no args" do
+      Country.all.should be_empty
+      country = Country.create
+      country.id.should == 1
     end
 
     it "adds the new object to the data collection" do
@@ -648,7 +654,7 @@ describe ActiveHash, "Base" do
     it "returns false when the object is already part of the collection" do
       Country.new(:id => 1).should_not be_new_record
     end
-    
+
     it "returns true when the object is not part of the collection" do
       Country.new(:id => 2).should be_new_record
     end
