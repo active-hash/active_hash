@@ -38,6 +38,12 @@ module ActiveHash
         all.length
       end
 
+      def transaction
+        yield
+      rescue ActiveRecord::Rollback
+        
+      end
+      
       def find(id, *args)
         case id
           when :all
