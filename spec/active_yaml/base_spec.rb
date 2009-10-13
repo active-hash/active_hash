@@ -2,10 +2,13 @@ require 'spec/spec_helper'
 
 describe ActiveYaml::Base do
 
+  before do
+    ActiveYaml::Base.set_root_path File.expand_path(File.dirname(__FILE__) + "/../fixtures")
+  end
+
   describe ".all" do
     it "loads the data from the yml file" do
       class SomeArbitraryClass < ActiveYaml::Base
-        set_root_path File.expand_path(File.dirname(__FILE__) + "/../fixtures")
         set_filename "sample"
         field :name
       end
