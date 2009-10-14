@@ -194,6 +194,17 @@ If you include the ActiveHash::Associations module, you can also create associat
     class Pet < ActiveRecord::Base
     end
 
+Once you define a belongs to, you also get the setter method:
+
+    class City < ActiveHash::Base
+      include ActiveHash::Associations
+      belongs_to :state
+    end
+
+    city = City.new
+    city.state = State.first
+    city.state_id             # is State.first.id
+
 NOTE:  You cannot use ActiveHash objects as children of ActiveRecord and I don't plan on adding support for that.  It doesn't really make any sense, since you'd have to hard-code your database ids in your class or yaml files, which is a dependency inversion.
 
 Also, the implementation of has_many and belongs_to is very simple - I hope to add better support for it later - it will only work in the trivial cases for now.

@@ -84,6 +84,19 @@ describe ActiveHash::Base, "associations" do
       end
     end
 
+    describe "#parent=" do
+      before do
+        Author.belongs_to :city
+        @city = City.create :id => 1
+      end
+
+      it "sets the underlying id of the parent" do
+        author = Author.new
+        author.city = @city
+        author.city_id.should == @city.id
+      end
+    end
+
   end
 
 end
