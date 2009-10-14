@@ -9,3 +9,5 @@ gems:
   version: >= 1.2.8
 - name: fixjour
   version: 0.2.0
+- name: jeweler
+  version: 1.2.1
