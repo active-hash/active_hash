@@ -218,7 +218,26 @@ The above example will look for the file "/u/data/sample.yml".
 
 ActiveYaml, as well as ActiveFile, check the mtime of the file you specified, and reloads the data if the mtime has changed.  So you can replace the data in the files even if your app is running in production mode in rails.
 
-Since ActiveYaml just creates a hash from the YAML file, you will have all fields specified in YAML auto-defined for you once you call all.
+Since ActiveYaml just creates a hash from the YAML file, you will have all fields specified in YAML auto-defined for you once you call all.  You can format your YAML as an array, or as a hash:
+
+    # array style
+    - id: 1
+      name: US
+    - id: 2
+      name: Canada
+    - id: 3
+      name: Mexico
+
+    # hash style
+    us:
+      id: 1
+      name: US
+    canada:
+      id: 2
+      name: Canada
+    mexico:
+      id: 3
+      name: Mexico
 
 ## ActiveFile
 

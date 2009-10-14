@@ -3,7 +3,11 @@ module ActiveYaml
   class Base < ActiveFile::Base
     class << self
       def load_file
-        YAML.load_file(full_path)
+        if (data = raw_data).is_a?(Array)
+          data
+        else
+          data.values
+        end
       end
 
       def raw_data
