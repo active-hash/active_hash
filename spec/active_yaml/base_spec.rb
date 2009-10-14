@@ -4,20 +4,34 @@ describe ActiveYaml::Base do
 
   before do
     ActiveYaml::Base.set_root_path File.expand_path(File.dirname(__FILE__) + "/../fixtures")
+
+    class Country < ActiveYaml::Base
+    end
+
+    class City < ActiveYaml::Base
+    end
+
+    class State < ActiveYaml::Base
+    end
   end
 
-  describe ".all" do
-    it "loads the data from the yml file" do
-      class SomeArbitraryClass < ActiveYaml::Base
-        set_filename "sample"
-        field :name
-      end
+  after do
+    Object.send :remove_const, :Country
+    Object.send :remove_const, :City
+    Object.send :remove_const, :State
+  end
 
-      records = SomeArbitraryClass.all
-      records.length.should == 3
-      records.should =~ [SomeArbitraryClass.new(:id => 1), SomeArbitraryClass.new(:id => 2), SomeArbitraryClass.new(:id => 3)]
-      records.first.name.should == "US"
+  describe ".raw_data" do
+
+    it "returns the raw hash data loaded from yaml hash-formatted files" do
+      City.raw_data.should be_kind_of(Hash)
+      City.raw_data.keys.should include("albany", "portland")
     end
+
+    it "returns the raw array data loaded from yaml array-formatted files" do
+      Country.raw_data.should be_kind_of(Array)
+    end
+
   end
 
 end

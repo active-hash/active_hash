@@ -6,6 +6,10 @@ module ActiveYaml
         YAML.load_file(full_path)
       end
 
+      def raw_data
+        YAML.load_file(full_path)
+      end
+
       def extension
         "yml"
       end

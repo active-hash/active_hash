@@ -1,0 +1,8 @@
+albany:
+  id: 1
+  state: :new_york
+  name: Albany
+portland:
+  id: 2
+  state: Oregon
+  name: Portland
