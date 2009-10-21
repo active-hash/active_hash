@@ -1,23 +1,23 @@
 module ActiveFile
 
   class Base < ActiveHash::Base
-    class_inheritable_accessor :filename, :root_path, :cached_mtime, :reload_active_file, :data_has_been_set
+    class_inheritable_accessor :filename, :root_path, :data_loaded
 
     class << self
+
       def all
-        reload
+        reload unless data_loaded
         super
       end
 
-      def reload(force = false)
-        if force || should_reload?
-          self.data = load_file
-        end
+      def delete_all
+        self.data_loaded = true
+        super
       end
 
-      def data=(array_of_hashes)
-        write_inheritable_attribute :data_has_been_set, true
-        super
+      def reload(foo = true)
+        self.data_loaded = true
+        self.data = load_file
       end
 
       def set_filename(name)
@@ -37,16 +37,6 @@ module ActiveFile
         filename  = read_inheritable_attribute(:filename)   || name.tableize
         File.join(root_path, "#{filename}.#{extension}")
       end
-
-      def should_reload?
-        return false if read_inheritable_attribute(:data_has_been_set) && ! read_inheritable_attribute(:reload_active_file)
-        return false if (mtime = File.mtime(full_path)) == read_inheritable_attribute(:cached_mtime)
-
-        write_inheritable_attribute :cached_mtime, mtime
-        true
-      end
-
-      private :should_reload?
 
       def extension
         raise "Override Me"

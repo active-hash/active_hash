@@ -21,6 +21,34 @@ describe ActiveYaml::Base do
     Object.send :remove_const, :State
   end
 
+  describe ".all" do
+
+    context "before the file is loaded" do
+      it "reads from the file" do
+        State.all.should_not be_empty
+        State.count.should > 0
+      end
+    end
+
+  end
+
+  describe ".delete_all" do
+    context "when called before .all" do
+      it "causes all to not load data" do
+        State.delete_all
+        State.all.should be_empty
+      end
+    end
+
+    context "when called after .all" do
+      it "clears out the data" do
+        State.all.should_not be_empty
+        State.delete_all
+        State.all.should be_empty
+      end
+    end
+  end
+
   describe ".raw_data" do
 
     it "returns the raw hash data loaded from yaml hash-formatted files" do
@@ -47,6 +75,7 @@ describe ActiveYaml::Base do
       it "returns an array of hashes" do
         City.load_file.should be_kind_of(Array)
         City.load_file.should include({"state" => :new_york, "name" => "Albany", "id" => 1})
+        City.reload
         City.all.should include( City.new(:id => 1) )
       end
     end
