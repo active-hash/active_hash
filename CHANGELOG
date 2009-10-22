@@ -1,6 +1,7 @@
 2009-10-22
   - added setters to ActiveHash::Base for all fields
   - instantiating an ActiveHash object with a hash calls the setter methods on the object
+  - boolean default values now work
 
 2009-10-21
   - Removed auto-reloading of files based on mtime - maybe it will come back later

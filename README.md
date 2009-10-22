@@ -4,18 +4,20 @@ ActiveHash is a simple base class that allows you to use a ruby hash as a readon
 
 ActiveHash assumes that every hash has an :id key, which is what you would probably store in a database.  This allows you to seemlessly upgrade from ActiveHash objects to full ActiveRecord objects without having to change any code in your app, or any foreign keys in your database.
 
-It also allows you to use #belongs_to in your AR objects.
+It also allows you to use #has_many and #belongs_to in your AR objects.
 
 ActiveHash can also be useful to create simple test classes that run without a database - ideal for testing plugins or gems that rely on simple AR behavior, but don't want to deal with databases or migrations for the spec suite.
 
 ActiveHash also ships with:
 
-  * ActiveFile: a base class that will reload data from a flat file every time the flat file is changed
+  * ActiveFile: a base class that you can use to create file data sources
   * ActiveYaml: a base class that will turn YAML into a hash and load the data into an ActiveHash object
 
 ## Installation
 
-    sudo gem install zilkey-active_hash
+Make sure gemcutter.org is one of your gem sources, then run:
+    
+    sudo gem install active_hash
 
 ## Usage
 
@@ -23,7 +25,7 @@ To use ActiveHash, you need to:
 
  * Inherit from ActiveHash::Base
  * Define your data
- * (optionally) Define your fields and/or default values
+ * Define your fields and/or default values
 
 A quick example would be:
 
@@ -109,7 +111,8 @@ It also gives you a few dynamic finder methods.  For example, if you defined :na
 
 ActiveHash objects implement enough of the ActiveRecord api to satisfy most common needs.  For example:
 
-    Country#id          # => returns the numeric id or nil
+    Country#id          # => returns the id or nil
+    Country#id=         # => sets the id attribute
     Country#quoted_id   # => returns the numeric id
     Country#to_param    # => returns the id as a string
     Country#new_record? # => returns true if is not part of Country.all, false otherwise
@@ -121,6 +124,7 @@ ActiveHash also gives you methods related to the fields you defined.  For exampl
 
     Country#name        # => returns the passed in name
     Country#name?       # => returns true if the name is not blank
+    Country#name=       # => sets the name
 
 ## Saving in-memory records
 
@@ -227,8 +231,6 @@ By default, this class will look for a yml file named "countries.yml" in the sam
 
 The above example will look for the file "/u/data/sample.yml".
 
-ActiveYaml, as well as ActiveFile, check the mtime of the file you specified, and reloads the data if the mtime has changed.  So you can replace the data in the files even if your app is running in production mode in rails.
-
 Since ActiveYaml just creates a hash from the YAML file, you will have all fields specified in YAML auto-defined for you once you call all.  You can format your YAML as an array, or as a hash:
 
     # array style
@@ -276,11 +278,7 @@ Setting the default file location in Rails:
     # config/initializers/active_file.rb
     ActiveFile.set_root_path "config/activefiles"
 
-By default, ActiveFile will not reload data from the file when it changes.  You can enable this by setting:
-
-    ActiveFile.reload_active_file = true
-
-In Rails, in development mode, it reloads the entire class, which reloads the file, so you don't need to turn this on in development.
+In Rails, in development mode, it reloads the entire class, which reloads the file.  In production, the data cached in memory.
 
 NOTE:  By default, .full_path refers to the current working directory.  In a rails app, this will be RAILS_ROOT.
 
