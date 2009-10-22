@@ -330,11 +330,13 @@ describe ActiveHash, "Base" do
 
   describe "#attributes" do
     it "returns the hash passed in the initializer" do
+      Country.field :foo
       country = Country.new(:foo => :bar)
       country.attributes.should == {:foo => :bar}
     end
 
     it "symbolizes keys" do
+      Country.field :foo
       country = Country.new("foo" => :bar)
       country.attributes.should == {:foo => :bar}
     end

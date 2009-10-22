@@ -95,6 +95,25 @@ describe ActiveHash::Base, "associations" do
         author.city = @city
         author.city_id.should == @city.id
       end
+
+      it "works from hash assignment" do
+        author = Author.new :city => @city
+        author.city_id.should == @city.id
+        author.city.should == @city
+      end
+    end
+
+    describe "with a different foreign key" do
+      before do
+        Author.belongs_to :residence, :class_name => "City", :foreign_key => "city_id"
+        @city = City.create :id => 1
+      end
+
+      it "works" do
+        author = Author.new
+        author.residence = @city
+        author.city_id.should == @city.id
+      end
     end
 
   end

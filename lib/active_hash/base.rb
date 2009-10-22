@@ -89,6 +89,7 @@ module ActiveHash
         @field_names << field_name
 
         define_getter_method(field_name, options[:default])
+        define_setter_method(field_name)
         define_interrogator_method(field_name)
         define_custom_find_method(field_name)
         define_custom_find_all_method(field_name)
@@ -127,12 +128,23 @@ module ActiveHash
       def define_getter_method(field, default_value)
         unless instance_methods.include?(field.to_s)
           define_method(field) do
-            attributes[field] || default_value
+            attributes[field].nil? ? default_value : attributes[field]
           end
         end
       end
 
       private :define_getter_method
+
+      def define_setter_method(field)
+        method_name = "#{field}="
+        unless instance_methods.include?(method_name)
+          define_method(method_name) do |new_val|
+            attributes[field] = new_val
+          end
+        end
+      end
+
+      private :define_setter_method
 
       def define_interrogator_method(field)
         method_name = "#{field}?"
@@ -201,10 +213,17 @@ module ActiveHash
     def initialize(options = {})
       options.symbolize_keys!
       @attributes = options
+      options.each do |key, value|
+        send "#{key}=", value
+      end
     end
 
     def id
       attributes[:id] ? attributes[:id] : nil
+    end
+
+    def id=(id)
+      attributes[:id] = id
     end
 
     alias quoted_id id
