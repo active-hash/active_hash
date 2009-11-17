@@ -119,4 +119,10 @@ describe ActiveHash::Base, "associations" do
 
   end
 
+  describe "#marked_for_destruction?" do
+    it "should return false" do
+      City.new.marked_for_destruction?.should == false
+    end
+  end
+
 end
