@@ -95,7 +95,7 @@ module ActiveHash
         define_custom_find_all_method(field_name)
       end
 
-      def respond_to?(method_name)
+      def respond_to?(method_name, include_private=false)
         super ||
           begin
             config = configuration_for_custom_finder(method_name)

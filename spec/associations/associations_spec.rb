@@ -23,6 +23,7 @@ describe ActiveHash::Base, "associations" do
   end
 
   after do
+    Object.send :remove_const, :City
     Object.send :remove_const, :Author
   end
 
