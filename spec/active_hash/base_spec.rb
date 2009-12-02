@@ -160,6 +160,12 @@ describe ActiveHash, "Base" do
       it "finds the record with the specified id as a string" do
         Country.find("2").id.should == 2
       end
+
+      it "raises ActiveHash::RecordNotFound when id not found" do
+        proc do
+          Country.find(0)
+        end.should raise_error(ActiveHash::RecordNotFound, /Couldn't find Country with ID=0/)
+      end
     end
 
     context "with :all" do

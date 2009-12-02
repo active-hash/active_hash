@@ -1,6 +1,7 @@
 2009-12-01
   - Add marked_for_destruction? to be compatible with nested attributes (Brandon Keene)
   - Added second parameter to respond_to? and cleaned up specs (Brian Takita)
+  - Find with an id that does not exist now raises a RecordNotFound exception to mimic ActiveRecord (Pat Nakajima)
 
 2009-10-22
   - added setters to ActiveHash::Base for all fields

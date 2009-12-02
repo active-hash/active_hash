@@ -1,4 +1,8 @@
 module ActiveHash
+
+  class RecordNotFound < StandardError
+  end
+
   class Base
     class_inheritable_accessor :data
     class << self
@@ -67,7 +71,9 @@ module ActiveHash
           when Array
             all.select {|record| id.map(&:to_i).include?(record.id) }
           else
-            find_by_id(id)
+            find_by_id(id) || begin
+             raise RecordNotFound.new("Couldn't find #{name} with ID=#{id}")
+           end
         end
       end
 

@@ -5,10 +5,10 @@
 
 Gem::Specification.new do |s|
   s.name = %q{active_hash}
-  s.version = "0.7.4"
+  s.version = "0.7.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Jeff Dean", "Mike Dalessio", "Corey Innis", "Peter Jaros"]
+  s.authors = ["Jeff Dean", "Mike Dalessio", "Corey Innis", "Peter Jaros", "Brandon Keene", "Brian Takita", "Pat Nakajima"]
   s.date = %q{2009-12-01}
   s.email = %q{jeff@zilkey.com}
   s.extra_rdoc_files = [
