@@ -1,4 +1,6 @@
 2009-12-10
+  - Fixed a bug where belongs_to associations would raise an error instead of returning
+    nil when the parent object didn't exist.
   - Added #[] and #[]= accessors for more ActiveRecord-esque-ness. (Pat Nakajima & Dave Yeu)
 
 2009-12-01
