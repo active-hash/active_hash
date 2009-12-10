@@ -74,6 +74,12 @@ describe ActiveHash::Base, "associations" do
         city = City.create :country_id => country.id
         city.country.should == country
       end
+
+      it "returns nil when the record does not exist" do
+        City.belongs_to :country
+        city = City.create :country_id => 123
+        city.country.should be_nil
+      end
     end
 
     context "with an ActiveHash parent" do
@@ -82,6 +88,12 @@ describe ActiveHash::Base, "associations" do
         city = City.create
         author = Author.create :city_id => city.id
         author.city.should == city
+      end
+
+      it "returns nil when the record does not exist" do
+        Author.belongs_to :city
+        author = Author.create :city_id => 123
+        author.city.should be_nil
       end
     end
 

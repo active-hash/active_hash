@@ -27,7 +27,7 @@ module ActiveHash
         }.merge(options)
 
         define_method(association_id) do
-          options[:class_name].constantize.find(send(options[:foreign_key]))
+          options[:class_name].constantize.find_by_id(send(options[:foreign_key]))
         end
 
         define_method("#{association_id}=") do |new_value|
