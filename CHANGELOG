@@ -1,3 +1,6 @@
+2009-12-10
+  - Added #[] and #[]= accessors for more ActiveRecord-esque-ness. (Pat Nakajima & Dave Yeu)
+
 2009-12-01
   - Add marked_for_destruction? to be compatible with nested attributes (Brandon Keene)
   - Added second parameter to respond_to? and cleaned up specs (Brian Takita)
