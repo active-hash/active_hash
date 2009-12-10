@@ -346,6 +346,19 @@ describe ActiveHash, "Base" do
       country = Country.new("foo" => :bar)
       country.attributes.should == {:foo => :bar}
     end
+
+    it "is works with #[]" do
+      Country.field :foo
+      country = Country.new(:foo => :bar)
+      country[:foo].should == :bar
+    end
+
+    it "is works with #[]=" do
+      Country.field :foo
+      country = Country.new
+      country[:foo] = :bar
+      country.foo.should == :bar
+    end
   end
 
   describe "reader methods" do

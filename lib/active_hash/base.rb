@@ -224,6 +224,14 @@ module ActiveHash
       end
     end
 
+    def [](key)
+      attributes[key]
+    end
+
+    def []=(key, val)
+      attributes[key] = val
+    end
+
     def id
       attributes[:id] ? attributes[:id] : nil
     end
