@@ -1,0 +1,20 @@
+- id: 1
+  name: Manhattan
+  county: New York
+  population: 1634795
+- id: 2
+  name: Brooklyn
+  county: Kings
+  population: 2556598
+- id: 3
+  name: Queens
+  county: Queens
+  population: 2293007
+- id: 4
+  name: Bronx
+  county: Bronx
+  population: 1391903
+- id: 5
+  name: Staten Island
+  county: Richmond
+  population: 487407

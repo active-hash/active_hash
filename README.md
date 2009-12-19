@@ -282,10 +282,39 @@ In Rails, in development mode, it reloads the entire class, which reloads the fi
 
 NOTE:  By default, .full_path refers to the current working directory.  In a rails app, this will be RAILS_ROOT.
 
+## Enum
+
+ActiveHash can expose its data in an Enumeration by setting constants for each record. This allows records to be accessed in code through a constant set in the ActiveHash class.
+
+The field to be used as the constant is set using _enum_accessor_ which takes the name of a field as an argument.
+
+    class Country < ActiveHash::Base
+      include ActiveHash::Enum
+      self.data = [
+          {:id => 1, :name => "US", :capital => "Washington, DC"},
+          {:id => 2, :name => "Canada", :capital => "Ottawa"},
+          {:id => 3, :name => "Mexico", :capital => "Mexico City"}
+      ]
+      enum_accessor :name
+    end
+
+Records can be accessed by looking up the field constant:
+
+    >> Country::US.capital
+    => "Washington DC"
+    >> Country::MEXICO.id
+    => 3
+    >> Country::CANADA
+    => #<Country:0x10229fb28 @attributes={:name=>"Canada", :id=>2}
+    
+Constants are formed by first stripping all non-word characters and then upcasing the result. This means strings like "Blazing Saddles", "ReBar", "Mike & Ike" and "Ho! Ho! Ho!" become BLAZINGSADDLES, REBAR, MIKEIKE and HOHOHO.
+
+The field specified as the _enum_accessor_ must contain unique data values.
+
 ## Authors
 
 Written by Jeff Dean, Mike Dalessio and Ben Woosley
 
-== Copyright
+## Copyright
 
 Copyright (c) 2009 Jeff Dean. See LICENSE for details.
