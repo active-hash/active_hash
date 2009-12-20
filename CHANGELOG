@@ -1,5 +1,6 @@
 2009-12-19
   - Added ActiveHash::Enum (John Pignata)
+  - Deprecated include ActiveHash::Associations in favor of extend ActiveHash::Associations
 
 2009-12-10
   - Fixed a bug where belongs_to associations would raise an error instead of returning

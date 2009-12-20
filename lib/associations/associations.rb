@@ -2,10 +2,15 @@ module ActiveHash
   module Associations
 
     def self.included(base)
-      base.send(:extend, ClassMethods)
+      puts %Q{DEPRECATION WARNING: include #{self} should be extend #{self} and will be removed in later versions.  Called from #{caller.first}}
+      base.extend self
     end
 
-    module ClassMethods
+    def self.extended(base)
+      base.send :extend, Methods
+    end
+
+    module Methods
       def has_many(association_id, options = {})
 
         define_method(association_id) do
@@ -36,5 +41,6 @@ module ActiveHash
 
       end
     end
+
   end
 end

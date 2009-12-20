@@ -182,15 +182,15 @@ You can also use standard rails view helpers, like #collection_select:
 
     <%= collection_select :person, :country_id, Country.all, :id, :name %>
 
-If you include the ActiveHash::Associations module, you can also create associations from your ActiveHash classes, like so:
+If you extend the ActiveHash::Associations module, you can also create associations from your ActiveHash classes, like so:
 
     class Country < ActiveHash::Base
-      include ActiveHash::Associations
+      extend ActiveHash::Associations
       has_many :people
     end
 
     class Person < ActiveHash::Base
-      include ActiveHash::Associations
+      extend ActiveHash::Associations
       belongs_to :country
       has_many :pets
     end
@@ -201,7 +201,7 @@ If you include the ActiveHash::Associations module, you can also create associat
 Once you define a belongs to, you also get the setter method:
 
     class City < ActiveHash::Base
-      include ActiveHash::Associations
+      extend ActiveHash::Associations
       belongs_to :state
     end
 
