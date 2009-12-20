@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{active_hash}
-  s.version = "0.7.7"
+  s.version = "0.7.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Jeff Dean", "Mike Dalessio", "Corey Innis", "Peter Jaros", "Brandon Keene", "Brian Takita", "Pat Nakajima"]
-  s.date = %q{2009-12-01}
+  s.authors = ["Jeff Dean", "Mike Dalessio", "Corey Innis", "Peter Jaros", "Brandon Keene", "Brian Takita", "Pat Nakajima", "John Pignata"]
+  s.date = %q{2009-12-19}
   s.email = %q{jeff@zilkey.com}
   s.extra_rdoc_files = [
     "LICENSE",
@@ -30,11 +30,14 @@ Gem::Specification.new do |s|
      "lib/active_hash/base.rb",
      "lib/active_yaml/base.rb",
      "lib/associations/associations.rb",
+     "lib/enum/enum.rb",
      "spec/active_file/base_spec.rb",
      "spec/active_hash/base_spec.rb",
      "spec/active_yaml/base_spec.rb",
      "spec/associations/associations_spec.rb",
+     "spec/enum/enum_spec.rb",
      "spec/fixtures/array_rows.yml",
+     "spec/fixtures/boroughs.yml",
      "spec/fixtures/cities.yml",
      "spec/fixtures/countries.yml",
      "spec/fixtures/states.yml",
@@ -50,6 +53,7 @@ Gem::Specification.new do |s|
      "spec/active_hash/base_spec.rb",
      "spec/active_yaml/base_spec.rb",
      "spec/associations/associations_spec.rb",
+     "spec/enum/enum_spec.rb",
      "spec/spec_helper.rb"
   ]
 

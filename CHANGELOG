@@ -1,3 +1,6 @@
+2009-12-19
+  - Added ActiveHash::Enum (John Pignata)
+
 2009-12-10
   - Fixed a bug where belongs_to associations would raise an error instead of returning
     nil when the parent object didn't exist.

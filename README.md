@@ -289,7 +289,7 @@ ActiveHash can expose its data in an Enumeration by setting constants for each r
 The field to be used as the constant is set using _enum_accessor_ which takes the name of a field as an argument.
 
     class Country < ActiveHash::Base
-      include ActiveHash::Enum
+      extend ActiveHash::Enum
       self.data = [
           {:id => 1, :name => "US", :capital => "Washington, DC"},
           {:id => 2, :name => "Canada", :capital => "Ottawa"},
@@ -313,7 +313,16 @@ The field specified as the _enum_accessor_ must contain unique data values.
 
 ## Authors
 
-Written by Jeff Dean, Mike Dalessio and Ben Woosley
+ * Jeff Dean
+ * Mike Dalessio
+ * Ben Woosley
+ * John Pignata
+ * Pat Nakajima
+ * Brandon Keene
+ * Dave Yeu
+ * Brian Takita
+ * Corey Innis
+ * Peter Jaros
 
 ## Copyright
 
