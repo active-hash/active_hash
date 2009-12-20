@@ -144,6 +144,16 @@ describe ActiveHash::Base, "associations" do
         author.city_id.should == @city.id
         author.city.should == @city
       end
+
+      it "works with nil" do
+        author = Author.new :city => @city
+        author.city_id.should == @city.id
+        author.city.should == @city
+
+        author.city = nil
+        author.city_id.should be_nil
+        author.city.should be_nil
+      end
     end
 
     describe "with a different foreign key" do

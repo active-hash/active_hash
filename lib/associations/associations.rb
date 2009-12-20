@@ -36,7 +36,7 @@ module ActiveHash
         end
 
         define_method("#{association_id}=") do |new_value|
-          attributes[ options[:foreign_key].to_sym ] = new_value.id
+          attributes[ options[:foreign_key].to_sym ] = new_value ? new_value.id : nil
         end
 
       end
