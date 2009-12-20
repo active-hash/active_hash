@@ -37,14 +37,11 @@ describe ActiveHash::Base, "associations" do
     end
 
     class City < ActiveHash::Base
-      field :country_id
       extend ActiveHash::Associations
     end
 
     class Author < ActiveHash::Base
       extend ActiveHash::Associations
-      field :publisher_id
-      field :city_id
     end
 
     build_model :books do
@@ -75,6 +72,7 @@ describe ActiveHash::Base, "associations" do
 
     context "with ActiveHash children" do
       before do
+        Author.field :city_id
         @included_author_1  = Author.create :city_id => 1
         @included_author_2  = Author.create :city_id => 1
         @excluded_author    = Author.create :city_id => 2

@@ -1,6 +1,8 @@
 2009-12-19
   - Added ActiveHash::Enum (John Pignata)
   - Deprecated include ActiveHash::Associations in favor of extend ActiveHash::Associations
+  - Fixed bug where you can't set nil to an association
+  - Calling #belongs_to now creates the underlying field if it's not already there (belongs_to :city will create the :city_id field)
 
 2009-12-10
   - Fixed a bug where belongs_to associations would raise an error instead of returning
