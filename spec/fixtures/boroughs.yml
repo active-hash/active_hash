@@ -11,10 +11,6 @@
   county: Queens
   population: 2293007
 - id: 4
-  name: Bronx
-  county: Bronx
-  population: 1391903
-- id: 5
   name: Staten Island
   county: Richmond
   population: 487407
