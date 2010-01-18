@@ -1,3 +1,6 @@
+2010-01-18
+  - Added stub for #destroyed? method, since Rails associations now depend on it
+
 2009-12-19
   - Added ActiveHash::Enum (John Pignata)
   - Deprecated include ActiveHash::Associations in favor of extend ActiveHash::Associations

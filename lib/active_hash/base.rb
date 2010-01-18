@@ -252,6 +252,10 @@ module ActiveHash
       ! self.class.all.include?(self)
     end
 
+    def destroyed?
+      false
+    end
+
     def readonly?
       true
     end
