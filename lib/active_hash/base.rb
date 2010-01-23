@@ -19,12 +19,6 @@ module ActiveHash
         end
       end
 
-      def add(hash)
-        new(hash).tap do |record|
-          insert record
-        end
-      end
-
       def insert(record)
         @records ||= []
         record.attributes[:id] ||= next_id
@@ -45,6 +39,7 @@ module ActiveHash
         record.save
         record
       end
+      alias_method :add, :create
 
       def create!(attributes = {})
         record = new(attributes)
