@@ -68,6 +68,28 @@ describe ActiveHash, "Base" do
     end
   end
 
+  describe ".add" do
+    before do
+      Country.fields :name
+    end
+
+    it "adds a record" do
+      proc {
+        Country.add :name => "Russia"
+      }.should change { Country.count }
+    end
+
+    it "returns the record" do
+      record = Country.add :name => "Russia"
+      record.name.should == "Russia"
+    end
+
+    it "should populate the id" do
+      record = Country.add :name => "Russia"
+      record.id.should_not be_nil
+    end
+  end
+
   describe ".all" do
     before do
       Country.field :name

@@ -19,6 +19,12 @@ module ActiveHash
         end
       end
 
+      def add(hash)
+        new(hash).tap do |record|
+          insert record
+        end
+      end
+
       def insert(record)
         @records ||= []
         record.attributes[:id] ||= next_id
@@ -213,13 +219,13 @@ module ActiveHash
       def base_class
         ActiveHash::Base
       end
-      
+
       def reload
         self.data = read_inheritable_attribute(:data)
       end
-      
+
       private :reload
-      
+
     end
 
     attr_reader :attributes
