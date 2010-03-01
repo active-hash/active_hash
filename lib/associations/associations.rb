@@ -2,12 +2,7 @@ module ActiveHash
   module Associations
 
     def self.included(base)
-      puts %Q{DEPRECATION WARNING: include #{self} should be extend #{self} and will be removed in later versions.  Called from #{caller.first}}
-      base.extend self
-    end
-
-    def self.extended(base)
-      base.send :extend, Methods
+      base.extend Methods
     end
 
     module Methods
