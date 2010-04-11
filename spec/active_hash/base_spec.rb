@@ -726,7 +726,7 @@ describe ActiveHash, "Base" do
 
     before do
       Country.field :name
-      Fixjour do
+      Fixjour :allow_redundancy => true do
         define_builder(Country) do |klass, overrides|
           klass.new(:name => 'Pat')
         end

@@ -5,3 +5,4 @@ rdoc
 pkg
 .idea
 junk.*
+.bundle/*

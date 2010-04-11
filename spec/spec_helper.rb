@@ -1,6 +1,6 @@
-require 'rubygems'
 require 'spec'
 require 'spec/autorun'
+require 'activerecord'
 require 'acts_as_fu'
 require 'fixjour'
 
