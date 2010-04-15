@@ -66,6 +66,8 @@ module ActiveHash
 
       def find(id, *args)
         case id
+          when nil
+            nil
           when :all
             all
           when Array
