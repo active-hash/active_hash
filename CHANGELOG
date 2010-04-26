@@ -1,3 +1,7 @@
+2010-04-25
+ - When ActiveRecord model belongs_to an ActiveHash and the associated id is nil, returns nil instead of raising RecordNotFound (Jeremy Weiskotten)
+ - Merged Nakajima's "add" alias for "create" - gotta save those ASCII characters :)
+
 2010-03-01
   - Removed "extend"-related deprecations - they didn't play well with rails class loading
 

@@ -40,6 +40,20 @@ A quick example would be:
     country.name  # => "Mexico"
     country.name? # => true
 
+You can also use _create_:
+
+    class Country < ActiveHash::Base
+      create :id => 1, :name => "US"
+      create :id => 2, :name => "Canada"
+    end
+
+If you are Pat Nakajima,  you probably prefer _add_:
+
+    class Country < ActiveHash::Base
+      add :id => 1, :name => "US"
+      add :id => 2, :name => "Canada"
+    end
+
 ## Auto-Defined fields
 
 ActiveHash will auto-define all fields for you when you load the hash.  For example, if you have the following class:

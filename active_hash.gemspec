@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{active_hash}
-  s.version = "0.7.9"
+  s.version = "0.8.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Jeff Dean", "Mike Dalessio", "Corey Innis", "Peter Jaros", "Brandon Keene", "Brian Takita", "Pat Nakajima", "John Pignata"]
-  s.date = %q{2010-03-01}
+  s.authors = ["Jeff Dean", "Mike Dalessio", "Corey Innis", "Peter Jaros", "Brandon Keene", "Brian Takita", "Pat Nakajima", "John Pignata", "Jeremy Weiskotten"]
+  s.date = %q{2010-04-25}
   s.email = %q{jeff@zilkey.com}
   s.extra_rdoc_files = [
     "LICENSE",
@@ -19,12 +19,12 @@ Gem::Specification.new do |s|
     ".document",
      ".gitignore",
      "CHANGELOG",
+     "Gemfile",
      "LICENSE",
      "README.md",
      "Rakefile",
      "VERSION",
      "active_hash.gemspec",
-     "geminstaller.yml",
      "lib/active_file/base.rb",
      "lib/active_hash.rb",
      "lib/active_hash/base.rb",
@@ -44,22 +44,10 @@ Gem::Specification.new do |s|
      "spec/spec_helper.rb"
   ]
   s.homepage = %q{http://github.com/zilkey/active_hash}
-  s.post_install_message = %q{NOTE: Breaking change!  Please change any extend statements to include statements:
-      
-      extend ActiveHash::Associations
-      extend ActiveHash::Enum
-  
-  becomes
-  
-      include ActiveHash::Associations
-      include ActiveHash::Enum
-
-  Sorry for the inconvenience.
-  
-}
+  s.post_install_message = %q{}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.5}
+  s.rubygems_version = %q{1.3.6}
   s.summary = %q{An ActiveRecord-like model that uses a hash or file as a datasource}
   s.test_files = [
     "spec/active_file/base_spec.rb",
