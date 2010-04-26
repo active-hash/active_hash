@@ -6,7 +6,7 @@ describe ActiveHash::Base, "enum" do
     ActiveYaml::Base.set_root_path File.expand_path(File.dirname(__FILE__) + "/../fixtures")
     
     class Borough < ActiveYaml::Base
-      extend ActiveHash::Enum
+      include ActiveHash::Enum
       fields :name, :county, :population
       enum_accessor :name
     end
@@ -24,7 +24,7 @@ describe ActiveHash::Base, "enum" do
     it "ensures that values stored in the field specified are unique" do
       lambda do
         Class.new(ActiveHash::Base) do
-          extend ActiveHash::Enum
+          include ActiveHash::Enum
           self.data = [
             { :name => 'Woodford Reserve' },
             { :name => 'Bulliet Bourbon' },
@@ -37,7 +37,7 @@ describe ActiveHash::Base, "enum" do
 
     it "removes non-word characters from values before setting constants" do
       Movie = Class.new(ActiveHash::Base) do
-        extend ActiveHash::Enum
+        include ActiveHash::Enum
         self.data = [
           {:name => 'Die Hard 2', :rating => '4.3'},
           {:name => 'The Informant!', :rating => '4.3'},

@@ -1,35 +1,5 @@
 require 'spec/spec_helper'
 
-describe ActiveHash::Base, "associations when included" do
-  before do
-    class City < ActiveHash::Base
-      silence_stream STDOUT do
-        include ActiveHash::Associations
-      end
-    end
-
-    class Author < ActiveHash::Base
-      silence_stream STDOUT do
-        include ActiveHash::Associations
-      end
-      field :publisher_id
-      field :city_id
-    end
-  end
-
-  after do
-    Object.send :remove_const, :City
-    Object.send :remove_const, :Author
-  end
-
-  it "works until the deprecation period is up" do
-    Author.belongs_to :city
-    city = City.create!
-    author = Author.new :city => city
-    author.city.should == city
-  end
-end
-
 describe ActiveHash::Base, "associations" do
 
   before do
@@ -37,11 +7,11 @@ describe ActiveHash::Base, "associations" do
     end
 
     class City < ActiveHash::Base
-      extend ActiveHash::Associations
+      include ActiveHash::Associations
     end
 
     class Author < ActiveHash::Base
-      extend ActiveHash::Associations
+      include ActiveHash::Associations
     end
 
     build_model :books do

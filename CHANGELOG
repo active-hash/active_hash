@@ -1,3 +1,6 @@
+2010-03-01
+  - Removed "extend"-related deprecations - they didn't play well with rails class loading
+
 2010-01-18
   - Added stub for #destroyed? method, since Rails associations now depend on it
 

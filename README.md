@@ -182,15 +182,15 @@ You can also use standard rails view helpers, like #collection_select:
 
     <%= collection_select :person, :country_id, Country.all, :id, :name %>
 
-If you extend the ActiveHash::Associations module, you can also create associations from your ActiveHash classes, like so:
+If you include the ActiveHash::Associations module, you can also create associations from your ActiveHash classes, like so:
 
     class Country < ActiveHash::Base
-      extend ActiveHash::Associations
+      include ActiveHash::Associations
       has_many :people
     end
 
     class Person < ActiveHash::Base
-      extend ActiveHash::Associations
+      include ActiveHash::Associations
       belongs_to :country
       has_many :pets
     end
@@ -201,7 +201,7 @@ If you extend the ActiveHash::Associations module, you can also create associati
 Once you define a belongs to, you also get the setter method:
 
     class City < ActiveHash::Base
-      extend ActiveHash::Associations
+      include ActiveHash::Associations
       belongs_to :state
     end
 
@@ -254,7 +254,7 @@ Since ActiveYaml just creates a hash from the YAML file, you will have all field
 
 ## ActiveFile
 
-If you store encrypted data, or you'd like to store your flat files as CSV or XML or any other format, you can easily extend ActiveHash to parse and load your file.  Just add a custom ::load_file method, and define the extension you want the file to use:
+If you store encrypted data, or you'd like to store your flat files as CSV or XML or any other format, you can easily include ActiveHash to parse and load your file.  Just add a custom ::load_file method, and define the extension you want the file to use:
 
     class Country < ActiveFile::Base
       set_root_path "/u/data"
@@ -289,7 +289,7 @@ ActiveHash can expose its data in an Enumeration by setting constants for each r
 The field to be used as the constant is set using _enum_accessor_ which takes the name of a field as an argument.
 
     class Country < ActiveHash::Base
-      extend ActiveHash::Enum
+      include ActiveHash::Enum
       self.data = [
           {:id => 1, :name => "US", :capital => "Washington, DC"},
           {:id => 2, :name => "Canada", :capital => "Ottawa"},

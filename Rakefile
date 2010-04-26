@@ -10,6 +10,19 @@ begin
     gem.homepage = "http://github.com/zilkey/active_hash"
     gem.authors = ["Jeff Dean", "Mike Dalessio", "Corey Innis", "Peter Jaros", "Brandon Keene", "Brian Takita", "Pat Nakajima", "John Pignata"]
     gem.add_dependency('activesupport', [">= 2.2.2"])
+    gem.post_install_message = %q{NOTE: Breaking change!  Please change any extend statements to include statements:
+      
+      extend ActiveHash::Associations
+      extend ActiveHash::Enum
+  
+  becomes
+  
+      include ActiveHash::Associations
+      include ActiveHash::Enum
+
+  Sorry for the inconvenience.
+  
+}
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
