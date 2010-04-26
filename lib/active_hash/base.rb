@@ -39,6 +39,7 @@ module ActiveHash
         record.save
         record
       end
+      alias_method :add, :create
 
       def create!(attributes = {})
         record = new(attributes)
@@ -66,6 +67,8 @@ module ActiveHash
 
       def find(id, *args)
         case id
+          when nil
+            nil
           when :all
             all
           when Array
@@ -211,13 +214,13 @@ module ActiveHash
       def base_class
         ActiveHash::Base
       end
-      
+
       def reload
         self.data = read_inheritable_attribute(:data)
       end
-      
+
       private :reload
-      
+
     end
 
     attr_reader :attributes

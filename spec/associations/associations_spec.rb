@@ -6,6 +6,10 @@ describe ActiveHash::Base, "associations" do
     build_model :countries do
     end
 
+    build_model :schools do
+      integer :city_id
+    end
+
     class City < ActiveHash::Base
       include ActiveHash::Associations
     end
@@ -64,6 +68,21 @@ describe ActiveHash::Base, "associations" do
   end
 
   describe "#belongs_to" do
+
+    context "with an ActiveRecord child" do
+      it "finds the correct records" do
+        School.belongs_to :city
+        city = City.create
+        school = School.create :city_id => city.id
+        school.city.should == city
+      end
+
+      it "returns nil when the record does not exist" do
+        School.belongs_to :city
+        school = School.create :city_id => nil
+        school.city.should be_nil
+      end
+    end
 
     context "with an ActiveRecord parent" do
       it "find the correct records" do
