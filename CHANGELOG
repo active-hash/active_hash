@@ -1,3 +1,6 @@
+2010-05-04
+ - When calling ActiveFile::Base.reload do not actually perform the reload if nothing has been modified unless you call reload(true) to force (Michael Schubert)
+
 2010-04-25
  - When ActiveRecord model belongs_to an ActiveHash and the associated id is nil, returns nil instead of raising RecordNotFound (Jeremy Weiskotten)
  - Merged Nakajima's "add" alias for "create" - gotta save those ASCII characters :)

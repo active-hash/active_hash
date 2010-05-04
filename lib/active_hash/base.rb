@@ -4,11 +4,12 @@ module ActiveHash
   end
 
   class Base
-    class_inheritable_accessor :data
+    class_inheritable_accessor :data, :dirty
     class << self
       attr_reader :field_names
 
       def data=(array_of_hashes)
+        mark_dirty
         @records = nil
         write_inheritable_attribute(:data, array_of_hashes)
         if array_of_hashes
@@ -22,6 +23,7 @@ module ActiveHash
       def insert(record)
         @records ||= []
         record.attributes[:id] ||= next_id
+        mark_dirty
         @records << record
       end
 
@@ -37,6 +39,7 @@ module ActiveHash
       def create(attributes = {})
         record = new(attributes)
         record.save
+        mark_dirty
         record
       end
       alias_method :add, :create
@@ -62,6 +65,7 @@ module ActiveHash
       end
 
       def delete_all
+        mark_dirty
         @records = []
       end
 
@@ -217,9 +221,22 @@ module ActiveHash
 
       def reload
         self.data = read_inheritable_attribute(:data)
+        mark_clean
       end
 
       private :reload
+
+      def mark_dirty
+        self.dirty = true
+      end
+
+      private :mark_dirty
+
+      def mark_clean
+        self.dirty = false
+      end
+
+      private :mark_clean
 
     end
 

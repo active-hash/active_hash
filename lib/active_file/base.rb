@@ -15,9 +15,11 @@ module ActiveFile
         super
       end
 
-      def reload(foo = true)
+      def reload(force = false)
+        return if !self.dirty && !force && self.data_loaded
         self.data_loaded = true
         self.data = load_file
+        mark_clean
       end
 
       def set_filename(name)

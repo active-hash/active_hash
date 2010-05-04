@@ -66,6 +66,12 @@ describe ActiveHash, "Base" do
       Country.data.should == [{:name => "US", :id => 1}, {:name => "Canada", :id => 2}]
       Region.data.should == [{:description => "A big region", :id => 1}, {:description => "A remote region", :id => 2}]
     end
+
+    it "marks the class as dirty" do
+      Country.dirty.should be_false
+      Country.data = []
+      Country.dirty.should be_true
+    end
   end
 
   describe ".add" do
@@ -77,6 +83,12 @@ describe ActiveHash, "Base" do
       proc {
         Country.add :name => "Russia"
       }.should change { Country.count }
+    end
+
+    it "marks the class as dirty" do
+      Country.dirty.should be_false
+      Country.add :name => "Russia"
+      Country.dirty.should be_true
     end
 
     it "returns the record" do
@@ -620,6 +632,12 @@ describe ActiveHash, "Base" do
       Country.all.should == [country]
     end
 
+    it "marks the class as dirty" do
+      Country.dirty.should be_false
+      Country.new(:id => 1, :name => "foo").save
+      Country.dirty.should be_true
+    end
+
   end
 
   describe ".create" do
@@ -674,6 +692,12 @@ describe ActiveHash, "Base" do
       country.id.should == 1
       country.name.should == "foo"
       Country.all.should == [country]
+    end
+
+    it "marks the class as dirty" do
+      Country.dirty.should be_false
+      Country.create! :id => 1, :name => "foo"
+      Country.dirty.should be_true
     end
 
   end
@@ -740,6 +764,12 @@ describe ActiveHash, "Base" do
       Country.all.should == [country1, country2]
       Country.delete_all
       Country.all.should be_empty
+    end
+
+    it "marks the class as dirty" do
+      Country.dirty.should be_false
+      Country.delete_all
+      Country.dirty.should be_true
     end
 
   end

@@ -337,6 +337,7 @@ The field specified as the _enum_accessor_ must contain unique data values.
  * Brian Takita
  * Corey Innis
  * Peter Jaros
+ * Michael Schubert
 
 ## Copyright
 

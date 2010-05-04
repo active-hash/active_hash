@@ -80,4 +80,52 @@ describe ActiveFile::Base do
     end
   end
 
+  describe ".reload" do
+    before do
+      class Country
+        def self.load_file()
+          {"new_york"=>{"name"=>"New York", "id"=>1}}.values
+        end
+      end
+      Country.reload # initial load
+    end
+
+    context "when nothing has been modified" do
+      it "does not reload anything" do
+        class Country
+          def self.load_file()
+            raise "should not have been called"
+          end
+        end
+        Country.dirty.should be_false
+        Country.reload
+        Country.dirty.should be_false
+      end
+    end
+
+    context "when forced" do
+      it "reloads the data" do
+        class Country
+          def self.load_file()
+            {"new_york"=>{"name"=>"New York", "id"=>2}}.values
+          end
+        end
+        Country.dirty.should be_false
+        Country.find_by_id(2).should be_nil
+        Country.reload(true)
+        Country.dirty.should be_false
+        Country.find(2).name.should == "New York"
+      end
+    end
+
+    context "when the data has been modified" do
+      it "reloads the data" do
+        Country.create!
+        Country.dirty.should be_true
+        Country.reload
+        Country.dirty.should be_false
+      end
+    end
+  end
+
 end
