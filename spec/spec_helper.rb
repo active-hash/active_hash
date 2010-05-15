@@ -1,6 +1,6 @@
 require 'spec'
 require 'spec/autorun'
-require 'activerecord'
+require 'active_record'
 require 'acts_as_fu'
 require 'fixjour'
 
