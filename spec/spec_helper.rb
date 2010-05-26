@@ -1,7 +1,9 @@
 require 'spec'
 require 'spec/autorun'
 require 'active_record'
-require 'acts_as_fu'
+silence_stream STDERR do
+  require 'acts_as_fu' # suppress activerecord warnings
+end
 require 'fixjour'
 
 $LOAD_PATH.unshift(File.dirname(__FILE__))
