@@ -8,6 +8,10 @@ module ActiveHash
     class << self
       attr_reader :field_names
 
+      def the_meta_class
+        respond_to?(:singleton_class) ? singleton_class : metaclass
+      end
+
       def data=(array_of_hashes)
         mark_dirty
         @records = nil
@@ -173,7 +177,7 @@ module ActiveHash
       def define_custom_find_method(field_name)
         method_name = "find_by_#{field_name}"
         unless singleton_methods.include?(method_name)
-          metaclass.instance_eval do
+          the_meta_class.instance_eval do
             define_method(method_name) do |name|
               all.detect {|record| record.send(field_name) == name }
             end
@@ -186,7 +190,7 @@ module ActiveHash
       def define_custom_find_all_method(field_name)
         method_name = "find_all_by_#{field_name}"
         unless singleton_methods.include?(method_name)
-          metaclass.instance_eval do
+          the_meta_class.instance_eval do
             unless singleton_methods.include?(method_name)
               define_method(method_name) do |name|
                 all.select {|record| record.send(field_name) == name }
