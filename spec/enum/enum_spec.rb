@@ -46,7 +46,7 @@ describe ActiveHash::Base, "enum" do
         enum_accessor :name
       end
 
-      Movie::DIE_HARD.name.should == 'Die Hard 2'
+      Movie::DIE_HARD_2.name.should == 'Die Hard 2'
       Movie::THE_INFORMANT.name.should == 'The Informant!'
       Movie::IN_OUT.name.should == 'In & Out'
     end
