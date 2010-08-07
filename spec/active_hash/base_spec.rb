@@ -626,6 +626,30 @@ describe ActiveHash, "Base" do
 
   end
 
+  describe "#cache_key" do
+    it 'should use the class\'s cache_key and id' do
+      Country.data = [
+        {:id => 1, :name => "foo"}
+      ]
+
+      Country.first.cache_key.should == 'countries/1'
+    end
+
+    it 'should use the record\'s updated_at if present' do
+      timestamp = Time.now
+
+      Country.data = [
+        {:id => 1, :name => "foo", :updated_at => timestamp}
+      ]
+
+      Country.first.cache_key.should == "countries/1-#{timestamp.to_s(:number)}"
+    end
+
+    it 'should use "new" instead of the id for a new record' do
+      Country.new(:id => 1).cache_key.should == 'countries/new'
+    end
+  end
+
   describe "#save" do
 
     before do

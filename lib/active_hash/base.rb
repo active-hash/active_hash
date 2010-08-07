@@ -307,6 +307,17 @@ module ActiveHash
       id.hash
     end
 
+    def cache_key
+      case
+      when new_record?
+        "#{self.class.model_name.cache_key}/new"
+      when timestamp = self[:updated_at]
+        "#{self.class.model_name.cache_key}/#{id}-#{timestamp.to_s(:number)}"
+      else
+        "#{self.class.model_name.cache_key}/#{id}"
+      end
+    end
+
     def save
       self.class.insert(self)
       true
