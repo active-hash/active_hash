@@ -31,9 +31,19 @@ describe ActiveHash, "Base" do
       Country.should respond_to(:find_by_iso_name)
     end
 
+    it "defines banged single finder methods for each field" do
+      Country.should respond_to(:find_by_name!)
+      Country.should respond_to(:find_by_iso_name!)
+    end
+
     it "defines array finder methods for each field" do
       Country.should respond_to(:find_all_by_name)
       Country.should respond_to(:find_all_by_iso_name)
+    end
+
+    it "does not define banged array finder methods for each field" do
+      Country.should_not respond_to(:find_all_by_name!)
+      Country.should_not respond_to(:find_all_by_iso_name!)
     end
 
     it "defines single finder methods for all combinations of fields" do
@@ -41,9 +51,19 @@ describe ActiveHash, "Base" do
       Country.should respond_to(:find_by_iso_name_and_name)
     end
 
+    it "defines banged single finder methods for all combinations of fields" do
+      Country.should respond_to(:find_by_name_and_iso_name!)
+      Country.should respond_to(:find_by_iso_name_and_name!)
+    end
+
     it "defines array finder methods for all combinations of fields" do
       Country.should respond_to(:find_all_by_name_and_iso_name)
       Country.should respond_to(:find_all_by_iso_name_and_name)
+    end
+
+    it "does not define banged array finder methods for all combinations of fields" do
+      Country.should_not respond_to(:find_all_by_name_and_iso_name!)
+      Country.should_not respond_to(:find_all_by_iso_name_and_name!)
     end
   end
 
@@ -311,6 +331,40 @@ describe ActiveHash, "Base" do
       end
     end
 
+    describe "find_by_<field_name>!" do
+      describe "with a match" do
+        context "for a non-nil argument" do
+          it "returns the first matching record" do
+            Country.find_by_name!("US").id.should == 12
+          end
+        end
+
+        context "for a nil argument" do
+          it "returns the first matching record" do
+            Country.find_by_name!(nil).id.should == 11
+          end
+        end
+      end
+
+      describe "without a match" do
+        before do
+          Country.data = []
+        end
+
+        context "for a non-nil argument" do
+          it "raises ActiveHash::RecordNotFound" do
+            lambda { Country.find_by_name!("Mexico") }.should raise_error(ActiveHash::RecordNotFound, /Couldn't find Country with name = Mexico/)
+          end
+        end
+
+        context "for a nil argument" do
+          it "raises ActiveHash::RecordNotFound" do
+            lambda { Country.find_by_name!(nil) }.should raise_error(ActiveHash::RecordNotFound, /Couldn't find Country with name = /)
+          end
+        end
+      end
+    end
+
     describe "find_all_by_<field_name>" do
       describe "with matches" do
         it "returns all matching records" do
@@ -353,6 +407,35 @@ describe ActiveHash, "Base" do
           lambda {
             Country.find_by_name_and_shoe_size("US", 10)
           }.should raise_error(NoMethodError, "undefined method `find_by_name_and_shoe_size' for Country:Class")
+        end
+      end
+    end
+
+    describe "find_by_<field_one>_and_<field_two>!" do
+      describe "with a match" do
+        it "returns the first matching record" do
+          Country.find_by_name_and_monarch!("Canada", "The Crown of England").id.should == 13
+          Country.find_by_monarch_and_name!("The Crown of England", "Canada").id.should == 13
+        end
+      end
+
+      describe "with a match based on to_s" do
+        it "returns the first matching record" do
+          Country.find_by_name_and_id!("Canada", "13").id.should == 13
+        end
+      end
+
+      describe "without a match" do
+        it "raises ActiveHash::RecordNotFound" do
+          lambda { Country.find_by_name_and_monarch!("US", "The Crown of England") }.should raise_error(ActiveHash::RecordNotFound, /Couldn't find Country with name = US, monarch = The Crown of England/)
+        end
+      end
+
+      describe "for fields the class doesn't have" do
+        it "raises a NoMethodError" do
+          lambda {
+            Country.find_by_name_and_shoe_size!("US", 10)
+          }.should raise_error(NoMethodError, "undefined method `find_by_name_and_shoe_size!' for Country:Class")
         end
       end
     end

@@ -137,13 +137,24 @@ module ActiveHash
         config = configuration_for_custom_finder(method_name)
         attribute_pairs = config[:fields].zip(args)
         matches = all.select { |base| attribute_pairs.all? { |field, value| base.send(field).to_s == value.to_s } }
-        config[:all?] ? matches : matches.first
+
+        if config[:all?]
+          matches
+        else
+          result = matches.first
+          if config[:bang?]
+            result || raise(RecordNotFound, "Couldn\'t find #{name} with #{attribute_pairs.collect {|pair| "#{pair.first} = #{pair.second}"}.join(', ')}")
+          else
+            result
+          end
+        end
       end
 
       def configuration_for_custom_finder(finder_name)
-        if finder_name.to_s.match(/^find_(all_)?by_(.*)/)
+        if finder_name.to_s.match(/^find_(all_)?by_(.*?)(!)?$/) && !($1 && $3)
           {
             :all?   => !!$1,
+            :bang?  => !!$3,
             :fields => $2.split('_and_')
           }
         end
