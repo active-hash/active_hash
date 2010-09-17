@@ -590,12 +590,19 @@ describe ActiveHash, "Base" do
         {:id => 1, :name => "foo"}
       ]
 
-      build_model :books do
-        text :subject_type
-        integer :subject_id
+      class Book < ActiveRecord::Base
+        establish_connection :adapter => "sqlite3", :database => ":memory:"
+        connection.create_table(:books, :force => true) do |t|
+          t.text :subject_type
+          t.integer :subject_id
+        end
         belongs_to :subject, :polymorphic => true
         belongs_to :country
       end
+    end
+
+    after do
+      Object.send :remove_const, :Book
     end
 
     it "should be possible to use it as a parent" do

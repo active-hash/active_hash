@@ -3,11 +3,16 @@ require 'spec/spec_helper'
 describe ActiveHash::Base, "associations" do
 
   before do
-    build_model :countries do
+    class Country < ActiveRecord::Base
+      establish_connection :adapter => "sqlite3", :database => ":memory:"
+      connection.create_table(:countries, :force => true) {}
     end
 
-    build_model :schools do
-      integer :city_id
+    class School < ActiveRecord::Base
+      establish_connection :adapter => "sqlite3", :database => ":memory:"
+      connection.create_table(:schools, :force => true) do |t|
+        t.integer :city_id
+      end
     end
 
     class City < ActiveHash::Base
@@ -18,14 +23,20 @@ describe ActiveHash::Base, "associations" do
       include ActiveHash::Associations
     end
 
-    build_model :books do
-      integer :author_id
+    class Book < ActiveRecord::Base
+      establish_connection :adapter => "sqlite3", :database => ":memory:"
+      connection.create_table(:books, :force => true) do |t|
+        t.integer :author_id
+      end
     end
   end
 
   after do
     Object.send :remove_const, :City
     Object.send :remove_const, :Author
+    Object.send :remove_const, :Country
+    Object.send :remove_const, :School
+    Object.send :remove_const, :Book
   end
 
   describe "#has_many" do

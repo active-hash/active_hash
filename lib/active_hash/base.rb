@@ -9,7 +9,9 @@ module ActiveHash
       attr_reader :field_names
 
       def the_meta_class
-        respond_to?(:singleton_class) ? singleton_class : metaclass
+        class << self
+          self
+        end
       end
 
       def data=(array_of_hashes)
@@ -17,7 +19,7 @@ module ActiveHash
         @records = nil
         write_inheritable_attribute(:data, array_of_hashes)
         if array_of_hashes
-          auto_assign_fields( array_of_hashes )
+          auto_assign_fields(array_of_hashes)
           array_of_hashes.each do |hash|
             insert new(hash)
           end
@@ -32,7 +34,7 @@ module ActiveHash
       end
 
       def next_id
-        max_record = all.max {|a, b| a.id <=> b.id }
+        max_record = all.max { |a, b| a.id <=> b.id }
         if max_record.nil?
           1
         elsif max_record.id.is_a?(Numeric)
@@ -46,6 +48,7 @@ module ActiveHash
         mark_dirty
         record
       end
+
       alias_method :add, :create
 
       def create!(attributes = {})
@@ -73,28 +76,28 @@ module ActiveHash
         @records = []
       end
 
-      def find(id, *args)
+      def find(id, * args)
         case id
           when nil
             nil
           when :all
             all
           when Array
-            all.select {|record| id.map(&:to_i).include?(record.id) }
+            all.select { |record| id.map(& :to_i).include?(record.id) }
           else
             find_by_id(id) || begin
-             raise RecordNotFound.new("Couldn't find #{name} with ID=#{id}")
-           end
+              raise RecordNotFound.new("Couldn't find #{name} with ID=#{id}")
+            end
         end
       end
 
       def find_by_id(id)
-        all.detect {|record| record.id == id.to_i}
+        all.detect { |record| record.id == id.to_i }
       end
 
       delegate :first, :last, :to => :all
 
-      def fields(*args)
+      def fields(* args)
         options = args.extract_options!
         args.each do |field|
           field(field, options)
@@ -122,7 +125,7 @@ module ActiveHash
           end
       end
 
-      def method_missing(method_name, *args)
+      def method_missing(method_name, * args)
         return super unless respond_to? method_name
 
         config = configuration_for_custom_finder(method_name)
@@ -179,7 +182,7 @@ module ActiveHash
         unless singleton_methods.include?(method_name)
           the_meta_class.instance_eval do
             define_method(method_name) do |name|
-              all.detect {|record| record.send(field_name) == name }
+              all.detect { |record| record.send(field_name) == name }
             end
           end
         end
@@ -193,7 +196,7 @@ module ActiveHash
           the_meta_class.instance_eval do
             unless singleton_methods.include?(method_name)
               define_method(method_name) do |name|
-                all.select {|record| record.send(field_name) == name }
+                all.select { |record| record.send(field_name) == name }
               end
             end
           end
@@ -273,7 +276,7 @@ module ActiveHash
     alias quoted_id id
 
     def new_record?
-      ! self.class.all.include?(self)
+      !self.class.all.include?(self)
     end
 
     def destroyed?

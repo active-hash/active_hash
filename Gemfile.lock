@@ -1,59 +1,30 @@
---- 
-dependencies: 
-  acts_as_fu: 
-    group: 
-    - :default
-    version: = 0.0.5
-  activerecord: 
-    group: 
-    - :default
-    version: ">= 2.3.8"
-    require: 
-    - active_record
-  sqlite3-ruby: 
-    group: 
-    - :default
-    version: ">= 1.2.5"
-  fixjour: 
-    group: 
-    - :default
-    version: = 0.4.1
-  rspec: 
-    group: 
-    - :default
-    version: ">= 1.3.0"
-  jeweler: 
-    group: 
-    - :default
-    version: = 1.4.0
-  activesupport: 
-    group: 
-    - :default
-    version: ">= 2.3.8"
-specs: 
-- activesupport: 
-    version: 2.3.8
-- activerecord: 
-    version: 2.3.8
-- acts_as_fu: 
-    version: 0.0.5
-- fixjour: 
-    version: 0.4.1
-- json_pure: 
-    version: 1.4.3
-- gemcutter: 
-    version: 0.5.0
-- git: 
-    version: 1.2.5
-- rubyforge: 
-    version: 2.0.4
-- jeweler: 
-    version: 1.4.0
-- rspec: 
-    version: 1.3.0
-- sqlite3-ruby: 
-    version: 1.2.5
-hash: 139b114e436ae52b18831364cc2b94e1f667a9cb
-sources: 
-- Rubygems: 
-    uri: http://gemcutter.org
+GEM
+  remote: http://rubygems.org/
+  specs:
+    activerecord (2.3.8)
+      activesupport (= 2.3.8)
+    activesupport (2.3.8)
+    fixjour (0.4.1)
+      activerecord
+    gemcutter (0.6.1)
+    git (1.2.5)
+    jeweler (1.4.0)
+      gemcutter (>= 0.1.0)
+      git (>= 1.2.5)
+      rubyforge (>= 2.0.0)
+    json_pure (1.4.6)
+    rspec (1.3.0)
+    rubyforge (2.0.4)
+      json_pure (>= 1.1.7)
+    sqlite3-ruby (1.3.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  activerecord (= 2.3.8)
+  activesupport (= 2.3.8)
+  fixjour (= 0.4.1)
+  jeweler (= 1.4.0)
+  rspec (>= 1.3.0)
+  sqlite3-ruby (>= 1.2.5)

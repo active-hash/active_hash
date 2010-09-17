@@ -1,9 +1,6 @@
 require 'spec'
 require 'spec/autorun'
 require 'active_record'
-silence_stream STDERR do
-  require 'acts_as_fu' # suppress activerecord warnings
-end
 require 'fixjour'
 
 $LOAD_PATH.unshift(File.dirname(__FILE__))
@@ -19,6 +16,5 @@ ActiveHash::Base.class_eval do
 end
 
 Spec::Runner.configure do |config|
-  config.include ActsAsFu
   config.include Fixjour
 end
