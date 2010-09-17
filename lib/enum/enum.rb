@@ -44,7 +44,8 @@ module ActiveHash
 
       def constant_for(field_value)
         if constant = field_value.try(:dup)
-          constant.gsub!(/[^A-Za-z]*/, "") 
+          constant.gsub!(/[^A-Za-z]+/, "_")
+          constant.gsub!(/^_|_$/, '')
           constant.upcase!
           constant
         end

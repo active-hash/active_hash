@@ -45,10 +45,10 @@ describe ActiveHash::Base, "enum" do
         ]
         enum_accessor :name
       end
-      
-      Movie::DIEHARD.name.should == 'Die Hard 2'
-      Movie::THEINFORMANT.name.should == 'The Informant!'
-      Movie::INOUT.name.should == 'In & Out'
+
+      Movie::DIE_HARD.name.should == 'Die Hard 2'
+      Movie::THE_INFORMANT.name.should == 'The Informant!'
+      Movie::IN_OUT.name.should == 'In & Out'
     end
   end
 
@@ -77,9 +77,9 @@ describe ActiveHash::Base, "enum" do
 
     describe ".delete_all" do
       it "unsets all constants for deleted records" do
-        Borough.const_defined?("STATENISLAND").should be_true
+        Borough.const_defined?("STATEN_ISLAND").should be_true
         Borough.delete_all.should be_true
-        Borough.const_defined?("STATENISLAND").should be_false
+        Borough.const_defined?("STATEN_ISLAND").should be_false
       end
     end
   end
