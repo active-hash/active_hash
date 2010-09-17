@@ -1,3 +1,7 @@
+2010-09-16
+ - Enum format now uses underscores instead of removing all characters
+ - Removed test dependency on acts_as_fu
+
 2010-05-26
  - Silence metaclass deprecation warnings in active support 2.3.8
 
