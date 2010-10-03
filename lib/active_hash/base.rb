@@ -57,8 +57,14 @@ module ActiveHash
         record
       end
 
-      def all
-        @records || []
+      def all(options={})
+        if options.has_key?(:conditions)
+          (@records || []).select do |record|
+            options[:conditions].all? {|col, match| record[col] == match}
+          end
+        else
+          @records || []
+        end
       end
 
       def count

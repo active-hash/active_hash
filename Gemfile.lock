@@ -13,6 +13,7 @@ GEM
       git (>= 1.2.5)
       rubyforge (>= 2.0.0)
     json_pure (1.4.6)
+    rake (0.8.7)
     rspec (1.3.0)
     rubyforge (2.0.4)
       json_pure (>= 1.1.7)
@@ -26,5 +27,6 @@ DEPENDENCIES
   activesupport (= 2.3.8)
   fixjour (= 0.4.1)
   jeweler (= 1.4.0)
+  rake
   rspec (>= 1.3.0)
   sqlite3-ruby (>= 1.2.5)

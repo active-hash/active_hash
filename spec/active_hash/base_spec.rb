@@ -137,6 +137,13 @@ describe ActiveHash, "Base" do
       records.first.name.should == "Canada"
       records.length.should == 1
     end
+    
+    it "filters the records from a AR-like conditions hash" do
+      record = Country.all(:conditions => {:name => 'US'})
+      record.count.should == 1
+      record.first.id.should == 1
+      record.first.name.should == 'US'
+    end
   end
 
   describe ".count" do
