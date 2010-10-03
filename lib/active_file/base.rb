@@ -5,7 +5,7 @@ module ActiveFile
 
     class << self
 
-      def all
+      def all(options={})
         reload unless data_loaded
         super
       end
