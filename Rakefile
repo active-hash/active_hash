@@ -8,7 +8,20 @@ begin
     gem.summary = %Q{An ActiveRecord-like model that uses a hash or file as a datasource}
     gem.email = "jeff@zilkey.com"
     gem.homepage = "http://github.com/zilkey/active_hash"
-    gem.authors = ["Jeff Dean", "Mike Dalessio", "Corey Innis", "Peter Jaros", "Brandon Keene", "Brian Takita", "Pat Nakajima", "John Pignata", "Michael Schubert", "Jeremy Weiskotten"]
+    gem.authors = [
+      "Jeff Dean", 
+      "Mike Dalessio", 
+      "Corey Innis", 
+      "Peter Jaros", 
+      "Brandon Keene", 
+      "Brian Takita", 
+      "Pat Nakajima", 
+      "John Pignata", 
+      "Michael Schubert", 
+      "Jeremy Weiskotten",
+      "Ryan Garver",
+      "Tom Stuart",
+    ]
     gem.add_dependency('activesupport', [">= 2.2.2"])
     gem.post_install_message = "NOTE:  Enums have changed to use underscores.\n\nYou may have to do a search and replace to get your suite green."
   end
