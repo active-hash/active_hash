@@ -1,3 +1,8 @@
+2010-10-07
+ - Add conditions to ActiveHash#all (Ryan Garver)
+ - Add #cache_key to ActiveHash::Base (Tom Stuart)
+ - Add banged dynamic finder support to ActiveHash::Base (Tom Stuart)
+
 2010-09-16
  - Enum format now uses underscores instead of removing all characters
  - Removed test dependency on acts_as_fu
