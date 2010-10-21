@@ -65,6 +65,16 @@ describe ActiveHash, "Base" do
       Country.should_not respond_to(:find_all_by_name_and_iso_name!)
       Country.should_not respond_to(:find_all_by_iso_name_and_name!)
     end
+
+    it "allows you to pass options to the built-in find_by_* methods (but ignores the hash for now)" do
+      Country.find_by_name("Canada", :select => nil).should be_nil
+      Country.find_all_by_name("Canada", :select => nil).should == []
+    end
+
+    it "allows you to pass options to the custom find_by_* methods (but ignores the hash for now)" do
+      Country.find_by_name_and_iso_name("Canada", "CA", :select => nil).should be_nil
+      Country.find_all_by_name_and_iso_name("Canada", "CA", :select => nil).should == []
+    end
   end
 
   describe ".data=" do

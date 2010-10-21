@@ -131,7 +131,7 @@ module ActiveHash
           end
       end
 
-      def method_missing(method_name, * args)
+      def method_missing(method_name, *args)
         return super unless respond_to? method_name
 
         config = configuration_for_custom_finder(method_name)
@@ -198,8 +198,10 @@ module ActiveHash
         method_name = "find_by_#{field_name}"
         unless singleton_methods.include?(method_name)
           the_meta_class.instance_eval do
-            define_method(method_name) do |name|
-              all.detect { |record| record.send(field_name) == name }
+            define_method(method_name) do |*args|
+              options = args.extract_options!
+              identifier = args[0]
+              all.detect { |record| record.send(field_name) == identifier }
             end
           end
         end
@@ -212,8 +214,10 @@ module ActiveHash
         unless singleton_methods.include?(method_name)
           the_meta_class.instance_eval do
             unless singleton_methods.include?(method_name)
-              define_method(method_name) do |name|
-                all.select { |record| record.send(field_name) == name }
+              define_method(method_name) do |*args|
+                options = args.extract_options!
+                identifier = args[0]
+                all.select { |record| record.send(field_name) == identifier }
               end
             end
           end
