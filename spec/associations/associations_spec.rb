@@ -27,7 +27,9 @@ describe ActiveHash::Base, "associations" do
       establish_connection :adapter => "sqlite3", :database => ":memory:"
       connection.create_table(:books, :force => true) do |t|
         t.integer :author_id
+        t.boolean :published
       end
+      named_scope :published, { :conditions => { :published => true } }
     end
   end
 
@@ -43,15 +45,21 @@ describe ActiveHash::Base, "associations" do
 
     context "with ActiveRecord children" do
       before do
-        @included_book_1  = Book.create! :author_id => 1
-        @included_book_2  = Book.create! :author_id => 1
-        @excluded_book    = Book.create! :author_id => 2
+        @included_book_1  = Book.create! :author_id => 1, :published => true
+        @included_book_2  = Book.create! :author_id => 1, :published => false
+        @excluded_book    = Book.create! :author_id => 2, :published => true
       end
 
       it "find the correct records" do
         Author.has_many :books
         author = Author.create :id => 1
         author.books.should =~ [@included_book_1, @included_book_2]
+      end
+
+      it "return a scope so that we can apply further scopes" do
+        Author.has_many :books
+        author = Author.create :id => 1
+        author.books.published.should =~ [@included_book_1]
       end
     end
 

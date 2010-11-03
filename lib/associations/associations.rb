@@ -14,9 +14,14 @@ module ActiveHash
             :foreign_key => self.class.to_s.foreign_key
           }.merge(options)
 
-          options[:class_name].constantize.send("find_all_by_#{options[:foreign_key]}", id)
-        end
+          klass = options[:class_name].constantize
 
+          if klass.respond_to?(:scoped)
+            klass.scoped(:conditions => { options[:foreign_key] => id })
+          else
+            klass.send("find_all_by_#{options[:foreign_key]}", id)
+          end
+        end
       end
 
       def belongs_to(association_id, options = {})
