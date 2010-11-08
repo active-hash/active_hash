@@ -21,9 +21,10 @@ begin
       "Jeremy Weiskotten",
       "Ryan Garver",
       "Tom Stuart",
+      "Joel Chippindale"
     ]
     gem.add_dependency('activesupport', [">= 2.2.2"])
-    gem.post_install_message = "NOTE:  Enums have changed to use underscores.\n\nYou may have to do a search and replace to get your suite green."
+    # gem.post_install_message = ""
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError

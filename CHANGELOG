@@ -1,3 +1,6 @@
+2010-11-07
+  - Get ActiveHash::Associations to return a scope for has_many active record relationships (mocoso)
+
 2010-10-20
   - Allow find_by_* methods to accept an options hash, so rails associations don't blow up
 

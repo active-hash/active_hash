@@ -325,20 +325,6 @@ Constants are formed by first stripping all non-word characters and then upcasin
 
 The field specified as the _enum_accessor_ must contain unique data values.
 
-## Authors
-
- * Jeff Dean
- * Mike Dalessio
- * Ben Woosley
- * John Pignata
- * Pat Nakajima
- * Brandon Keene
- * Dave Yeu
- * Brian Takita
- * Corey Innis
- * Peter Jaros
- * Michael Schubert
-
 ## Copyright
 
-Copyright (c) 2009 Jeff Dean. See LICENSE for details.
+Copyright (c) 2010 Jeff Dean. See LICENSE for details.

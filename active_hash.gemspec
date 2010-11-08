@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{active_hash}
-  s.version = "0.8.5"
+  s.version = "0.8.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Jeff Dean", "Mike Dalessio", "Corey Innis", "Peter Jaros", "Brandon Keene", "Brian Takita", "Pat Nakajima", "John Pignata", "Michael Schubert", "Jeremy Weiskotten", "Ryan Garver", "Tom Stuart"]
-  s.date = %q{2010-10-20}
+  s.authors = ["Jeff Dean", "Mike Dalessio", "Corey Innis", "Peter Jaros", "Brandon Keene", "Brian Takita", "Pat Nakajima", "John Pignata", "Michael Schubert", "Jeremy Weiskotten", "Ryan Garver", "Tom Stuart", "Joel Chippindale"]
+  s.date = %q{2010-11-07}
   s.email = %q{jeff@zilkey.com}
   s.extra_rdoc_files = [
     "LICENSE",
@@ -45,9 +45,6 @@ Gem::Specification.new do |s|
      "spec/spec_helper.rb"
   ]
   s.homepage = %q{http://github.com/zilkey/active_hash}
-  s.post_install_message = %q{NOTE:  Enums have changed to use underscores.
-
-You may have to do a search and replace to get your suite green.}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}

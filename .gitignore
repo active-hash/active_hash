@@ -6,3 +6,4 @@ pkg
 .idea
 junk.*
 .bundle/*
+.rvmrc
