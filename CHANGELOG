@@ -1,3 +1,6 @@
+2010-11-09
+ - Use Ruby's definition of "word character" (numbers, underscores) when forming ActiveHash::Enum constants (tstuart)
+
 2010-11-07
   - Get ActiveHash::Associations to return a scope for has_many active record relationships (mocoso)
 
