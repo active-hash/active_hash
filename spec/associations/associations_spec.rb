@@ -53,13 +53,13 @@ describe ActiveHash::Base, "associations" do
       it "find the correct records" do
         Author.has_many :books
         author = Author.create :id => 1
-        author.books.should =~ [@included_book_1, @included_book_2]
+        author.books.should == [@included_book_1, @included_book_2]
       end
 
       it "return a scope so that we can apply further scopes" do
         Author.has_many :books
         author = Author.create :id => 1
-        author.books.published.should =~ [@included_book_1]
+        author.books.published.should == [@included_book_1]
       end
     end
 
@@ -74,13 +74,13 @@ describe ActiveHash::Base, "associations" do
       it "find the correct records" do
         City.has_many :authors
         city = City.create :id => 1
-        city.authors.should =~ [@included_author_1, @included_author_2]
+        city.authors.should == [@included_author_1, @included_author_2]
       end
 
       it "uses the correct class name when passed" do
         City.has_many :writers, :class_name => "Author"
         city = City.create :id => 1
-        city.writers.should =~ [@included_author_1, @included_author_2]
+        city.writers.should == [@included_author_1, @included_author_2]
       end
     end
 

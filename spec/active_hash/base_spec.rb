@@ -241,7 +241,7 @@ describe ActiveHash, "Base" do
 
     context "with :all" do
       it "returns all records" do
-        Country.find(:all).should =~ [Country.new(:id => 1), Country.new(:id => 2)]
+        Country.find(:all).should == [Country.new(:id => 1), Country.new(:id => 2)]
       end
     end
 
@@ -262,7 +262,7 @@ describe ActiveHash, "Base" do
       end
 
       it "returns all matching ids" do
-        Country.find([1, 3]).should =~ [Country.new(:id => 1), Country.new(:id => 3)]
+        Country.find([1, 3]).should == [Country.new(:id => 1), Country.new(:id => 3)]
       end
     end
   end
