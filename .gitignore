@@ -7,3 +7,4 @@ pkg
 junk.*
 .bundle/*
 .rvmrc
+*.gem
