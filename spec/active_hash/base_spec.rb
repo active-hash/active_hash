@@ -571,6 +571,16 @@ describe ActiveHash, "Base" do
     end
   end
 
+  describe "#persisted" do
+    it "should return true if the object has been saved" do
+      Country.create(:id => 2).should be_persisted
+    end
+
+    it "should return false if the object has not been saved" do
+      Country.new(:id => 2).should_not be_persisted
+    end
+  end
+
   describe "#eql?" do
     before do
       class Region < ActiveHash::Base

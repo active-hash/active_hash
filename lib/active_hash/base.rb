@@ -308,6 +308,10 @@ module ActiveHash
       true
     end
 
+    def persisted?
+      self.class.all.map(&:id).include?(id)
+    end
+
     def to_param
       id.to_s
     end
