@@ -29,7 +29,12 @@ describe ActiveHash::Base, "associations" do
         t.integer :author_id
         t.boolean :published
       end
-      named_scope :published, { :conditions => { :published => true } }
+
+      if Object.const_defined?(:ActiveModel)
+        scope :published, {:conditions => {:published => true}}
+      else
+        named_scope :published, {:conditions => {:published => true}}
+      end
     end
   end
 
@@ -45,9 +50,9 @@ describe ActiveHash::Base, "associations" do
 
     context "with ActiveRecord children" do
       before do
-        @included_book_1  = Book.create! :author_id => 1, :published => true
-        @included_book_2  = Book.create! :author_id => 1, :published => false
-        @excluded_book    = Book.create! :author_id => 2, :published => true
+        @included_book_1 = Book.create! :author_id => 1, :published => true
+        @included_book_2 = Book.create! :author_id => 1, :published => false
+        @excluded_book = Book.create! :author_id => 2, :published => true
       end
 
       it "find the correct records" do
@@ -66,9 +71,9 @@ describe ActiveHash::Base, "associations" do
     context "with ActiveHash children" do
       before do
         Author.field :city_id
-        @included_author_1  = Author.create :city_id => 1
-        @included_author_2  = Author.create :city_id => 1
-        @excluded_author    = Author.create :city_id => 2
+        @included_author_1 = Author.create :city_id => 1
+        @included_author_2 = Author.create :city_id => 1
+        @excluded_author = Author.create :city_id => 2
       end
 
       it "find the correct records" do

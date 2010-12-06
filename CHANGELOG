@@ -1,3 +1,9 @@
+2010-12-06
+ - added dependency on ActiveModel
+ - add persisted? method to ActiveHash::Base
+ - ActiveHash::Base#save takes *args to be compatible with ActiveModel
+ - ActiveHash::Base#to_param returns nil if the object hasn't been saved
+
 2010-11-09
  - Use Ruby's definition of "word character" (numbers, underscores) when forming ActiveHash::Enum constants (tstuart)
 

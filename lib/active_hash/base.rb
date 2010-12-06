@@ -5,6 +5,16 @@ module ActiveHash
 
   class Base
     class_inheritable_accessor :data, :dirty
+
+    if Object.const_defined?(:ActiveModel)
+      extend ActiveModel::Naming
+      include ActiveModel::Conversion
+    else
+      def to_param
+        id.present? ? id.to_s : nil
+      end
+    end
+
     class << self
       attr_reader :field_names
 
@@ -143,7 +153,7 @@ module ActiveHash
         else
           result = matches.first
           if config[:bang?]
-            result || raise(RecordNotFound, "Couldn\'t find #{name} with #{attribute_pairs.collect {|pair| "#{pair.first} = #{pair.second}"}.join(', ')}")
+            result || raise(RecordNotFound, "Couldn\'t find #{name} with #{attribute_pairs.collect {|pair| "#{pair[0]} = #{pair[1]}"}.join(', ')}")
           else
             result
           end
@@ -304,16 +314,12 @@ module ActiveHash
       false
     end
 
-    def readonly?
-      true
-    end
-
     def persisted?
       self.class.all.map(&:id).include?(id)
     end
 
-    def to_param
-      id.to_s
+    def readonly?
+      true
     end
 
     def eql?(other)
@@ -337,7 +343,21 @@ module ActiveHash
       end
     end
 
-    def save
+    def errors
+      obj = Object.new
+
+      def obj.[](key)
+        []
+      end
+
+      def obj.full_messages()
+        []
+      end
+
+      obj
+    end
+
+    def save(*args)
       self.class.insert(self)
       true
     end

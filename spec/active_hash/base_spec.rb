@@ -567,7 +567,17 @@ describe ActiveHash, "Base" do
 
   describe "#to_param" do
     it "should return id as a string" do
-      Country.new(:id => 2).to_param.should == "2"
+      Country.create(:id => 2).to_param.should == "2"
+    end
+  end
+
+  describe "#persisted" do
+    it "should return true if the object has been saved" do
+      Country.create(:id => 2).should be_persisted
+    end
+
+    it "should return false if the object has not been saved" do
+      Country.new(:id => 2).should_not be_persisted
     end
   end
 
