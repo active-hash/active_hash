@@ -173,7 +173,7 @@ module ActiveHash
       private :configuration_for_custom_finder
 
       def define_getter_method(field, default_value)
-        unless instance_methods.include?(field.to_s)
+        unless has_instance_method?(field)
           define_method(field) do
             attributes[field].nil? ? default_value : attributes[field]
           end
@@ -184,7 +184,7 @@ module ActiveHash
 
       def define_setter_method(field)
         method_name = "#{field}="
-        unless instance_methods.include?(method_name)
+        unless has_instance_method?(method_name)
           define_method(method_name) do |new_val|
             attributes[field] = new_val
           end
@@ -194,8 +194,8 @@ module ActiveHash
       private :define_setter_method
 
       def define_interrogator_method(field)
-        method_name = "#{field}?"
-        unless instance_methods.include?(method_name)
+        method_name = :"#{field}?"
+        unless has_instance_method?(method_name)
           define_method(method_name) do
             send(field).present?
           end
@@ -205,8 +205,8 @@ module ActiveHash
       private :define_interrogator_method
 
       def define_custom_find_method(field_name)
-        method_name = "find_by_#{field_name}"
-        unless singleton_methods.include?(method_name)
+        method_name = :"find_by_#{field_name}"
+        unless has_singleton_method?(method_name)
           the_meta_class.instance_eval do
             define_method(method_name) do |*args|
               options = args.extract_options!
@@ -220,8 +220,8 @@ module ActiveHash
       private :define_custom_find_method
 
       def define_custom_find_all_method(field_name)
-        method_name = "find_all_by_#{field_name}"
-        unless singleton_methods.include?(method_name)
+        method_name = :"find_all_by_#{field_name}"
+        unless has_singleton_method?(method_name)
           the_meta_class.instance_eval do
             unless singleton_methods.include?(method_name)
               define_method(method_name) do |*args|
@@ -276,14 +276,26 @@ module ActiveHash
 
       private :mark_clean
 
+      def has_instance_method?(name)
+        instance_methods.map{|method| method.to_sym}.include?(name)
+      end
+
+      private :has_instance_method?
+
+      def has_singleton_method?(name)
+        singleton_methods.map{|method| method.to_sym}.include?(name)
+      end
+
+      private :has_singleton_method?
+
     end
 
     attr_reader :attributes
 
-    def initialize(options = {})
-      options.symbolize_keys!
-      @attributes = options
-      options.each do |key, value|
+    def initialize(attributes = {})
+      attributes.symbolize_keys!
+      @attributes = attributes
+      attributes.dup.each do |key, value|
         send "#{key}=", value
       end
     end

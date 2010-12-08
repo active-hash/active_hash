@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{active_hash}
-  s.version = "0.9.0"
+  s.version = "0.9.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = [
@@ -18,9 +18,10 @@ Gem::Specification.new do |s|
     "Jeremy Weiskotten",
     "Ryan Garver",
     "Tom Stuart",
-    "Joel Chippindale"
+    "Joel Chippindale",
+    "Kevin Olsen"
   ]
-  s.date = %q{2010-12-06}
+  s.date = %q{2010-12-08}
   s.email = %q{jeff@zilkey.com}
   s.extra_rdoc_files = [
     "LICENSE",

@@ -692,6 +692,11 @@ describe ActiveHash, "Base" do
         end
       end
 
+      Country.find_by_name("foo").should == "find_by_name defined manually"
+      Country.find_all_by_name("foo").should == "find_all_by_name defined manually"
+      Country.new.name.should == "name defined manually"
+      Country.new.name?.should == "name? defined manually"
+
       Country.data = [
         {:name => "foo"}
       ]

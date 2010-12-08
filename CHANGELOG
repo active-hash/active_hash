@@ -1,11 +1,14 @@
+2010-12-08
+  - ruby 1.9.2 compatibility
+
 2010-12-06
- - added dependency on ActiveModel
- - add persisted? method to ActiveHash::Base
- - ActiveHash::Base#save takes *args to be compatible with ActiveModel
- - ActiveHash::Base#to_param returns nil if the object hasn't been saved
+  - added dependency on ActiveModel
+  - add persisted? method to ActiveHash::Base
+  - ActiveHash::Base#save takes *args to be compatible with ActiveModel
+  - ActiveHash::Base#to_param returns nil if the object hasn't been saved
 
 2010-11-09
- - Use Ruby's definition of "word character" (numbers, underscores) when forming ActiveHash::Enum constants (tstuart)
+  - Use Ruby's definition of "word character" (numbers, underscores) when forming ActiveHash::Enum constants (tstuart)
 
 2010-11-07
   - Get ActiveHash::Associations to return a scope for has_many active record relationships (mocoso)
@@ -14,23 +17,23 @@
   - Allow find_by_* methods to accept an options hash, so rails associations don't blow up
 
 2010-10-07
- - Add conditions to ActiveHash#all (Ryan Garver)
- - Add #cache_key to ActiveHash::Base (Tom Stuart)
- - Add banged dynamic finder support to ActiveHash::Base (Tom Stuart)
+  - Add conditions to ActiveHash#all (Ryan Garver)
+  - Add #cache_key to ActiveHash::Base (Tom Stuart)
+  - Add banged dynamic finder support to ActiveHash::Base (Tom Stuart)
 
 2010-09-16
- - Enum format now uses underscores instead of removing all characters
- - Removed test dependency on acts_as_fu
+  - Enum format now uses underscores instead of removing all characters
+  - Removed test dependency on acts_as_fu
 
 2010-05-26
- - Silence metaclass deprecation warnings in active support 2.3.8
+  - Silence metaclass deprecation warnings in active support 2.3.8
 
 2010-05-04
- - When calling ActiveFile::Base.reload do not actually perform the reload if nothing has been modified unless you call reload(true) to force (Michael Schubert)
+  - When calling ActiveFile::Base.reload do not actually perform the reload if nothing has been modified unless you call reload(true) to force (Michael Schubert)
 
 2010-04-25
- - When ActiveRecord model belongs_to an ActiveHash and the associated id is nil, returns nil instead of raising RecordNotFound (Jeremy Weiskotten)
- - Merged Nakajima's "add" alias for "create" - gotta save those ASCII characters :)
+  - When ActiveRecord model belongs_to an ActiveHash and the associated id is nil, returns nil instead of raising RecordNotFound (Jeremy Weiskotten)
+  - Merged Nakajima's "add" alias for "create" - gotta save those ASCII characters :)
 
 2010-03-01
   - Removed "extend"-related deprecations - they didn't play well with rails class loading
@@ -45,8 +48,7 @@
   - Calling #belongs_to now creates the underlying field if it's not already there (belongs_to :city will create the :city_id field)
 
 2009-12-10
-  - Fixed a bug where belongs_to associations would raise an error instead of returning
-    nil when the parent object didn't exist.
+  - Fixed a bug where belongs_to associations would raise an error instead of returning nil when the parent object didn't exist.
   - Added #[] and #[]= accessors for more ActiveRecord-esque-ness. (Pat Nakajima & Dave Yeu)
 
 2009-12-01
