@@ -1,8 +1,11 @@
 # -*- encoding: utf-8 -*-
 
+$:.push File.expand_path("../lib", __FILE__)
+require "active_hash/version"
+
 Gem::Specification.new do |s|
   s.name = %q{active_hash}
-  s.version = "0.9.1"
+  s.version = ActiveHash::Gem::VERSION
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = [
@@ -21,7 +24,7 @@ Gem::Specification.new do |s|
     "Joel Chippindale",
     "Kevin Olsen"
   ]
-  s.date = %q{2010-12-08}
+  s.date = %q{2011-01-22}
   s.email = %q{jeff@zilkey.com}
   s.extra_rdoc_files = [
     "LICENSE",
@@ -31,7 +34,6 @@ Gem::Specification.new do |s|
     "CHANGELOG",
     "LICENSE",
     "README.md",
-    "VERSION",
     "active_hash.gemspec",
     Dir.glob("lib/**/*")
   ].flatten
