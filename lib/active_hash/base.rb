@@ -3,6 +3,9 @@ module ActiveHash
   class RecordNotFound < StandardError
   end
 
+  class ReservedFieldError < StandardError
+  end
+
   class Base
     class_inheritable_accessor :data, :dirty
 
@@ -115,7 +118,7 @@ module ActiveHash
 
       delegate :first, :last, :to => :all
 
-      def fields(* args)
+      def fields(*args)
         options = args.extract_options!
         args.each do |field|
           field(field, options)
@@ -123,6 +126,7 @@ module ActiveHash
       end
 
       def field(field_name, options = {})
+        validate_field(field_name)
         field_names << field_name
 
         define_getter_method(field_name, options[:default])
@@ -131,6 +135,14 @@ module ActiveHash
         define_custom_find_method(field_name)
         define_custom_find_all_method(field_name)
       end
+
+      def validate_field(field_name)
+        if [:attributes].include?(field_name.to_sym)
+          raise ReservedFieldError.new("#{field_name} is a reserved field in ActiveHash.  Please use another name.")
+        end
+      end
+
+      private :validate_field
 
       def respond_to?(method_name, include_private=false)
         super ||

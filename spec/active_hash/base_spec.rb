@@ -75,6 +75,12 @@ describe ActiveHash, "Base" do
       Country.find_by_name_and_iso_name("Canada", "CA", :select => nil).should be_nil
       Country.find_all_by_name_and_iso_name("Canada", "CA", :select => nil).should == []
     end
+
+    it "blows up if you try to overwrite :attributes" do
+      proc do
+        Country.field :attributes
+      end.should raise_error(ActiveHash::ReservedFieldError)
+    end
   end
 
   describe ".data=" do
