@@ -147,7 +147,7 @@ describe ActiveHash, "Base" do
     end
 
     it "returns all data as inflated objects" do
-      Country.all.all?{|country| country.should be_kind_of(Country)}
+      Country.all.all? { |country| country.should be_kind_of(Country) }
     end
 
     it "populates the data correctly" do
@@ -167,7 +167,7 @@ describe ActiveHash, "Base" do
       records.first.name.should == "Canada"
       records.length.should == 1
     end
-    
+
     it "filters the records from a AR-like conditions hash" do
       record = Country.all(:conditions => {:name => 'US'})
       record.count.should == 1
@@ -468,6 +468,14 @@ describe ActiveHash, "Base" do
     end
   end
 
+  describe "#method_missing" do
+    it "doesn't blow up if you call a missing dynamic finder when fields haven't been set" do
+      proc do
+        Country.find_by_name("Foo")
+      end.should raise_error(NoMethodError, "undefined method `find_by_name' for Country:Class")
+    end
+  end
+
   describe "#attributes" do
     it "returns the hash passed in the initializer" do
       Country.field :foo
@@ -644,8 +652,8 @@ describe ActiveHash, "Base" do
     end
 
     it "is hashable" do
-      { Country.new(:id => 4) => "bar"}.should == {Country.new(:id => 4) => "bar" }
-      { Country.new(:id => 3) => "bar"}.should_not == {Country.new(:id => 4) => "bar" }
+      {Country.new(:id => 4) => "bar"}.should == {Country.new(:id => 4) => "bar"}
+      {Country.new(:id => 3) => "bar"}.should_not == {Country.new(:id => 4) => "bar"}
     end
   end
 

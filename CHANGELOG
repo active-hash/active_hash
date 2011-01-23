@@ -1,3 +1,6 @@
+2011-01-22
+  - improved method_missing errors for dynamic finders
+
 2010-12-08
   - ruby 1.9.2 compatibility
 

@@ -16,7 +16,9 @@ module ActiveHash
     end
 
     class << self
-      attr_reader :field_names
+      def field_names
+        @field_names ||= []
+      end
 
       def the_meta_class
         class << self
@@ -121,8 +123,7 @@ module ActiveHash
       end
 
       def field(field_name, options = {})
-        @field_names ||= []
-        @field_names << field_name
+        field_names << field_name
 
         define_getter_method(field_name, options[:default])
         define_setter_method(field_name)
