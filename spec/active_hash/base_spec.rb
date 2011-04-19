@@ -944,34 +944,4 @@ describe ActiveHash, "Base" do
 
   end
 
-  describe "using with Fixjour" do
-
-    before do
-      Country.field :name
-      Fixjour :allow_redundancy => true do
-        define_builder(Country) do |klass, overrides|
-          klass.new(:name => 'Pat')
-        end
-      end
-    end
-
-    it "should verify" do
-      Fixjour.verify!
-    end
-
-    it "should work with the create builder" do
-      proc do
-        create_country
-      end.should change(Country, :count).by(1)
-    end
-
-    it "should work with the new builder" do
-      proc do
-        country = new_country :name => "foo"
-        country.name.should == "foo"
-      end.should_not change(Country, :count)
-    end
-
-  end
-
 end
