@@ -11,6 +11,15 @@ describe ActiveHash, "Base" do
     Object.send :remove_const, :Country
   end
 
+  it "passes LocalJumpError through in .transaction when no block is given" do
+    expect { Country.transaction }.to raise_error(LocalJumpError)
+  end
+
+  # This require must be after the above example so that ActiveRecord
+  # is available in its full glory for the test classes that use it,
+  # but doesn't create a false positive for the above example.
+  require "active_record"
+
   describe ".fields" do
     before do
       Country.fields :name, :iso_name

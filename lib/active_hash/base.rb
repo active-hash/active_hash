@@ -88,8 +88,9 @@ module ActiveHash
 
       def transaction
         yield
+      rescue LocalJumpError => err
+        raise err
       rescue ActiveRecord::Rollback
-
       end
 
       def delete_all
