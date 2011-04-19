@@ -8,3 +8,4 @@ junk.*
 .bundle/*
 .rvmrc
 *.gem
+Gemfile.lock
