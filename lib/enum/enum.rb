@@ -43,7 +43,7 @@ module ActiveHash
       private :set_constant
 
       def constant_for(field_value)
-        if constant = field_value.try(:dup)
+        if constant = !field_value.nil? && field_value.dup
           constant.gsub!(/\W+/, "_")
           constant.gsub!(/^_|_$/, '')
           constant.upcase!
