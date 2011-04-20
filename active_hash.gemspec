@@ -22,7 +22,8 @@ Gem::Specification.new do |s|
     "Ryan Garver",
     "Tom Stuart",
     "Joel Chippindale",
-    "Kevin Olsen"
+    "Kevin Olsen",
+    "Vladimir Andrijevik"
   ]
   s.date = %q{2011-01-22}
   s.email = %q{jeff@zilkey.com}
@@ -43,7 +44,6 @@ Gem::Specification.new do |s|
   s.summary = %q{An ActiveRecord-like model that uses a hash or file as a datasource}
   s.test_files = [
     "Gemfile",
-    "Gemfile.lock",
     "spec/active_file/base_spec.rb",
     "spec/active_hash/base_spec.rb",
     "spec/active_yaml/base_spec.rb",

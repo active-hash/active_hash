@@ -1,5 +1,8 @@
+2011-04-19
+  - better dependency management and compatibility with ActiveSupport 2.x (thanks vandrijevik!)
+
 2011-01-22
-  - improved method_missing errors for dynamic finders (
+  - improved method_missing errors for dynamic finders
   - prevent users from trying to overwrite :attributes (https://github.com/zilkey/active_hash/issues/#issue/33)
 
 2010-12-08
