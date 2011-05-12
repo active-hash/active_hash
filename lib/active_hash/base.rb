@@ -74,11 +74,15 @@ module ActiveHash
 
       def all(options={})
         if options.has_key?(:conditions)
-          (@records || []).select do |record|
-            options[:conditions].all? {|col, match| record[col] == match}
-          end
+          where(options[:conditions])
         else
           @records || []
+        end
+      end
+
+      def where(options)
+        (@records || []).select do |record|
+          options.all? {|col, match| record[col] == match}
         end
       end
 
