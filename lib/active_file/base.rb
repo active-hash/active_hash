@@ -10,6 +10,11 @@ module ActiveFile
         super
       end
 
+      def where(options)
+        reload unless data_loaded
+        super
+      end
+
       def delete_all
         self.data_loaded = true
         super
