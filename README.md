@@ -290,7 +290,7 @@ The two methods you need to implement are load_file, which needs to return an ar
 Setting the default file location in Rails:
 
     # config/initializers/active_file.rb
-    ActiveFile.set_root_path "config/activefiles"
+    ActiveFile::Base.set_root_path "config/activefiles"
 
 In Rails, in development mode, it reloads the entire class, which reloads the file.  In production, the data cached in memory.
 
