@@ -1,7 +1,7 @@
 module ActiveFile
 
   class Base < ActiveHash::Base
-    class_inheritable_accessor :filename, :root_path, :data_loaded
+    class_attribute :filename, :root_path, :data_loaded
 
     class << self
 
