@@ -7,7 +7,7 @@ module ActiveHash
   end
 
   class Base
-    class_inheritable_accessor :data, :dirty
+    class_attribute :data, :dirty
 
     if Object.const_defined?(:ActiveModel)
       extend ActiveModel::Naming
