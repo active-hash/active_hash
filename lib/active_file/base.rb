@@ -28,11 +28,11 @@ module ActiveFile
       end
 
       def set_filename(name)
-        write_inheritable_attribute :filename, name
+        self.filename = name
       end
 
       def set_root_path(path)
-        write_inheritable_attribute :root_path, path
+        self.root_path = path
       end
 
       def load_file
