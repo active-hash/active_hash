@@ -1,3 +1,7 @@
+2011-06-05
+  - fixed deprecation warnings for class_inheritable_accessor (thanks scudco!)
+  - added basic compatibility with the `where` method from Arel (thanks rgarver!)
+
 2011-04-19
   - better dependency management and compatibility with ActiveSupport 2.x (thanks vandrijevik!)
 
