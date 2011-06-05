@@ -1,7 +1,12 @@
 module ActiveFile
 
   class Base < ActiveHash::Base
-    class_attribute :filename, :root_path, :data_loaded
+
+    if respond_to?(:class_attribute)
+      class_attribute :filename, :root_path, :data_loaded
+    else
+      class_inheritable_accessor :filename, :root_path, :data_loaded
+    end
 
     class << self
 
@@ -40,9 +45,9 @@ module ActiveFile
       end
 
       def full_path
-        root_path = read_inheritable_attribute(:root_path)  || Dir.pwd
-        filename  = read_inheritable_attribute(:filename)   || name.tableize
-        File.join(root_path, "#{filename}.#{extension}")
+        actual_root_path = root_path  || Dir.pwd
+        actual_filename  = filename   || name.tableize
+        File.join(actual_root_path, "#{actual_filename}.#{extension}")
       end
 
       def extension

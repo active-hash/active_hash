@@ -7,7 +7,12 @@ module ActiveHash
   end
 
   class Base
-    class_attribute :data, :dirty
+
+    if respond_to?(:class_attribute)
+      class_attribute :_data, :dirty
+    else
+      class_inheritable_accessor :_data, :dirty
+    end
 
     if Object.const_defined?(:ActiveModel)
       extend ActiveModel::Naming
@@ -29,10 +34,14 @@ module ActiveHash
         end
       end
 
+      def data
+        _data
+      end
+
       def data=(array_of_hashes)
         mark_dirty
         @records = nil
-        write_inheritable_attribute(:data, array_of_hashes)
+        self._data = array_of_hashes
         if array_of_hashes
           auto_assign_fields(array_of_hashes)
           array_of_hashes.each do |hash|
@@ -276,7 +285,7 @@ module ActiveHash
       end
 
       def reload
-        self.data = read_inheritable_attribute(:data)
+        self.data = _data
         mark_clean
       end
 
