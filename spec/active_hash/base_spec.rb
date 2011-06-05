@@ -191,6 +191,53 @@ describe ActiveHash, "Base" do
     end
   end
 
+  describe ".where" do
+    before do
+      Country.field :name
+      Country.field :language
+      Country.data = [
+        {:id => 1, :name => "US", :language => 'English'},
+        {:id => 2, :name => "Canada", :language => 'English'},
+        {:id => 2, :name => "Mexico", :language => 'Spanish'}
+      ]
+    end
+
+    it "raises ArgumentError if no conditions are provided" do
+      lambda{
+        Country.where
+      }.should raise_error(ArgumentError)
+    end
+
+    it "returns all data as inflated objects" do
+      Country.where(:language => 'English').all? { |country| country.should be_kind_of(Country) }
+    end
+
+    it "populates the data correctly" do
+      records = Country.where(:language => 'English')
+      records.first.id.should == 1
+      records.first.name.should == "US"
+      records.last.id.should == 2
+      records.last.name.should == "Canada"
+    end
+
+    it "re-populates the records after data= is called" do
+      Country.data = [
+        {:id => 45, :name => "Canada"}
+      ]
+      records = Country.where(:name => 'Canada')
+      records.first.id.should == 45
+      records.first.name.should == "Canada"
+      records.length.should == 1
+    end
+
+    it "filters the records from a AR-like conditions hash" do
+      record = Country.where(:name => 'US')
+      record.count.should == 1
+      record.first.id.should == 1
+      record.first.name.should == 'US'
+    end
+  end
+
   describe ".count" do
     before do
       Country.data = [
