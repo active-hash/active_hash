@@ -23,7 +23,8 @@ Gem::Specification.new do |s|
     "Tom Stuart",
     "Joel Chippindale",
     "Kevin Olsen",
-    "Vladimir Andrijevik"
+    "Vladimir Andrijevik",
+    "Adam Anderson"
   ]
   s.date = %q{2011-01-22}
   s.email = %q{jeff@zilkey.com}

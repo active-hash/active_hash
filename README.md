@@ -325,6 +325,55 @@ Constants are formed by first stripping all non-word characters and then upcasin
 
 The field specified as the _enum_accessor_ must contain unique data values.
 
+## Contributing
+
+If you'd like to become an ActiveHash contributor, the easiest way it to fork this repo, make your changes, run the specs and submit a pull request once they pass.
+
+To run specs, run:
+
+    bundle install
+    bundle exec rspec spec
+
+If your changes seem reasonable and the specs pass I'll give you commit rights to this repo and add you to the list of people who can push the gem.
+
+## Releasing a new version
+
+To make users' lives easier, please maintain support for:
+
+  * Ruby 1.8.7
+  * Ruby Enterprise 1.8.7
+  * Ruby 1.92
+  * ActiveRecord/ActiveSupport from 2.3.2 through edge
+
+To that end, there is a prerelease script that will run the tests against those 3 rubies, and against multiple versions of ActiveRecord/ActiveSupport.
+Before releasing a new version of ActiveHash, please run the prelease shell script like so:
+
+  ./prerelease
+
+It requires you to have rvm installed, and it requires the latest patch-versions of 1.8.7, ree and 1.9.2.  The prerelease script will:
+
+  * switch to rvm's ruby-1.8.7
+  * check for an active_hash gemset, and create one if it's not there
+  * check for bundler and install it if it's not there
+  * run `bundle exec rspec spec` against AR versions 2.3.2, 2.3.5, 2.3.11, the currently released version and edge
+  * switch to ree-1.8.7 and do the same
+  * switch to ruby-1.9.2 and do the same
+
+Needless to say, this script takes some time to run.  If you have to update your rubies, the first time you run this might take 45 minutes,
+but it will save users lots of headaches, and save me from dealing with the bug reports :)
+
+Once `prerelease` passes, follow these steps to release a new version of active_hash:
+
+  * update the changelog with a brief summary of the changes that are included in the release
+  * bump the gem version by editing the `version.rb` file
+  * if there are new contributors, add them to the list of authors in the Rakefile
+  * run `rake build`
+  * commit those changes
+  * run `rake install` and verify that the gem loads correctly from an irb session
+  * run `rake release`, which will rebuild the gem, tag it, push the tags (and your latest commit) to github, then push the gem to rubygems.org
+
+If you have any questions about how to maintain backwards compatibility, please email me and we can figure it out.
+
 ## Copyright
 
 Copyright (c) 2010 Jeff Dean. See LICENSE for details.

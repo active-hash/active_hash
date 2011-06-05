@@ -1,0 +1,50 @@
+#!/bin/sh
+
+# if any of the commands fails, exit the script immediately
+set -e
+
+# Load RVM into a shell session *as a function*
+if [[ -s "$HOME/.rvm/scripts/rvm" ]] ; then
+  # First try to load from a user install
+  source "$HOME/.rvm/scripts/rvm"
+elif [[ -s "/usr/local/rvm/scripts/rvm" ]] ; then
+  # Then try to load from a root install
+  source "/usr/local/rvm/scripts/rvm"
+else
+  printf "ERROR: An RVM installation was not found.\n"
+fi
+
+function run {
+  gem list --local bundler | grep bundler || gem install bundler --no-ri --no-rdoc
+
+  echo 'Running bundle exec rspec spec against activesupport / activerecord 2.3.2...'
+  ACTIVE_HASH_ACTIVERECORD_VERSION=2.3.2 bundle update activerecord
+  bundle exec rspec spec
+
+  echo 'Running bundle exec rspec spec against activesupport / activerecord 2.3.5...'
+  ACTIVE_HASH_ACTIVERECORD_VERSION=2.3.5 bundle update activerecord
+  bundle exec rspec spec
+
+  echo 'Running bundle exec rspec spec against activesupport / activerecord 2.3.11...'
+  ACTIVE_HASH_ACTIVERECORD_VERSION=2.3.11 bundle update activerecord
+  bundle exec rspec spec
+
+  echo 'Running bundle exec rspec spec against the latest released version of activesupport / activerecord...'
+  ACTIVE_HASH_ACTIVERECORD_VERSION="" bundle update activerecord
+  bundle exec rspec spec
+
+  echo 'Running bundle exec rspec spec against edge activesupport / activerecord...'
+  ACTIVE_HASH_ACTIVERECORD_VERSION=edge bundle update activerecord activesupport
+  bundle exec rspec spec
+}
+
+rvm use ruby-1.8.7@active_hash --create
+run
+
+rvm use ree-1.8.7@active_hash --create
+run
+
+rvm use ruby-1.9.2@active_hash --create
+run
+
+echo 'Success!'
