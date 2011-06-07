@@ -1,6 +1,5 @@
 #!/bin/sh
 
-# if any of the commands fails, exit the script immediately
 set -e
 
 # Load RVM into a shell session *as a function*
