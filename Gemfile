@@ -16,7 +16,7 @@ group :development do
     gem "activerecord"
   end
 
-  gem "rake"
+  gem "rake", "0.8.7"
   gem "rspec", "2.2.0"
   gem "sqlite3-ruby", ">= 1.3.2"
 end

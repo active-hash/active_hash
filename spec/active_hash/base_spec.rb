@@ -341,6 +341,23 @@ describe ActiveHash, "Base" do
       it "finds the record with the specified id" do
         Country.find_by_id(2).id.should == 2
       end
+
+      it "finds the record with the specified id as a string" do
+        Country.find_by_id("2").id.should == 2
+      end
+    end
+
+    context "with string ids" do
+      before do
+        Country.data = [
+          {:id => "abc", :name => "US"},
+          {:id => "def", :name => "Canada"}
+        ]
+      end
+
+      it "finds the record with the specified id" do
+        Country.find_by_id("abc").id.should == "abc"
+      end
     end
 
     context "with nil" do

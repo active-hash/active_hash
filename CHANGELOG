@@ -1,3 +1,6 @@
+2011-06-07
+  - fixed bug where .find would not work if you defined your ids as strings
+
 2011-06-05
   - fixed deprecation warnings for class_inheritable_accessor (thanks scudco!)
   - added basic compatibility with the `where` method from Arel (thanks rgarver!)

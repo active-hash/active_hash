@@ -91,7 +91,7 @@ module ActiveHash
 
       def where(options)
         (@records || []).select do |record|
-          options.all? {|col, match| record[col] == match}
+          options.all? { |col, match| record[col] == match }
         end
       end
 
@@ -118,7 +118,7 @@ module ActiveHash
           when :all
             all
           when Array
-            all.select { |record| id.map(& :to_i).include?(record.id) }
+            all.select { |record| id.to_s.include?(record.id.to_s) }
           else
             find_by_id(id) || begin
               raise RecordNotFound.new("Couldn't find #{name} with ID=#{id}")
@@ -127,7 +127,7 @@ module ActiveHash
       end
 
       def find_by_id(id)
-        all.detect { |record| record.id == id.to_i }
+        all.detect { |record| record.id.to_s == id.to_s }
       end
 
       delegate :first, :last, :to => :all
@@ -180,7 +180,7 @@ module ActiveHash
         else
           result = matches.first
           if config[:bang?]
-            result || raise(RecordNotFound, "Couldn\'t find #{name} with #{attribute_pairs.collect {|pair| "#{pair[0]} = #{pair[1]}"}.join(', ')}")
+            result || raise(RecordNotFound, "Couldn\'t find #{name} with #{attribute_pairs.collect { |pair| "#{pair[0]} = #{pair[1]}" }.join(', ')}")
           else
             result
           end
@@ -190,8 +190,8 @@ module ActiveHash
       def configuration_for_custom_finder(finder_name)
         if finder_name.to_s.match(/^find_(all_)?by_(.*?)(!)?$/) && !($1 && $3)
           {
-            :all?   => !!$1,
-            :bang?  => !!$3,
+            :all? => !!$1,
+            :bang? => !!$3,
             :fields => $2.split('_and_')
           }
         end
@@ -304,13 +304,13 @@ module ActiveHash
       private :mark_clean
 
       def has_instance_method?(name)
-        instance_methods.map{|method| method.to_sym}.include?(name)
+        instance_methods.map { |method| method.to_sym }.include?(name)
       end
 
       private :has_instance_method?
 
       def has_singleton_method?(name)
-        singleton_methods.map{|method| method.to_sym}.include?(name)
+        singleton_methods.map { |method| method.to_sym }.include?(name)
       end
 
       private :has_singleton_method?
@@ -373,12 +373,12 @@ module ActiveHash
 
     def cache_key
       case
-      when new_record?
-        "#{self.class.model_name.cache_key}/new"
-      when timestamp = self[:updated_at]
-        "#{self.class.model_name.cache_key}/#{id}-#{timestamp.to_s(:number)}"
-      else
-        "#{self.class.model_name.cache_key}/#{id}"
+        when new_record?
+          "#{self.class.model_name.cache_key}/new"
+        when timestamp = self[:updated_at]
+          "#{self.class.model_name.cache_key}/#{id}-#{timestamp.to_s(:number)}"
+        else
+          "#{self.class.model_name.cache_key}/#{id}"
       end
     end
 
