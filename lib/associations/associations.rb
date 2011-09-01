@@ -1,11 +1,8 @@
 module ActiveHash
   module Associations
+    extend ActiveSupport::Concern
 
-    def self.included(base)
-      base.extend Methods
-    end
-
-    module Methods
+    module ClassMethods
       def has_many(association_id, options = {})
 
         define_method(association_id) do
@@ -40,9 +37,7 @@ module ActiveHash
         define_method("#{association_id}=") do |new_value|
           attributes[ options[:foreign_key].to_sym ] = new_value ? new_value.id : nil
         end
-
       end
     end
-
   end
 end
