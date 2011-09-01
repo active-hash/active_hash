@@ -4,7 +4,7 @@ ActiveHash is a simple base class that allows you to use a ruby hash as a readon
 
 ActiveHash assumes that every hash has an :id key, which is what you would probably store in a database.  This allows you to seemlessly upgrade from ActiveHash objects to full ActiveRecord objects without having to change any code in your app, or any foreign keys in your database.
 
-It also allows you to use #has_many and #belongs_to in your AR objects.
+It also allows you to use #has_many and #belongs_to (via belongs_to_active_hash) in your AR objects.
 
 ActiveHash can also be useful to create simple test classes that run without a database - ideal for testing plugins or gems that rely on simple AR behavior, but don't want to deal with databases or migrations for the spec suite.
 
