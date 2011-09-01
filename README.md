@@ -167,9 +167,11 @@ To clear all records from the in-memory array, call delete_all:
 
     Country.delete_all  # => does not affect the yaml files in any way - just clears the in-memory array which can be useful for testing
 
-## Associations
+## Referencing ActiveHash objects from ActiveRecord Associations
 
-You can create has_many and belongs_to associations to and from ActiveRecord.  Out of the box, you can create .belongs_to associations from rails objects, like so:
+One common use case for ActiveHash is to have top-level objects in memory that ActiveRecord objects belong to.
+
+In versions of ActiveRecord previous to 3.1, you should be able to do the following:
 
     class Country < ActiveHash::Base
     end
@@ -178,7 +180,17 @@ You can create has_many and belongs_to associations to and from ActiveRecord.  O
       belongs_to :country
     end
 
-ActiveHash will also work as a polymorphic parent:
+However, as of ActiveRecord 3.1 support for ActiveRecord's `belong_to` is broken.  Instead, you must use the `belongs_to_active_hash` method:
+
+    class Country < ActiveHash::Base
+    end
+
+    class Person < ActiveRecord::Base
+      extend ActiveHash::Associations::ActiveRecordExtensions
+      belongs_to_active_hash :country
+    end
+
+With ActiveRecord versions < 3.1, ActiveHash will also work as a polymorphic parent:
 
     class Country < ActiveHash::Base
     end
@@ -192,9 +204,13 @@ ActiveHash will also work as a polymorphic parent:
     person.save
     person.location # => Country.first
 
+However, as of ActiveRecord 3.1 this will not work.  If you need support for that, please open an issue.
+
 You can also use standard rails view helpers, like #collection_select:
 
     <%= collection_select :person, :country_id, Country.all, :id, :name %>
+
+## Referencing ActiveRecord objects from ActiveHash
 
 If you include the ActiveHash::Associations module, you can also create associations from your ActiveHash classes, like so:
 
@@ -224,8 +240,6 @@ Once you define a belongs to, you also get the setter method:
     city.state_id             # is State.first.id
 
 NOTE:  You cannot use ActiveHash objects as children of ActiveRecord and I don't plan on adding support for that.  It doesn't really make any sense, since you'd have to hard-code your database ids in your class or yaml files, which is a dependency inversion.
-
-Also, the implementation of has_many and belongs_to is very simple - I hope to add better support for it later - it will only work in the trivial cases for now.
 
 Thanks to baldwindavid for the ideas and code on that one.
 

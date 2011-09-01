@@ -1,14 +1,17 @@
 require 'spec_helper'
+require 'active_record'
 
 describe ActiveHash::Base, "associations" do
 
   before do
     class Country < ActiveRecord::Base
+      extend ActiveHash::Associations::ActiveRecordExtensions
       establish_connection :adapter => "sqlite3", :database => ":memory:"
       connection.create_table(:countries, :force => true) {}
     end
 
     class School < ActiveRecord::Base
+      extend ActiveHash::Associations::ActiveRecordExtensions
       establish_connection :adapter => "sqlite3", :database => ":memory:"
       connection.create_table(:schools, :force => true) do |t|
         t.integer :city_id
@@ -91,22 +94,26 @@ describe ActiveHash::Base, "associations" do
 
   end
 
-  describe "#belongs_to" do
+  describe ActiveHash::Associations::ActiveRecordExtensions do
 
-    context "with an ActiveRecord child" do
+    describe "#belongs_to_active_hash" do
       it "finds the correct records" do
-        School.belongs_to :city
+        School.belongs_to_active_hash :city
         city = City.create
         school = School.create :city_id => city.id
         school.city.should == city
       end
 
       it "returns nil when the record does not exist" do
-        School.belongs_to :city
-        school = School.create :city_id => nil
+        School.belongs_to_active_hash :city
+        school = School.create! :city_id => nil
         school.city.should be_nil
       end
     end
+
+  end
+
+  describe "#belongs_to" do
 
     context "with an ActiveRecord parent" do
       it "find the correct records" do

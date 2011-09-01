@@ -1,7 +1,5 @@
 #!/bin/sh
 
-set -e
-
 # Load RVM into a shell session *as a function*
 if [[ -s "$HOME/.rvm/scripts/rvm" ]] ; then
   # First try to load from a user install
@@ -12,6 +10,8 @@ elif [[ -s "/usr/local/rvm/scripts/rvm" ]] ; then
 else
   printf "ERROR: An RVM installation was not found.\n"
 fi
+
+set -e
 
 function run {
   gem list --local bundler | grep bundler || gem install bundler --no-ri --no-rdoc

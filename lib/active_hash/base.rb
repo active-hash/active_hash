@@ -24,6 +24,11 @@ module ActiveHash
     end
 
     class << self
+
+      def primary_key
+        "id"
+      end
+
       def field_names
         @field_names ||= []
       end
