@@ -1,3 +1,6 @@
+2011-09-18 (v0.9.7)
+  - Fixing the setting of a belongs_to_active_hash association by association (not id).
+
 2011-08-31
   - added a module which adds a .belongs_to_active_hash method to ActiveRecord, since it was broken for Rails 3.1 (thanks to felixclack for pointing this issue out)
 

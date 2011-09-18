@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
     "Vladimir Andrijevik",
     "Adam Anderson"
   ]
-  s.date = %q{2011-08-31}
+  s.date = %q{2011-09-18}
   s.email = %q{jeff@zilkey.com}
   s.extra_rdoc_files = [
     "LICENSE",
