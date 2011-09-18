@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # Load RVM into a shell session *as a function*
 if [[ -s "$HOME/.rvm/scripts/rvm" ]] ; then
@@ -16,25 +16,11 @@ set -e
 function run {
   gem list --local bundler | grep bundler || gem install bundler --no-ri --no-rdoc
 
-  echo 'Running bundle exec rspec spec against activesupport / activerecord 2.3.2...'
-  ACTIVE_HASH_ACTIVERECORD_VERSION=2.3.2 bundle update activerecord
-  bundle exec rspec spec
-
-  echo 'Running bundle exec rspec spec against activesupport / activerecord 2.3.5...'
-  ACTIVE_HASH_ACTIVERECORD_VERSION=2.3.5 bundle update activerecord
-  bundle exec rspec spec
-
-  echo 'Running bundle exec rspec spec against activesupport / activerecord 2.3.11...'
-  ACTIVE_HASH_ACTIVERECORD_VERSION=2.3.11 bundle update activerecord
-  bundle exec rspec spec
-
-  echo 'Running bundle exec rspec spec against the latest released version of activesupport / activerecord...'
-  ACTIVE_HASH_ACTIVERECORD_VERSION="" bundle update activerecord
-  bundle exec rspec spec
-
-  echo 'Running bundle exec rspec spec against edge activesupport / activerecord...'
-  ACTIVE_HASH_ACTIVERECORD_VERSION=edge bundle update activerecord activesupport
-  bundle exec rspec spec
+  for v in 2.3.2 2.3.5 2.3.11 3.0.10 3.1.0 "" edge ; do
+      echo "Running bundle exec rspec spec against activesupport / activerecord ${v}..."
+      ACTIVE_HASH_ACTIVERECORD_VERSION=${v} bundle update --local activerecord || ACTIVE_HASH_ACTIVERECORD_VERSION=${v} bundle update activerecord
+      bundle exec rspec spec
+  done
 }
 
 rvm use ruby-1.8.7@active_hash --create
