@@ -97,20 +97,36 @@ describe ActiveHash::Base, "associations" do
   describe ActiveHash::Associations::ActiveRecordExtensions do
 
     describe "#belongs_to_active_hash" do
-      it "finds the correct records" do
-        School.belongs_to_active_hash :city
-        city = City.create
-        school = School.create :city_id => city.id
-        school.city.should == city
+      context "setting by id" do
+        it "finds the correct records" do
+          School.belongs_to_active_hash :city
+          city = City.create
+          school = School.create :city_id => city.id
+          school.city.should == city
+        end
+
+        it "returns nil when the record does not exist" do
+          School.belongs_to_active_hash :city
+          school = School.create! :city_id => nil
+          school.city.should be_nil
+        end
       end
 
-      it "returns nil when the record does not exist" do
-        School.belongs_to_active_hash :city
-        school = School.create! :city_id => nil
-        school.city.should be_nil
+      context "setting by association" do
+        it "finds the correct records" do
+          School.belongs_to_active_hash :city
+          city = City.create
+          school = School.create :city => city
+          school.city.should == city
+        end
+
+        it "returns nil when the record does not exist" do
+          School.belongs_to_active_hash :city
+          school = School.create! :city => nil
+          school.city.should be_nil
+        end
       end
     end
-
   end
 
   describe "#belongs_to" do
