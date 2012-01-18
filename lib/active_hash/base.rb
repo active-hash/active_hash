@@ -123,7 +123,7 @@ module ActiveHash
           when :all
             all
           when Array
-            all.select { |record| id.to_s.include?(record.id.to_s) }
+            id.map { |i| find(i) }
           else
             find_by_id(id) || begin
               raise RecordNotFound.new("Couldn't find #{name} with ID=#{id}")
