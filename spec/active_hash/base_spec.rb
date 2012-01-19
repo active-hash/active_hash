@@ -326,6 +326,12 @@ describe ActiveHash, "Base" do
       it "returns all matching ids" do
         Country.find([1, 3]).should == [Country.new(:id => 1), Country.new(:id => 3)]
       end
+
+      it "raises ActiveHash::RecordNotFound when id not found" do
+        proc do
+          Country.find([0, 3])
+        end.should raise_error(ActiveHash::RecordNotFound, /Couldn't find Country with ID=0/)
+      end
     end
   end
 
