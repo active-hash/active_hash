@@ -2,13 +2,13 @@ require 'active_support'
 
 begin
   require 'active_support/core_ext'
-rescue MissingSourceFile
+rescue LoadError
 end
 
 begin
   require 'active_model'
   require 'active_model/naming'
-rescue MissingSourceFile
+rescue LoadError
 end
 
 require 'active_hash/base'
