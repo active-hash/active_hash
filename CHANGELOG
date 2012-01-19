@@ -1,3 +1,6 @@
+2012-01-18 (v0.9.8)
+  - Make ActiveHash.find with array raise an exception when record cannot be found (mocoso)
+
 2011-09-18 (v0.9.7)
   - Fixing the setting of a belongs_to_active_hash association by association (not id).
 
