@@ -2,34 +2,20 @@
 
 # Load RVM into a shell session *as a function*
 if [[ -s "$HOME/.rvm/scripts/rvm" ]] ; then
-  # First try to load from a user install
-  source "$HOME/.rvm/scripts/rvm"
+    source "$HOME/.rvm/scripts/rvm"
 elif [[ -s "/usr/local/rvm/scripts/rvm" ]] ; then
-  # Then try to load from a root install
-  source "/usr/local/rvm/scripts/rvm"
+    source "/usr/local/rvm/scripts/rvm"
 else
-  printf "ERROR: An RVM installation was not found.\n"
+    echo "ERROR: An RVM installation was not found.\n"
 fi
 
-set -e
+set -o errexit
 
-function run {
-  gem list --local bundler | grep bundler || gem install bundler --no-ri --no-rdoc
-
-  for v in 2.3.2 2.3.5 2.3.11 3.0.10 3.1.0 "" edge ; do
-      echo "Running bundle exec rspec spec against activesupport / activerecord ${v}..."
-      ACTIVE_HASH_ACTIVERECORD_VERSION=${v} bundle update --local activerecord || ACTIVE_HASH_ACTIVERECORD_VERSION=${v} bundle update activerecord
-      bundle exec rspec spec
-  done
-}
-
-rvm use ruby-1.8.7@active_hash --create
-run
-
-rvm use ree-1.8.7@active_hash --create
-run
-
-rvm use ruby-1.9.2@active_hash --create
-run
+for v in ruby-1.8.7 ree-1.8.7 ruby-1.9.2 ruby-1.9.3 ; do
+    rvm use ${v}@active_hash --create
+    bundle install --local || bundle install
+    rake appraisal:install
+    rake appraisal spec
+done
 
 echo 'Success!'
