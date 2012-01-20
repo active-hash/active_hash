@@ -813,6 +813,7 @@ describe ActiveHash, "Base" do
         connection.create_table(:books, :force => true) do |t|
           t.text :subject_type
           t.integer :subject_id
+          t.integer :country_id
         end
         belongs_to :subject, :polymorphic => true
         belongs_to :country

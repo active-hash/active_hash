@@ -14,24 +14,8 @@ GIT
       i18n (~> 0.6)
       multi_json (~> 1.0)
 
-GIT
-  remote: https://github.com/rails/rails.git
-  revision: 2c7ded31fb89c924bcb3a1b5f57d5c0f5b675ef1
-  specs:
-    activemodel (4.0.0.beta)
-      activesupport (= 4.0.0.beta)
-      builder (~> 3.0.0)
-    activerecord (4.0.0.beta)
-      activemodel (= 4.0.0.beta)
-      activesupport (= 4.0.0.beta)
-      arel (~> 3.0.0)
-      tzinfo (~> 0.3.29)
-    activesupport (4.0.0.beta)
-      i18n (~> 0.6)
-      multi_json (~> 1.0)
-
 PATH
-  remote: /home/mike/code/oss/active_hash
+  remote: /Users/jeff/workspace/gems/active_hash
   specs:
     active_hash (0.9.8)
       activesupport (>= 2.2.2)

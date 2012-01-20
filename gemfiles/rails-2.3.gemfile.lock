@@ -1,5 +1,5 @@
 PATH
-  remote: /home/mike/code/oss/active_hash
+  remote: /Users/jeff/workspace/gems/active_hash
   specs:
     active_hash (0.9.8)
       activesupport (>= 2.2.2)
