@@ -1,3 +1,6 @@
+2012-01-19
+  - Move specs to appraisal (flavorjones)
+
 2012-01-18 (v0.9.8)
   - Make ActiveHash.find with array raise an exception when record cannot be found (mocoso)
 
