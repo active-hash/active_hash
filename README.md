@@ -359,22 +359,10 @@ To make users' lives easier, please maintain support for:
   * Ruby 1.92
   * ActiveRecord/ActiveSupport from 2.3.2 through edge
 
-To that end, there is a prerelease script that will run the tests against those 3 rubies, and against multiple versions of ActiveRecord/ActiveSupport.
-Before releasing a new version of ActiveHash, please run the prelease shell script like so:
+To that end, run specs against all rubies before committing:
 
-  ./prerelease
-
-It requires you to have rvm installed, and it requires the latest patch-versions of 1.8.7, ree and 1.9.2.  The prerelease script will:
-
-  * switch to rvm's ruby-1.8.7
-  * check for an active_hash gemset, and create one if it's not there
-  * check for bundler and install it if it's not there
-  * run `bundle exec rspec spec` against AR versions 2.3.2, 2.3.5, 2.3.11, the currently released version and edge
-  * switch to ree-1.8.7 and do the same
-  * switch to ruby-1.9.2 and do the same
-
-Needless to say, this script takes some time to run.  If you have to update your rubies, the first time you run this might take 45 minutes,
-but it will save users lots of headaches, and save me from dealing with the bug reports :)
+    rake appraisal:install
+    rake appraisal spec
 
 Once `prerelease` passes, follow these steps to release a new version of active_hash:
 
