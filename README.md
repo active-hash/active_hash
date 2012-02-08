@@ -54,6 +54,10 @@ If you are Pat Nakajima,  you probably prefer _add_:
       add :id => 2, :name => "Canada"
     end
 
+## WARNING
+
+If you add data to an ActiveHash file during an initializer, it will not be reloaded in development in Rails.
+
 ## Auto-Defined fields
 
 ActiveHash will auto-define all fields for you when you load the hash.  For example, if you have the following class:
