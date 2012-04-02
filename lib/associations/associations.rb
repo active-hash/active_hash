@@ -1,3 +1,5 @@
+require 'active_record'
+
 module ActiveHash
   module Associations
 
@@ -16,6 +18,12 @@ module ActiveHash
         define_method("#{association_id}=") do |new_value|
           send "#{options[:foreign_key]}=", new_value ? new_value.id : nil
         end
+        create_reflection(
+            :belongs_to,
+            association_id.to_sym,
+            options,
+            options[:class_name].constantize
+            )
       end
 
     end
@@ -26,13 +34,14 @@ module ActiveHash
 
     module Methods
       def has_many(association_id, options = {})
+        options = {
+          :class_name => association_id.to_s.classify,
+          :foreign_key => self.to_s.foreign_key
+        }.merge(options)
 
         define_method(association_id) do
-          options = {
-            :class_name => association_id.to_s.classify,
-            :foreign_key => self.class.to_s.foreign_key
-          }.merge(options)
-
+          reflection = self.class.reflect_on_association(association_id.to_sym)
+          options = reflection.options
           klass = options[:class_name].constantize
 
           if klass.respond_to?(:scoped)
@@ -41,6 +50,13 @@ module ActiveHash
             klass.send("find_all_by_#{options[:foreign_key]}", id)
           end
         end
+
+        create_reflection(
+          :has_many,
+          association_id.to_sym,
+          options,
+          options[:class_name].constantize
+          )
       end
 
       def belongs_to(association_id, options = {})
@@ -60,8 +76,13 @@ module ActiveHash
           attributes[options[:foreign_key].to_sym] = new_value ? new_value.id : nil
         end
 
+        create_reflection(
+            :belongs_to,
+            association_id.to_sym,
+            options,
+            options[:class_name].constantize
+            )
       end
     end
-
   end
 end
