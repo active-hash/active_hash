@@ -69,6 +69,13 @@ describe ActiveHash::Base, "associations" do
         author = Author.create :id => 1
         author.books.published.should == [@included_book_1]
       end
+
+      it "finds active record metadata for this association" do
+        Author.has_many :books
+        association = Author.reflect_on_association(:books)
+        association.should_not be_nil
+        association.klass.name.should == Book.name
+      end
     end
 
     context "with ActiveHash children" do
@@ -90,6 +97,14 @@ describe ActiveHash::Base, "associations" do
         city = City.create :id => 1
         city.writers.should == [@included_author_1, @included_author_2]
       end
+
+      it "finds active record metadata for this association" do
+        City.has_many :writers, :class_name => "Author"
+        City.reflect_on_all_associations.map(&:name).should == [:writers]
+        association = City.reflect_on_association(:writers)
+        association.should_not be_nil
+        association.klass.name.should == Author.name
+      end
     end
 
   end
@@ -110,6 +125,13 @@ describe ActiveHash::Base, "associations" do
           school = School.create! :city_id => nil
           school.city.should be_nil
         end
+
+        it "finds active record metadata for this association" do
+          School.belongs_to_active_hash :city
+          association = School.reflect_on_association(:city)
+          association.should_not be_nil
+          association.klass.name.should == City.name
+        end
       end
 
       context "setting by association" do
@@ -125,6 +147,13 @@ describe ActiveHash::Base, "associations" do
           school = School.create! :city => nil
           school.city.should be_nil
         end
+      end
+
+      it "finds active record metadata for this association" do
+        School.belongs_to_active_hash :city
+        association = School.reflect_on_association(:city)
+        association.should_not be_nil
+        association.klass.name.should == City.name
       end
     end
   end
@@ -143,6 +172,13 @@ describe ActiveHash::Base, "associations" do
         City.belongs_to :country
         city = City.create :country_id => 123
         city.country.should be_nil
+      end
+
+      it "finds active record metadata for this association" do
+        City.belongs_to :country
+        association = City.reflect_on_association(:country)
+        association.should_not be_nil
+        association.klass.name.should == Country.name
       end
     end
 

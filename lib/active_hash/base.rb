@@ -1,3 +1,4 @@
+require 'active_record'
 module ActiveHash
 
   class RecordNotFound < StandardError
@@ -23,8 +24,16 @@ module ActiveHash
       end
     end
 
+    include ActiveRecord::Reflection
+
     class << self
 
+      def compute_type(*args)
+        self
+      end
+      def pluralize_table_names
+        true
+      end
       def primary_key
         "id"
       end
