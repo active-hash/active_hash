@@ -126,6 +126,13 @@ describe ActiveHash::Base, "associations" do
           school.city.should be_nil
         end
       end
+
+      it "finds active record metadata for this association" do
+        School.belongs_to_active_hash :city
+        association = School.reflect_on_association(:city)
+        association.should_not be_nil
+        association.klass.name.should == City.name
+      end
     end
   end
 
