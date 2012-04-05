@@ -39,6 +39,14 @@ module ActiveHash
         end
       end
 
+      def compute_type(type_name)
+        self
+      end
+
+      def pluralize_table_names
+        true
+      end
+
       def data
         _data
       end

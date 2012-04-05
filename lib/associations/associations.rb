@@ -16,6 +16,13 @@ module ActiveHash
         define_method("#{association_id}=") do |new_value|
           send "#{options[:foreign_key]}=", new_value ? new_value.id : nil
         end
+
+        create_reflection(
+            :belongs_to,
+            association_id.to_sym,
+            options,
+            options[:class_name].constantize
+            )
       end
 
     end
