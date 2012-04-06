@@ -368,11 +368,11 @@ To that end, run specs against all rubies before committing:
     rake appraisal:install
     rake appraisal spec
 
-Once `prerelease` passes, follow these steps to release a new version of active_hash:
+Once appraisal passes in all supported rubies, follow these steps to release a new version of active_hash:
 
   * update the changelog with a brief summary of the changes that are included in the release
   * bump the gem version by editing the `version.rb` file
-  * if there are new contributors, add them to the list of authors in the Rakefile
+  * if there are new contributors, add them to the list of authors in the gemspec
   * run `rake build`
   * commit those changes
   * run `rake install` and verify that the gem loads correctly from an irb session

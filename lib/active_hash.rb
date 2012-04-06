@@ -2,7 +2,7 @@ require 'active_support'
 
 begin
   require 'active_support/core_ext'
-rescue LoadError
+rescue
 end
 
 begin

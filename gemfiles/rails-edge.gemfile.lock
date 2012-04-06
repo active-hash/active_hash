@@ -17,7 +17,7 @@ GIT
 PATH
   remote: /Users/jeff/workspace/gems/active_hash
   specs:
-    active_hash (0.9.8)
+    active_hash (0.9.9)
       activesupport (>= 2.2.2)
 
 GEM

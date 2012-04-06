@@ -12,7 +12,9 @@ appraise "rails-rc" do
   gem "activerecord", "~> 3.2.0.rc"
 end
 
-appraise "rails-edge" do
-  gem "activerecord", :git => "https://github.com/rails/rails.git"
-  gem "activesupport", :git => "https://github.com/rails/rails.git"
+unless RUBY_VERSION =~ /1\.8/
+  appraise "rails-edge" do
+    gem "activerecord", :git => "https://github.com/rails/rails.git"
+    gem "activesupport", :git => "https://github.com/rails/rails.git"
+  end
 end
