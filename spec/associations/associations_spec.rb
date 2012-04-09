@@ -209,7 +209,43 @@ describe ActiveHash::Base, "associations" do
         author.city_id.should == @city.id
       end
     end
+  end
 
+  describe "#has_one" do
+    context "with ActiveRecord children" do
+      before do
+        Author.has_one :book
+      end
+
+      it "find the correct records" do
+        book = Book.create! :author_id => 1, :published => true
+        author = Author.create :id => 1
+        author.book.should == book
+      end
+
+      it "returns nil when there is no record" do
+        author = Author.create :id => 1
+        author.book.should be_nil
+      end
+    end
+
+    context "with ActiveHash children" do
+      before do
+        City.has_one :author
+        Author.field :city_id
+      end
+
+      it "find the correct records" do
+        city = City.create :id => 1
+        author = Author.create :city_id => 1
+        city.author.should == author
+      end
+
+      it "returns nil when there are no records" do
+        city = City.create :id => 1
+        city.author.should be_nil
+      end
+    end
   end
 
   describe "#marked_for_destruction?" do
