@@ -1,11 +1,11 @@
+*.gem
 *.sw?
 .DS_Store
-coverage
-rdoc
-pkg
-.idea
-junk.*
 .bundle/*
+.idea
 .rvmrc
-*.gem
 Gemfile.lock
+coverage
+junk.*
+pkg
+rdoc
