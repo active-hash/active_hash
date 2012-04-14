@@ -1,3 +1,6 @@
+2012-04-14
+  - Support for has_one associations (kbrock)
+
 2012-04-05
   - Allow gems like simple_form to read metadata about belongs_to associations that point to active hash objects (kbrock)
 
