@@ -6,6 +6,7 @@
 .rvmrc
 Gemfile.lock
 coverage
+gemfiles
 junk.*
 pkg
 rdoc
