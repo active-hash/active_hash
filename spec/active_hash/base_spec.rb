@@ -198,7 +198,7 @@ describe ActiveHash, "Base" do
       Country.data = [
         {:id => 1, :name => "US", :language => 'English'},
         {:id => 2, :name => "Canada", :language => 'English'},
-        {:id => 2, :name => "Mexico", :language => 'Spanish'}
+        {:id => 3, :name => "Mexico", :language => 'Spanish'}
       ]
     end
 
@@ -235,6 +235,16 @@ describe ActiveHash, "Base" do
       record.count.should == 1
       record.first.id.should == 1
       record.first.name.should == 'US'
+    end
+
+    it "raises an error if ids aren't unique" do
+      proc do
+        Country.data = [
+          {:id => 1, :name => "US", :language => 'English'},
+          {:id => 2, :name => "Canada", :language => 'English'},
+          {:id => 2, :name => "Mexico", :language => 'Spanish'}
+        ]
+      end.should raise_error(ActiveHash::IdError)
     end
   end
 
