@@ -6,6 +6,9 @@ module ActiveHash
   class ReservedFieldError < StandardError
   end
 
+  class IdError < StandardError
+  end
+
   class Base
 
     if respond_to?(:class_attribute)
@@ -54,6 +57,7 @@ module ActiveHash
       def data=(array_of_hashes)
         mark_dirty
         @records = nil
+        reset_ids
         self._data = array_of_hashes
         if array_of_hashes
           auto_assign_fields(array_of_hashes)
@@ -66,8 +70,10 @@ module ActiveHash
       def insert(record)
         @records ||= []
         record.attributes[:id] ||= next_id
-        mark_dirty
-        @records << record
+        if (!dirty or has_unique_id?(record))
+          mark_dirty
+          @records << record
+        end
       end
 
       def next_id
@@ -76,6 +82,26 @@ module ActiveHash
           1
         elsif max_record.id.is_a?(Numeric)
           max_record.id.succ
+        end
+      end
+
+      def ids
+        @ids ||= Set.new
+      end
+
+      private :ids
+
+      def reset_ids
+        ids.clear
+      end
+
+      private :reset_ids
+
+      def has_unique_id?(record)
+        if ids.include?(record.id)
+          raise IdError.new("Duplicate Id found for record #{record.attributes}")
+        else
+          ids.add(record.id)
         end
       end
 
@@ -121,6 +147,7 @@ module ActiveHash
 
       def delete_all
         mark_dirty
+        reset_ids
         @records = []
       end
 
@@ -298,6 +325,7 @@ module ActiveHash
       end
 
       def reload
+        reset_ids
         self.data = _data
         mark_clean
       end
