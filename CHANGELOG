@@ -1,3 +1,6 @@
+2012-07-16
+  - Validate IDs are unique by caching them in a set (desmondmonster)
+
 2012-04-14
   - Support for has_one associations (kbrock)
 

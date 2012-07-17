@@ -11,6 +11,8 @@ module ActiveHash
 
   class Base
 
+    require 'set'
+
     if respond_to?(:class_attribute)
       class_attribute :_data, :dirty
     else
@@ -70,10 +72,11 @@ module ActiveHash
       def insert(record)
         @records ||= []
         record.attributes[:id] ||= next_id
-        if (!dirty or has_unique_id?(record))
-          mark_dirty
-          @records << record
-        end
+        validate_unique_id(record) if dirty
+        mark_dirty
+
+        ids << record.id
+        @records << record
       end
 
       def next_id
@@ -97,13 +100,11 @@ module ActiveHash
 
       private :reset_ids
 
-      def has_unique_id?(record)
-        if ids.include?(record.id)
-          raise IdError.new("Duplicate Id found for record #{record.attributes}")
-        else
-          ids.add(record.id)
-        end
+      def validate_unique_id(record)
+        raise IdError.new("Duplicate Id found for record #{record.attributes}") if ids.include?(record.id)
       end
+
+      private :validate_unique_id
 
       def create(attributes = {})
         record = new(attributes)
