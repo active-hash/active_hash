@@ -11,8 +11,6 @@ module ActiveHash
 
   class Base
 
-    require 'set'
-
     if respond_to?(:class_attribute)
       class_attribute :_data, :dirty
     else
@@ -59,7 +57,7 @@ module ActiveHash
       def data=(array_of_hashes)
         mark_dirty
         @records = nil
-        reset_ids
+        reset_record_index
         self._data = array_of_hashes
         if array_of_hashes
           auto_assign_fields(array_of_hashes)
@@ -75,7 +73,7 @@ module ActiveHash
         validate_unique_id(record) if dirty
         mark_dirty
 
-        ids << record.id
+        add_to_record_index({ record.id.to_s => @records.length })
         @records << record
       end
 
@@ -88,20 +86,26 @@ module ActiveHash
         end
       end
 
-      def ids
-        @ids ||= Set.new
+      def record_index
+        @record_index ||= {}
       end
 
-      private :ids
+      private :record_index
 
-      def reset_ids
-        ids.clear
+      def reset_record_index
+        record_index.clear
       end
 
-      private :reset_ids
+      private :reset_record_index
+
+      def add_to_record_index(entry)
+        record_index.merge!(entry)
+      end
+
+      private :add_to_record_index
 
       def validate_unique_id(record)
-        raise IdError.new("Duplicate Id found for record #{record.attributes}") if ids.include?(record.id)
+        raise IdError.new("Duplicate Id found for record #{record.attributes}") if record_index.has_key?(record.id.to_s)
       end
 
       private :validate_unique_id
@@ -148,7 +152,7 @@ module ActiveHash
 
       def delete_all
         mark_dirty
-        reset_ids
+        reset_record_index
         @records = []
       end
 
@@ -168,7 +172,8 @@ module ActiveHash
       end
 
       def find_by_id(id)
-        all.detect { |record| record.id.to_s == id.to_s }
+        index = record_index[id.to_s]
+        index and @records[index]
       end
 
       delegate :first, :last, :to => :all
@@ -326,7 +331,7 @@ module ActiveHash
       end
 
       def reload
-        reset_ids
+        reset_record_index
         self.data = _data
         mark_clean
       end
