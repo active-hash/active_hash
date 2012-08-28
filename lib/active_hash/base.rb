@@ -311,7 +311,7 @@ module ActiveHash
 
       def auto_assign_fields(array_of_hashes)
         (array_of_hashes || []).inject([]) do |array, row|
-          next unless row.kind_of?( Hash ) # Allow a non-hash at the beginning for YAML aliases
+          next [] unless row.kind_of?( Hash ) # Allow a non-hash at the beginning for YAML aliases
           row.symbolize_keys!
           row.keys.each do |key|
             unless key.to_s == "id"
