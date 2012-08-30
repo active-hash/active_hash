@@ -21,6 +21,10 @@ describe ActiveYaml::Base do
     Object.send :remove_const, :State
   end
 
+  it 'defines finder methods' do
+    City.should respond_to(:find_by_name)
+  end
+
   describe ".all" do
 
     context "before the file is loaded" do
