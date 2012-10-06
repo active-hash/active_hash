@@ -26,6 +26,9 @@ describe ActiveHash::Base, "associations" do
       include ActiveHash::Associations
     end
 
+    class SchoolStatus < ActiveHash::Base
+    end
+
     class Book < ActiveRecord::Base
       establish_connection :adapter => "sqlite3", :database => ":memory:"
       connection.create_table(:books, :force => true) do |t|
@@ -132,6 +135,13 @@ describe ActiveHash::Base, "associations" do
         association = School.reflect_on_association(:city)
         association.should_not be_nil
         association.klass.name.should == City.name
+      end
+
+      it "handles classes ending with an 's'" do
+        School.belongs_to_active_hash :school_status
+        association = School.reflect_on_association(:school_status)
+        association.should_not be_nil
+        association.klass.name.should == SchoolStatus.name
       end
     end
   end
