@@ -5,7 +5,7 @@ module ActiveHash
 
       def belongs_to_active_hash(association_id, options = {})
         options = {
-          :class_name => association_id.to_s.classify,
+          :class_name => association_id.to_s.camelize,
           :foreign_key => association_id.to_s.foreign_key
         }.merge(options)
 
