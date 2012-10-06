@@ -123,6 +123,24 @@ describe ActiveHash::Base, "associations" do
           school.city.should == city
         end
 
+        it "is assignable by name attribute" do
+          School.belongs_to_active_hash :city, :shortcuts => [:name]
+          City.data = [ {:id => 1, :name => 'gothan'} ]
+          city = City.find_by_name 'gothan'
+          school = School.create :city_name => 'gothan'
+          school.city.should == city
+          school.city_name.should == 'gothan'
+        end
+
+        it "have custom shortcut" do
+          School.belongs_to_active_hash :city, :shortcuts => :friendly_name
+          City.data = [ {:id => 1, :friendly_name => 'Gothan City'} ]
+          city = City.find_by_friendly_name 'Gothan City'
+          school = School.create :city_friendly_name => 'Gothan City'
+          school.city.should == city
+          school.city_friendly_name.should == 'Gothan City'
+        end
+
         it "returns nil when the record does not exist" do
           School.belongs_to_active_hash :city
           school = School.create! :city => nil
