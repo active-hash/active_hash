@@ -6,8 +6,10 @@ module ActiveHash
       def belongs_to_active_hash(association_id, options = {})
         options = {
           :class_name => association_id.to_s.camelize,
-          :foreign_key => association_id.to_s.foreign_key
+          :foreign_key => association_id.to_s.foreign_key,
+          :shortcuts => []
         }.merge(options)
+        options[:shortcuts] = [options[:shortcuts]] unless options[:shortcuts].kind_of?(Array)
 
         define_method(association_id) do
           options[:class_name].constantize.find_by_id(send(options[:foreign_key]))
@@ -15,6 +17,16 @@ module ActiveHash
 
         define_method("#{association_id}=") do |new_value|
           send "#{options[:foreign_key]}=", new_value ? new_value.id : nil
+        end
+
+        options[:shortcuts].each do |shortcut|
+          define_method("#{association_id}_#{shortcut}") do
+            send(association_id).try(shortcut)
+          end
+
+          define_method("#{association_id}_#{shortcut}=") do |new_value|
+            send "#{association_id}=", new_value ? options[:class_name].constantize.send("find_by_#{shortcut}", new_value) : nil
+          end
         end
 
         create_reflection(
