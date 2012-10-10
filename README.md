@@ -214,6 +214,35 @@ You can also use standard rails view helpers, like #collection_select:
 
     <%= collection_select :person, :country_id, Country.all, :id, :name %>
 
+### Using shortcuts
+
+Since ActiveHashes usually are static, we can use shortcuts to assign via an easy to remember string instead of an obscure ID number.
+
+    # app/models/country.rb
+    class Country < ActiveHash::Base
+    end
+
+    # app/models/person.rb
+    class Person < ActiveRecord::Base
+      extend ActiveHash::Associations::ActiveRecordExtensions
+      belongs_to_active_hash :country, :shortcuts => [:name]
+    end
+
+    # config/initializers/data.rb
+    Country.data = [
+        {:id => 1, :name => "US"},
+        {:id => 2, :name => "Canada"}
+    ]
+
+    # Using `rails console`
+    john = Person.new
+    john.country_name = "US"
+    # Is the same as doing `john.country = Country.find_by_name("US")`
+    john.country_name
+    # Will return "US", and is the same as doing `john.country.try(:name)`
+
+You can have multiple shortcuts, so settings `:shortcuts => [:name, :friendly_name]` will enable you to use `#country_name=` and `#country_friendly_name=`.
+
 ## Referencing ActiveRecord objects from ActiveHash
 
 If you include the ActiveHash::Associations module, you can also create associations from your ActiveHash classes, like so:
