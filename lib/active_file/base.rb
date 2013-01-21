@@ -54,6 +54,16 @@ module ActiveFile
         raise "Override Me"
       end
 
+      def find(*args)
+        reload unless data_loaded
+        return super
+      end
+
+      def find_by_id(*args)
+        reload unless data_loaded
+        return super
+      end
+
       protected :extension
 
     end

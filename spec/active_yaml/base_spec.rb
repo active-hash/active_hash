@@ -82,4 +82,22 @@ describe ActiveYaml::Base do
 
   end
 
+  describe 'ID finders without reliance on a call to all, even with fields specified' do
+
+    before do
+      class City < ActiveYaml::Base
+        fields :id, :state, :name
+      end
+    end
+
+    it 'returns a single city based on #find' do
+      City.find(1).name.should == 'Albany'
+    end
+
+    it 'returns a single city based on find_by_id' do
+      City.find_by_id(1).name.should == 'Albany'
+    end
+
+  end
+
 end
