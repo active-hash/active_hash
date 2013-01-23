@@ -1,3 +1,6 @@
+2013-01-22
+  - Fix find_by_id and find method returning nil unless .all called in ActiveYaml (mattheworiordan)
+
 2012-07-25
   - Make find_by_id lookups faster by indexing records by id (desmondmonster)
 

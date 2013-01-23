@@ -26,7 +26,8 @@ Gem::Specification.new do |s|
     "Vladimir Andrijevik",
     "Adam Anderson",
     "Keenan Brock",
-    "Desmond Bowe"
+    "Desmond Bowe",
+    "Matthew O'Riordan"
   ]
   s.date = %q{2012-01-18}
   s.email = %q{jeff@zilkey.com}
