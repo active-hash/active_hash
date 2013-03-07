@@ -43,6 +43,7 @@ A quick example would be:
 You can also use _create_:
 
     class Country < ActiveHash::Base
+      field :name
       create :id => 1, :name => "US"
       create :id => 2, :name => "Canada"
     end
@@ -50,6 +51,7 @@ You can also use _create_:
 If you are Pat Nakajima,  you probably prefer _add_:
 
     class Country < ActiveHash::Base
+      field :name
       add :id => 1, :name => "US"
       add :id => 2, :name => "Canada"
     end
@@ -62,7 +64,7 @@ If you add data to an ActiveHash file during an initializer, it will not be relo
 
 ActiveHash will auto-define all fields for you when you load the hash.  For example, if you have the following class:
 
-    class CustomField < ActiveYaml::Base
+    class CustomField < ActiveHash::Base
       self.data = [
         {:custom_field_1 => "foo"},
         {:custom_field_2 => "foo"},
@@ -74,7 +76,7 @@ Once you call CustomField.all it will define methods for :custom_field_1, :custo
 
 If you need the fields at load time, as opposed to after .all is called, you can also define them manually, like so:
 
-    class CustomField < ActiveYaml::Base
+    class CustomField < ActiveHash::Base
       fields :custom_field_1, :custom_field_2, :custom_field_3
     end
 
