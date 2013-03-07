@@ -37,7 +37,7 @@ describe ActiveHash::Base, "associations" do
       end
 
       if Object.const_defined?(:ActiveModel)
-        scope :published, {:conditions => {:published => true}}
+        scope( :published, proc { where(:published => true) })
       else
         named_scope :published, {:conditions => {:published => true}}
       end
