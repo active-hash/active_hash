@@ -4,21 +4,36 @@ describe ActiveHash::Base, "enum" do
 
   before do
     ActiveYaml::Base.set_root_path File.expand_path(File.dirname(__FILE__) + "/../fixtures")
-    
+
     class Borough < ActiveYaml::Base
       include ActiveHash::Enum
       fields :name, :county, :population
       enum_accessor :name
     end
+
+    class Neighborhood < ActiveHash::Base
+      include ActiveHash::Enum
+      fields :name, :county
+      enum_accessor :name, :county
+
+      self.data = [
+        {name: "Queen Ann", county: "King"}
+      ]
+    end
   end
 
   after do
     Object.send(:remove_const, :Borough)
+    Object.send(:remove_const, :Neighborhood)
   end
 
   describe "#enum_accessor" do
-    it "sets the field used for accessing records by constants" do
+    it "can use a custom method" do
       Borough::BROOKLYN.should == Borough.find_by_name("Brooklyn")
+    end
+
+    it "sets the field used for accessing records by constants" do
+      Neighborhood::QUEEN_ANN_KING.should == Neighborhood.find_by_name("Queen Ann")
     end
 
     it "ensures that values stored in the field specified are unique" do
@@ -26,11 +41,11 @@ describe ActiveHash::Base, "enum" do
         Class.new(ActiveHash::Base) do
           include ActiveHash::Enum
           self.data = [
-            { :name => 'Woodford Reserve' },
-            { :name => 'Bulliet Bourbon' },
-            { :name => 'Woodford Reserve' }
+            {:name => 'Woodford Reserve'},
+            {:name => 'Bulliet Bourbon'},
+            {:name => 'Woodford Reserve'}
           ]
-          enum_accessor :name 
+          enum_accessor :name
         end
       end.should raise_error(ActiveHash::Enum::DuplicateEnumAccessor)
     end
@@ -41,7 +56,7 @@ describe ActiveHash::Base, "enum" do
         self.data = [
           {:name => 'Die Hard 2', :rating => '4.3'},
           {:name => 'The Informant!', :rating => '4.3'},
-          {:name => 'In & Out', :rating => '4.3'}          
+          {:name => 'In & Out', :rating => '4.3'}
         ]
         enum_accessor :name
       end

@@ -369,7 +369,21 @@ Records can be accessed by looking up the field constant:
     => 3
     >> Country::CANADA
     => #<Country:0x10229fb28 @attributes={:name=>"Canada", :id=>2}
-    
+
+You may also use multiple attributes to generate the constant, like so:
+
+    class Town < ActiveHash::Base
+      include ActiveHash::Enum
+      self.data = [
+          {:id => 1, :name => "Columbus", :state => "NY"},
+          {:id => 2, :name => "Columbus", :state => "OH"}
+      ]
+      enum_accessor :name, :state
+    end
+
+    >> Town::COLUMBUS_NY
+    >> Town::COLUMBUS_OH
+
 Constants are formed by first stripping all non-word characters and then upcasing the result. This means strings like "Blazing Saddles", "ReBar", "Mike & Ike" and "Ho! Ho! Ho!" become BLAZING_SADDLES, REBAR, MIKE_IKE and HO_HO_HO.
 
 The field specified as the _enum_accessor_ must contain unique data values.

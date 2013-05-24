@@ -8,9 +8,9 @@ versions.each do |version|
   end
 end
 
-unless RUBY_VERSION =~ /1\.8/
-   appraise "rails-edge" do
-     gem "activerecord", :git => "https://github.com/rails/rails.git"
-     gem "activesupport", :git => "https://github.com/rails/rails.git"
-   end
-end
+#unless RUBY_VERSION =~ /1\.8/
+#   appraise "rails-edge" do
+#     gem "activerecord", :git => "https://github.com/rails/rails.git"
+#     gem "activesupport", :git => "https://github.com/rails/rails.git"
+#   end
+#end

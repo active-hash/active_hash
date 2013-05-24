@@ -1,3 +1,7 @@
+2013-05-23 (v0.9.14)
+  - enum_accessor can now take multiple field names when generating the constant
+  - temporarily disabled rails edge specs since there's an appraisal issue with minitest
+
 2013-01-22
   - Fix find_by_id and find method returning nil unless .all called in ActiveYaml (mattheworiordan)
 

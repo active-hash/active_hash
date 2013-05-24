@@ -6,23 +6,23 @@ module ActiveHash
     def self.included(base)
       base.extend(Methods)
     end
-    
+
     module Methods
 
-      def enum_accessor(field_name)
-        @enum_accessor = field_name
+      def enum_accessor(*field_names)
+        @enum_accessors = field_names
         reload
       end
 
       def insert(record)
         super
-        set_constant(record) if @enum_accessor.present?
+        set_constant(record) if @enum_accessors.present?
       end
 
       def delete_all
-        if @enum_accessor.present?
+        if @enum_accessors.present?
           @records.each do |record|
-            constant = constant_for(record.attributes[@enum_accessor])
+            constant = constant_for(record, @enum_accessors)
             remove_const(constant) if const_defined?(constant)
           end
         end
@@ -30,7 +30,7 @@ module ActiveHash
       end
 
       def set_constant(record)
-        constant = constant_for(record.attributes[@enum_accessor])
+        constant = constant_for(record, @enum_accessors)
         return nil if constant.blank?
 
         unless const_defined?(constant)
@@ -42,7 +42,8 @@ module ActiveHash
 
       private :set_constant
 
-      def constant_for(field_value)
+      def constant_for(record, field_names)
+        field_value = field_names.map { |name| record.attributes[name] }.join("_")
         if constant = !field_value.nil? && field_value.dup
           constant.gsub!(/\W+/, "_")
           constant.gsub!(/^_|_$/, '')
