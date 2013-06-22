@@ -1,0 +1,35 @@
+/aliases:
+  soda_flavor: &soda_flavor
+    sweet
+  soda_price: &soda_price
+    1.0
+  chip_flavor: &chip_flavor
+    salty
+  chip_price: &chip_price
+    1.5
+
+
+coke:
+  id: 1
+  name: Coke
+  flavor: *soda_flavor
+  price: *soda_price
+
+pepsi:
+  id: 2
+  name: Pepsi
+  flavor: *soda_flavor
+  price: *soda_price
+
+pringles:
+  id: 3
+  name: Pringles
+  flavor: *chip_flavor
+  price: *chip_price
+  slogan: &inner_alias
+
+eta:
+  id: 4
+  name: ETA
+  flavor: *chip_flavor
+  price: *chip_price

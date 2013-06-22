@@ -16,7 +16,7 @@ ActiveHash also ships with:
 ## Installation
 
 Make sure gemcutter.org is one of your gem sources, then run:
-    
+
     sudo gem install active_hash
 
 ## Usage
@@ -314,6 +314,41 @@ Since ActiveYaml just creates a hash from the YAML file, you will have all field
     mexico:
       id: 3
       name: Mexico
+
+### Using aliases in YAML
+
+Aliases can be used in ActiveYaml using either array or hash style.
+Keys beginning with a '/' character can be safely added, and will be ignored, allowing you to add aliases anywhere in your code:
+
+    # Array Style
+    - /aliases:
+      soda_flavor: &soda_flavor
+        sweet
+      soda_price: &soda_price
+        1.0
+
+    - id: 1
+      name: Coke
+      flavor: *soda_flavor
+      price: *soda_price
+
+
+     # Key style
+    /aliases:
+      soda_flavor: &soda_flavor
+        sweet
+      soda_price: &soda_price
+        1.0
+
+    coke:
+      id: 1
+      name: Coke
+      flavor: *soda_flavor
+      price: *soda_price
+
+
+__ WARNING: ActiveYaml will ignore any hash containing a key beginning with the '/' character, to allow for YAML aliases__
+
 
 ## ActiveFile
 
