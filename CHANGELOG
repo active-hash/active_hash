@@ -1,3 +1,6 @@
+2013-06-24 (v1.0.0)
+  - save is a no-op on existing records, instead of raising an error (issue #63)
+
 2013-06-24 (v0.10.0)
   - added ActiveYaml::Aliases module so you can DRY up your repetitive yaml (brett-richardson)
 
