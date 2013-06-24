@@ -1,6 +1,5 @@
 require 'spec_helper'
 
-
 describe ActiveYaml::Base do
 
   before do
@@ -17,8 +16,6 @@ describe ActiveYaml::Base do
     Object.send :remove_const, :ArrayRow
     Object.send :remove_const, :City
     Object.send :remove_const, :State
-    Object.send :remove_const, :ArrayProduct
-    Object.send :remove_const, :KeyProduct
   end
 
   describe ".all" do
@@ -74,7 +71,7 @@ describe ActiveYaml::Base do
         City.load_file.should be_kind_of(Array)
         City.load_file.should include({"state" => :new_york, "name" => "Albany", "id" => 1})
         City.reload
-        City.all.should include( City.new(:id => 1) )
+        City.all.should include(City.new(:id => 1))
       end
     end
 
@@ -98,36 +95,68 @@ describe ActiveYaml::Base do
 
   end
 
-  context 'with YAML aliases', yaml_aliases: true do
-    {
-      :'array rows' => 'ArrayProduct',
-      :'key rows'   => 'KeyProduct'
-    }.each do |type, product_class_string|
-      context "with #{type}" do
-        let( :model ){ Object.const_get product_class_string }
+  context 'with YAML aliases using yaml arrays' do
+    before do
+      class ArrayProduct < ActiveYaml::Base;
+      end
+    end
 
-        describe '.all' do
-          subject{ model.all }
-          it{ should_not be_empty }
-          its( :length ){ should == 4 }
-        end
+    after do
+      Object.send :remove_const, :ArrayProduct
+    end
 
-        describe 'aliased attributes' do
-          subject{ model.where( name: 'Coke' ).first.attributes }
+    let(:model) { ArrayProduct }
 
-          it( 'sets strings correctly' ){ subject[:flavor].should == 'sweet' }
-          it( 'sets floats correctly'  ){ subject[:price ].should == 1.0 }
-        end
+    describe '.all' do
+      subject { model.all }
+      it { should_not be_empty }
+      its(:length) { should == 4 }
+    end
 
-        describe 'keys starting with "/"' do
-          let :models_including_aliases do
-            model.all.select{ |p| p.attributes.keys.include? :'/aliases' }
-          end
+    describe 'aliased attributes' do
+      subject { model.where(name: 'Coke').first.attributes }
 
-          it 'excludes them' do
-            models_including_aliases.should be_empty
-          end
-        end
+      it('sets strings correctly') { subject[:flavor].should == 'sweet' }
+      it('sets floats correctly') { subject[:price].should == 1.0 }
+    end
+
+    describe 'keys starting with "/"' do
+      it 'excludes them' do
+        models_including_aliases = model.all.select { |p| p.attributes.keys.include? :'/aliases' }
+        models_including_aliases.should be_empty
+      end
+    end
+  end
+
+  context 'with YAML aliases' do
+    before do
+      class KeyProduct < ActiveYaml::Base;
+      end
+    end
+
+    after do
+      Object.send :remove_const, :KeyProduct
+    end
+
+    let(:model) { KeyProduct }
+
+    describe '.all' do
+      subject { model.all }
+      it { should_not be_empty }
+      its(:length) { should == 4 }
+    end
+
+    describe 'aliased attributes' do
+      subject { model.where(name: 'Coke').first.attributes }
+
+      it('sets strings correctly') { subject[:flavor].should == 'sweet' }
+      it('sets floats correctly') { subject[:price].should == 1.0 }
+    end
+
+    describe 'keys starting with "/"' do
+      it 'excludes them' do
+        models_including_aliases = model.all.select { |p| p.attributes.keys.include? :'/aliases' }
+        models_including_aliases.should be_empty
       end
     end
   end
