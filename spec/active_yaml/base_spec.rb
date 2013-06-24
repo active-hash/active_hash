@@ -1,35 +1,33 @@
 require 'spec_helper'
 
+
 describe ActiveYaml::Base do
 
   before do
     ActiveYaml::Base.set_root_path File.expand_path(File.dirname(__FILE__) + "/../fixtures")
 
-    class ArrayRow < ActiveYaml::Base
-    end
-
-    class City < ActiveYaml::Base
-    end
-
-    class State < ActiveYaml::Base
-    end
+    class ArrayRow     < ActiveYaml::Base ; end
+    class City         < ActiveYaml::Base ; end
+    class State        < ActiveYaml::Base ; end
+    class ArrayProduct < ActiveYaml::Base ; end # Contain YAML aliases
+    class KeyProduct   < ActiveYaml::Base ; end # Contain YAML aliases
   end
 
   after do
     Object.send :remove_const, :ArrayRow
     Object.send :remove_const, :City
     Object.send :remove_const, :State
+    Object.send :remove_const, :ArrayProduct
+    Object.send :remove_const, :KeyProduct
   end
 
   describe ".all" do
-
     context "before the file is loaded" do
       it "reads from the file" do
         State.all.should_not be_empty
         State.count.should > 0
       end
     end
-
   end
 
   describe ".delete_all" do
@@ -98,6 +96,40 @@ describe ActiveYaml::Base do
       City.find_by_id(1).name.should == 'Albany'
     end
 
+  end
+
+  context 'with YAML aliases', yaml_aliases: true do
+    { # Iterate both types of YAML data with different classes
+      :'array rows' => 'ArrayProduct',
+      :'key rows'   => 'KeyProduct'
+    }.each do |type, product_class_string|
+      context "with #{type}" do
+        let( :model ){ Object.const_get product_class_string } # Classes are created in a before block, so we find the constant at runtime
+
+        describe '.all' do
+          subject{ model.all }
+          it{ should_not be_empty }
+          its( :length ){ should == 4 }
+        end
+
+        describe 'aliased attributes' do # Ensure the aliases are being applied correctly
+          subject{ model.where( name: 'Coke' ).first.attributes }
+
+          it( 'sets strings correctly' ){ subject[:flavor].should == 'sweet' }
+          it( 'sets floats correctly'  ){ subject[:price ].should == 1.0 }
+        end
+
+        describe 'keys starting with "/"' do
+          let :models_including_aliases do
+            model.all.select{ |p| p.attributes.keys.include? :'/aliases' }
+          end
+
+          it 'excludes them' do
+            models_including_aliases.should be_empty
+          end
+        end
+      end
+    end
   end
 
 end
