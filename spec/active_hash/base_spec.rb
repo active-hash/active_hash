@@ -898,6 +898,16 @@ describe ActiveHash, "Base" do
       Country.dirty.should be_true
     end
 
+    it "it is a no-op if the object has already been added to the collection" do
+      Country.all.should be_empty
+      country = Country.new :id => 1, :name => "foo"
+      country.save
+      country.name = "bar"
+      country.save
+      country.save!
+      Country.all.should == [country]
+    end
+
   end
 
   describe ".create" do

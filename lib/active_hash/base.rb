@@ -67,6 +67,12 @@ module ActiveHash
         end
       end
 
+      def exists?(record)
+        if record.id.present?
+          record_index[record.id.to_s].present?
+        end
+      end
+
       def insert(record)
         @records ||= []
         record.attributes[:id] ||= next_id
@@ -444,7 +450,9 @@ module ActiveHash
     end
 
     def save(*args)
-      self.class.insert(self)
+      unless self.class.exists?(self)
+        self.class.insert(self)
+      end
       true
     end
 
