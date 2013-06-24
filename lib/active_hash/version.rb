@@ -1,5 +1,5 @@
 module ActiveHash
   module Gem
-    VERSION = "0.9.14"
+    VERSION = "0.10.0"
   end
 end
