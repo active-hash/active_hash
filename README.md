@@ -317,8 +317,8 @@ Since ActiveYaml just creates a hash from the YAML file, you will have all field
 
 ### Using aliases in YAML
 
-Aliases can be used in ActiveYaml using either array or hash style.
-Keys beginning with a '/' character can be safely added, and will be ignored, allowing you to add aliases anywhere in your code:
+Aliases can be used in ActiveYaml using either array or hash style by including `ActiveYaml::Aliases`.
+With that module included, keys beginning with a '/' character can be safely added, and will be ignored, allowing you to add aliases anywhere in your code:
 
     # Array Style
     - /aliases:
@@ -346,8 +346,13 @@ Keys beginning with a '/' character can be safely added, and will be ignored, al
       flavor: *soda_flavor
       price: *soda_price
 
+    class Soda < ActiveYaml::Base
+      include ActiveYaml::Aliases
+    end
 
-__ WARNING: ActiveYaml will ignore any hash containing a key beginning with the '/' character, to allow for YAML aliases__
+    Soda.length # => 1
+    Soda.first.flavor # => sweet
+    Soda.first.price # => 1.0
 
 
 ## ActiveFile
