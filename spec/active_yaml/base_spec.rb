@@ -99,12 +99,12 @@ describe ActiveYaml::Base do
   end
 
   context 'with YAML aliases', yaml_aliases: true do
-    { # Iterate both types of YAML data with different classes
+    {
       :'array rows' => 'ArrayProduct',
       :'key rows'   => 'KeyProduct'
     }.each do |type, product_class_string|
       context "with #{type}" do
-        let( :model ){ Object.const_get product_class_string } # Classes are created in a before block, so we find the constant at runtime
+        let( :model ){ Object.const_get product_class_string }
 
         describe '.all' do
           subject{ model.all }
@@ -112,7 +112,7 @@ describe ActiveYaml::Base do
           its( :length ){ should == 4 }
         end
 
-        describe 'aliased attributes' do # Ensure the aliases are being applied correctly
+        describe 'aliased attributes' do
           subject{ model.where( name: 'Coke' ).first.attributes }
 
           it( 'sets strings correctly' ){ subject[:flavor].should == 'sweet' }
