@@ -28,7 +28,7 @@ describe ActiveYaml::Aliases do
     end
 
     describe 'aliased attributes' do
-      subject { model.where(name: 'Coke').first.attributes }
+      subject { model.where(:name => 'Coke').first.attributes }
 
       it('sets strings correctly') { subject[:flavor].should == 'sweet' }
       it('sets floats correctly') { subject[:price].should == 1.0 }
@@ -51,7 +51,7 @@ describe ActiveYaml::Aliases do
     end
 
     describe 'aliased attributes' do
-      subject { model.where(name: 'Coke').first.attributes }
+      subject { model.where(:name => 'Coke').first.attributes }
 
       it('sets strings correctly') { subject[:flavor].should == 'sweet' }
       it('sets floats correctly') { subject[:price].should == 1.0 }

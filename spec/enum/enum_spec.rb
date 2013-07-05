@@ -17,7 +17,7 @@ describe ActiveHash::Base, "enum" do
       enum_accessor :name, :county
 
       self.data = [
-        {name: "Queen Ann", county: "King"}
+        {:name => "Queen Ann", :county => "King"}
       ]
     end
   end
