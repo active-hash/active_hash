@@ -2,6 +2,7 @@
 
 $:.push File.expand_path("../lib", __FILE__)
 require "active_hash/version"
+require "util/ruby_engine"
 
 Gem::Specification.new do |s|
   s.name = %q{active_hash}
@@ -58,10 +59,16 @@ Gem::Specification.new do |s|
     "spec/spec_helper.rb"
   ]
 
-  if RUBY_VERSION =~ /1\.8|1\.9\.(1|2)/
-    supported_rails_versions = [">= 2.2.2", "< 4"]
+  supported_rails_versions = if RUBY_VERSION =~ /1\.8|1\.9\.(1|2)/
+    [">= 2.2.2", "< 4"]
   else
-    supported_rails_versions = [">= 2.2.2"]
+    [">= 2.2.2"]
+  end
+
+  sqlite_gem = if RubyEngine.jruby?
+    'activerecord-jdbcsqlite3-adapter'
+  else
+    'sqlite3'
   end
 
   if s.respond_to? :specification_version then
@@ -71,20 +78,20 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<activesupport>, supported_rails_versions)
       s.add_development_dependency(%q<rspec>, ["~> 2.2.0"])
-      s.add_development_dependency(%q<sqlite3>, [">= 0"])
+      s.add_development_dependency(sqlite_gem, [">= 0"])
       s.add_development_dependency(%q<activerecord>, supported_rails_versions)
       s.add_development_dependency(%q<appraisal>, [">= 0"])
     else
       s.add_dependency(%q<activesupport>, supported_rails_versions)
       s.add_dependency(%q<rspec>, ["~> 2.2.0"])
-      s.add_dependency(%q<sqlite3>, [">= 0"])
+      s.add_dependency(sqlite_gem, [">= 0"])
       s.add_dependency(%q<activerecord>, supported_rails_versions)
       s.add_dependency(%q<appraisal>, [">= 0"])
     end
   else
     s.add_dependency(%q<activesupport>, supported_rails_versions)
     s.add_dependency(%q<rspec>, ["~> 2.2.0"])
-    s.add_dependency(%q<sqlite3>, [">= 0"])
+    s.add_dependency(sqlite_gem, [">= 0"])
     s.add_dependency(%q<activerecord>, supported_rails_versions)
     s.add_dependency(%q<appraisal>, [">= 0"])
   end
