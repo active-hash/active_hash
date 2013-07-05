@@ -3,6 +3,7 @@
 $:.push File.expand_path("../lib", __FILE__)
 require "active_hash/version"
 require "util/ruby_engine"
+require "util/ruby_version"
 
 Gem::Specification.new do |s|
   s.name = %q{active_hash}
@@ -59,7 +60,7 @@ Gem::Specification.new do |s|
     "spec/spec_helper.rb"
   ]
 
-  supported_rails_versions = if RUBY_VERSION =~ /1\.8|1\.9\.(1|2)/
+  supported_rails_versions = if RubyVersion < '1.9.3'
     [">= 2.2.2", "< 4"]
   else
     [">= 2.2.2"]
