@@ -58,28 +58,34 @@ Gem::Specification.new do |s|
     "spec/spec_helper.rb"
   ]
 
+  if RUBY_VERSION =~ /1\.8|1\.9\.(1|2)/
+    supported_rails_versions = [">= 2.2.2", "< 4"]
+  else
+    supported_rails_versions = [">= 2.2.2"]
+  end
+
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<activesupport>, [">= 2.2.2"])
+      s.add_runtime_dependency(%q<activesupport>, supported_rails_versions)
       s.add_development_dependency(%q<rspec>, ["~> 2.2.0"])
       s.add_development_dependency(%q<sqlite3>, [">= 0"])
-      s.add_development_dependency(%q<activerecord>, [">= 2.2.2"])
+      s.add_development_dependency(%q<activerecord>, supported_rails_versions)
       s.add_development_dependency(%q<appraisal>, [">= 0"])
     else
-      s.add_dependency(%q<activesupport>, [">= 2.2.2"])
+      s.add_dependency(%q<activesupport>, supported_rails_versions)
       s.add_dependency(%q<rspec>, ["~> 2.2.0"])
       s.add_dependency(%q<sqlite3>, [">= 0"])
-      s.add_dependency(%q<activerecord>, [">= 2.2.2"])
+      s.add_dependency(%q<activerecord>, supported_rails_versions)
       s.add_dependency(%q<appraisal>, [">= 0"])
     end
   else
-    s.add_dependency(%q<activesupport>, [">= 2.2.2"])
+    s.add_dependency(%q<activesupport>, supported_rails_versions)
     s.add_dependency(%q<rspec>, ["~> 2.2.0"])
     s.add_dependency(%q<sqlite3>, [">= 0"])
-    s.add_dependency(%q<activerecord>, [">= 2.2.2"])
+    s.add_dependency(%q<activerecord>, supported_rails_versions)
     s.add_dependency(%q<appraisal>, [">= 0"])
   end
 end
