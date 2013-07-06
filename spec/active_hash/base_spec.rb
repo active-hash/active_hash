@@ -511,7 +511,7 @@ describe ActiveHash, "Base" do
         it "raises a NoMethodError" do
           lambda {
             Country.find_by_name_and_shoe_size("US", 10)
-          }.should raise_error(NoMethodError, "undefined method `find_by_name_and_shoe_size' for Country:Class")
+          }.should raise_error(NoMethodError, /undefined method `find_by_name_and_shoe_size' (?:for|on) Country/)
         end
       end
     end
@@ -540,7 +540,7 @@ describe ActiveHash, "Base" do
         it "raises a NoMethodError" do
           lambda {
             Country.find_by_name_and_shoe_size!("US", 10)
-          }.should raise_error(NoMethodError, "undefined method `find_by_name_and_shoe_size!' for Country:Class")
+          }.should raise_error(NoMethodError, /undefined method `find_by_name_and_shoe_size!' (?:for|on) Country/)
         end
       end
     end
@@ -567,7 +567,7 @@ describe ActiveHash, "Base" do
     it "doesn't blow up if you call a missing dynamic finder when fields haven't been set" do
       proc do
         Country.find_by_name("Foo")
-      end.should raise_error(NoMethodError, "undefined method `find_by_name' for Country:Class")
+      end.should raise_error(NoMethodError, /undefined method `find_by_name' (?:for|on) Country/)
     end
   end
 
