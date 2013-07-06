@@ -1,6 +1,6 @@
 # ActiveHash
 
-[![Build Status](https://travis-ci.org/ably-forks/active_hash.png?branch=travis-ci)](https://travis-ci.org/ably-forks/active_hash)
+[![Build Status](https://travis-ci.org/zilkey/active_hash.png?branch=master)](https://travis-ci.org/zilkey/active_hash)
 
 ActiveHash is a simple base class that allows you to use a ruby hash as a readonly datasource for an ActiveRecord-like model.
 
