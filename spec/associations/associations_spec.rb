@@ -7,7 +7,9 @@ describe ActiveHash::Base, "associations" do
     class Country < ActiveRecord::Base
       extend ActiveHash::Associations::ActiveRecordExtensions
       establish_connection :adapter => "sqlite3", :database => ":memory:"
-      connection.create_table(:countries, :force => true) {}
+      connection.create_table(:countries, :force => true) do |t|
+        t.string :name
+      end
     end
 
     class School < ActiveRecord::Base
