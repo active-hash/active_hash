@@ -20,7 +20,7 @@ module ActiveYaml
     end
 
     def initialize(attributes={})
-      super unless attributes.keys.index { |k| k.match /^\//i }
+      super unless attributes.keys.index { |k| k.to_s.match /^\//i }
     end
   end
 

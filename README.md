@@ -1,5 +1,7 @@
 # ActiveHash
 
+[![Build Status](https://travis-ci.org/zilkey/active_hash.png?branch=master)](https://travis-ci.org/zilkey/active_hash)
+
 ActiveHash is a simple base class that allows you to use a ruby hash as a readonly datasource for an ActiveRecord-like model.
 
 ActiveHash assumes that every hash has an :id key, which is what you would probably store in a database.  This allows you to seemlessly upgrade from ActiveHash objects to full ActiveRecord objects without having to change any code in your app, or any foreign keys in your database.
