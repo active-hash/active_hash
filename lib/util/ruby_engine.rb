@@ -1,3 +1,7 @@
+# Sourced from http://rbjl.net/35-how-to-properly-check-for-your-ruby-interpreter-version-and-os
+# Extracted from http://rubyzucker.info/
+# Copyright (c) 2010-2013 Jan Lelis <http://happycode.org> released under the MIT license
+
 class RubyEngine
   class << self
     def interpreter
