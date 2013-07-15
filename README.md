@@ -17,9 +17,13 @@ ActiveHash also ships with:
 
 ## Installation
 
-Make sure gemcutter.org is one of your gem sources, then run:
+Bundler:
 
-    sudo gem install active_hash
+    gem 'active_hash'
+
+Other:
+
+  gem install active_hash
 
 ## Usage
 
