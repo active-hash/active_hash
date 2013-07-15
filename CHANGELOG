@@ -1,3 +1,7 @@
+2013-07-15 (v1.0.1)
+  - Travis CI for ActiveHash + Ruby 2, 1.8.7, Rubinius and JRuby support (mattheworiordan)
+  - no longer need to call .all before executing `find_by_*` or `where` methods (mattheworiordan)
+
 2013-06-24 (v1.0.0)
   - save is a no-op on existing records, instead of raising an error (issue #63)
 
