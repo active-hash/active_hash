@@ -10,16 +10,6 @@ module ActiveFile
 
     class << self
 
-      def all(options={})
-        reload unless data_loaded
-        super
-      end
-
-      def where(options)
-        reload unless data_loaded
-        super
-      end
-
       def delete_all
         self.data_loaded = true
         super
@@ -53,18 +43,14 @@ module ActiveFile
       def extension
         raise "Override Me"
       end
-
-      def find(*args)
-        reload unless data_loaded
-        return super
-      end
-
-      def find_by_id(*args)
-        reload unless data_loaded
-        return super
-      end
-
       protected :extension
+
+      [:find, :find_by_id, :all, :where, :method_missing].each do |method|
+        define_method(method) do |*args|
+          reload unless data_loaded
+          return super(*args)
+        end
+      end
 
     end
   end
