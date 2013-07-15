@@ -296,7 +296,7 @@ By default, this class will look for a yml file named "countries.yml" in the sam
 
 The above example will look for the file "/u/data/sample.yml".
 
-Since ActiveYaml just creates a hash from the YAML file, you will have all fields specified in YAML auto-defined for you once you call all.  You can format your YAML as an array, or as a hash:
+Since ActiveYaml just creates a hash from the YAML file, you will have all fields specified in YAML auto-defined for you.  You can format your YAML as an array, or as a hash:
 
     # array style
     - id: 1
