@@ -140,6 +140,7 @@ module ActiveHash
       end
 
       def where(options)
+        return @records if options.nil?
         (@records || []).select do |record|
           options.all? { |col, match| record[col] == match }
         end
