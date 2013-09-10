@@ -1,3 +1,6 @@
+2013-09-09 (v1.0.2)
+  - `where(nil)` returns all results, like ActiveRecord (kugaevsky)
+
 2013-07-15 (v1.0.1)
   - Travis CI for ActiveHash + Ruby 2, 1.8.7, Rubinius and JRuby support (mattheworiordan)
   - no longer need to call .all before executing `find_by_*` or `where` methods (mattheworiordan)

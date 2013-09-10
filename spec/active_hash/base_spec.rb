@@ -208,6 +208,10 @@ describe ActiveHash, "Base" do
       }.should raise_error(ArgumentError)
     end
 
+    it "returns all records when passed nil" do
+      Country.where(nil).should == Country.all
+    end
+
     it "returns all data as inflated objects" do
       Country.where(:language => 'English').all? { |country| country.should be_kind_of(Country) }
     end
