@@ -314,6 +314,20 @@ describe ActiveHash::Base, "associations" do
         author.city_id.should == @city.id
       end
     end
+
+    describe "with a different primary key" do
+      before do
+        City.field :long_identifier
+        Author.belongs_to :city, :primary_key => "long_identifier"
+        @city = City.create :id => 1, :long_identifier => "123"
+      end
+
+      it "works" do
+        author = Author.new
+        author.city = @city
+        author.city_id.should == @city.long_identifier
+      end
+    end
   end
 
   describe "#has_one" do
