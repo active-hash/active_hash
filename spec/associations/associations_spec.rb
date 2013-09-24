@@ -35,6 +35,7 @@ describe ActiveHash::Base, "associations" do
       establish_connection :adapter => "sqlite3", :database => ":memory:"
       connection.create_table(:books, :force => true) do |t|
         t.integer :author_id
+        t.integer :author_code
         t.boolean :published
       end
 
@@ -57,43 +58,117 @@ describe ActiveHash::Base, "associations" do
   describe "#has_many" do
 
     context "with ActiveRecord children" do
-      before do
-        @included_book_1 = Book.create! :author_id => 1, :published => true
-        @included_book_2 = Book.create! :author_id => 1, :published => false
-        @excluded_book = Book.create! :author_id => 2, :published => true
+      context "with default options" do
+        before do
+          @book_1 = Book.create! :author_id => 1, :published => true
+          @book_2 = Book.create! :author_id => 1, :published => false
+          @book_3 = Book.create! :author_id => 2, :published => true
+          Author.has_many :books
+        end
+
+        it "find the correct records" do
+          author = Author.create :id => 1
+          author.books.should == [@book_1, @book_2]
+        end
+
+        it "return a scope so that we can apply further scopes" do
+          author = Author.create :id => 1
+          author.books.published.should == [@book_1]
+        end
       end
 
-      it "find the correct records" do
-        Author.has_many :books
-        author = Author.create :id => 1
-        author.books.should == [@included_book_1, @included_book_2]
+      context "with a primary_key option" do
+        before do
+          @book_1 = Book.create! :author_id => 1, :published => true
+          @book_2 = Book.create! :author_id => 2, :published => false
+          @book_3 = Book.create! :author_id => 2, :published => true
+          Author.field :book_identifier
+          Author.has_many :books, :primary_key => :book_identifier
+        end
+
+        it "should find the correct records" do
+          author = Author.create :id => 1, :book_identifier => 2
+          author.books.should == [@book_2, @book_3]
+        end
+
+        it "return a scope so that we can apply further scopes" do
+          author = Author.create :id => 1, :book_identifier => 2
+          author.books.published.should == [@book_3]
+        end
       end
 
-      it "return a scope so that we can apply further scopes" do
-        Author.has_many :books
-        author = Author.create :id => 1
-        author.books.published.should == [@included_book_1]
+      context "with a foreign_key option" do
+        before do
+          @book_1 = Book.create! :author_code => 1, :published => true
+          @book_2 = Book.create! :author_code => 1, :published => false
+          @book_3 = Book.create! :author_code => 2, :published => true
+          Author.has_many :books, :foreign_key => :author_code
+        end
+
+        it "should find the correct records" do
+          author = Author.create :id => 1
+          author.books.should == [@book_1, @book_2]
+        end
+
+        it "return a scope so that we can apply further scopes" do
+          author = Author.create :id => 1
+          author.books.published.should == [@book_1]
+        end
       end
     end
 
     context "with ActiveHash children" do
-      before do
-        Author.field :city_id
-        @included_author_1 = Author.create :city_id => 1
-        @included_author_2 = Author.create :city_id => 1
-        @excluded_author = Author.create :city_id => 2
+      context "with default options" do
+        before do
+          Author.field :city_id
+          @included_author_1 = Author.create :city_id => 1
+          @included_author_2 = Author.create :city_id => 1
+          @excluded_author = Author.create :city_id => 2
+        end
+
+        it "find the correct records" do
+          City.has_many :authors
+          city = City.create :id => 1
+          city.authors.should == [@included_author_1, @included_author_2]
+        end
+
+        it "uses the correct class name when passed" do
+          City.has_many :writers, :class_name => "Author"
+          city = City.create :id => 1
+          city.writers.should == [@included_author_1, @included_author_2]
+        end
       end
 
-      it "find the correct records" do
-        City.has_many :authors
-        city = City.create :id => 1
-        city.authors.should == [@included_author_1, @included_author_2]
+      context "with a primary_key option" do
+        before do
+          Author.field :city_id
+          City.field :author_identifier
+          @author_1 = Author.create :city_id => 1
+          @author_2 = Author.create :city_id => 10
+          @author_3 = Author.create :city_id => 10
+          City.has_many :authors, :primary_key => :author_identifier
+        end
+
+        it "finds the correct records" do
+          city = City.create :id => 1, :author_identifier => 10
+          city.authors.should == [@author_2, @author_3]
+        end
       end
 
-      it "uses the correct class name when passed" do
-        City.has_many :writers, :class_name => "Author"
-        city = City.create :id => 1
-        city.writers.should == [@included_author_1, @included_author_2]
+      context "with a foreign_key option" do
+        before do
+          Author.field :city_id
+          Author.field :city_identifier
+          @author_1 = Author.create :city_id => 1, :city_identifier => 10
+          @author_2 = Author.create :city_id => 10, :city_identifier => 10
+          @author_3 = Author.create :city_id => 10, :city_identifier => 5
+          City.has_many :authors, :foreign_key => :city_identifier
+        end
+
+        it "finds the correct records" do
+          city = City.create :id => 10
+          city.authors.should == [@author_1, @author_2]
+        end
       end
     end
 
