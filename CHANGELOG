@@ -1,3 +1,7 @@
+2013-10-01 (v1.2.0)
+  - belongs_to is back!
+  - added support for primary key options for belongs_to (tomtaylor)
+
 2013-09-09 (v1.0.2)
   - `where(nil)` returns all results, like ActiveRecord (kugaevsky)
 
