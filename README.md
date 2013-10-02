@@ -192,13 +192,26 @@ In versions of ActiveRecord previous to 3.1, you should be able to do the follow
       belongs_to :country
     end
 
-However, as of ActiveRecord 3.1 support for ActiveRecord's `belong_to` is broken.  Instead, you must use the `belongs_to_active_hash` method:
+However, as of ActiveRecord 3.1 support for ActiveRecord's `belong_to` is broken.  Instead, you must extend ActiveHash::Associations::ActiveRecordExtensions method:
 
     class Country < ActiveHash::Base
     end
 
     class Person < ActiveRecord::Base
       extend ActiveHash::Associations::ActiveRecordExtensions
+      belongs_to :country
+    end
+
+NOTE: this needs to be called on a subclass of ActiveRecord::Base.  If you extend ActiveRecord::Base, it will not work.
+If you want to extend ActiveRecord::Base so all your AR models can belong to ActiveHash::Base objects, you can use the
+`belongs_to_active_hash` method:
+
+    ActiveRecord::Base.extend ActiveHash::Associations::ActiveRecordExtensions
+
+    class Country < ActiveHash::Base
+    end
+
+    class Person < ActiveRecord::Base
       belongs_to_active_hash :country
     end
 
