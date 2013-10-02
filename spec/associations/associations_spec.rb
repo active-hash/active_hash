@@ -5,19 +5,20 @@ describe ActiveHash::Base, "associations" do
 
   before do
     class Country < ActiveRecord::Base
-      extend ActiveHash::Associations::ActiveRecordExtensions
       establish_connection :adapter => "sqlite3", :database => ":memory:"
       connection.create_table(:countries, :force => true) do |t|
         t.string :name
       end
+      extend ActiveHash::Associations::ActiveRecordExtensions
     end
 
     class School < ActiveRecord::Base
-      extend ActiveHash::Associations::ActiveRecordExtensions
       establish_connection :adapter => "sqlite3", :database => ":memory:"
       connection.create_table(:schools, :force => true) do |t|
+        t.integer :country_id
         t.integer :city_id
       end
+      extend ActiveHash::Associations::ActiveRecordExtensions
     end
 
     class City < ActiveHash::Base
@@ -175,6 +176,27 @@ describe ActiveHash::Base, "associations" do
   end
 
   describe ActiveHash::Associations::ActiveRecordExtensions do
+
+    describe "#belongs_to" do
+      it "sets up an ActiveRecord association for non-ActiveHash objects" do
+        School.belongs_to :country
+        school = School.new
+        country = Country.create!
+        school.country = country
+        school.country.should == country
+        school.country_id.should == country.id
+        school.save!
+        school.reload
+        school.reload.country_id.should == country.id
+      end
+
+      it "calls through to belongs_to_active_hash if it's an ActiveHash object" do
+        School.belongs_to :city
+        city = City.create
+        school = School.create :city_id => city.id
+        school.city.should == city
+      end
+    end
 
     describe "#belongs_to_active_hash" do
       context "setting by id" do
