@@ -54,7 +54,7 @@ You can also use _create_:
       create :id => 2, :name => "Canada"
     end
 
-If you are Pat Nakajima,  you probably prefer _add_:
+You can also use _add_:
 
     class Country < ActiveHash::Base
       field :name
