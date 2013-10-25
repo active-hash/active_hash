@@ -181,7 +181,7 @@ describe ActiveHash::Base, "associations" do
 
       if ActiveRecord::VERSION::MAJOR > 3
         it "doesn't interfere with AR's procs in belongs_to methods" do
-          School.belongs_to :country, ->(){ where( ) }
+          School.belongs_to :country, lambda{ where( ) }
           school = School.new
           country = Country.create!
           school.country = country
