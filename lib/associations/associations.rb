@@ -20,9 +20,10 @@ module ActiveHash
         options = {
           :class_name => association_id.to_s.camelize,
           :foreign_key => association_id.to_s.foreign_key,
-          :primary_key => association_id.to_s.camelize.constantize.primary_key,
           :shortcuts => []
         }.merge(options)
+        # Define default primary_key with provided class_name if any
+        options[:primary_key] ||= options[:class_name].constantize.primary_key
         options[:shortcuts] = [options[:shortcuts]] unless options[:shortcuts].kind_of?(Array)
 
         define_method(association_id) do
