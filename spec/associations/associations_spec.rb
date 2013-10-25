@@ -178,6 +178,21 @@ describe ActiveHash::Base, "associations" do
   describe ActiveHash::Associations::ActiveRecordExtensions do
 
     describe "#belongs_to" do
+
+      if ActiveRecord::VERSION::MAJOR > 3
+        it "doesn't interfere with AR's procs in belongs_to methods" do
+          School.belongs_to :country, ->(){ where( ) }
+          school = School.new
+          country = Country.create!
+          school.country = country
+          school.country.should == country
+          school.country_id.should == country.id
+          school.save!
+          school.reload
+          school.reload.country_id.should == country.id
+        end
+      end
+
       it "sets up an ActiveRecord association for non-ActiveHash objects" do
         School.belongs_to :country
         school = School.new

@@ -3,7 +3,10 @@ module ActiveHash
 
     module ActiveRecordExtensions
 
-      def belongs_to(name, options = {})
+      def belongs_to(*args)
+        our_args = args.dup
+        options = our_args.extract_options!
+        name = our_args.shift
         options = {:class_name => name.to_s.camelize }.merge(options)
         klass = options[:class_name].constantize
         if klass < ActiveHash::Base
