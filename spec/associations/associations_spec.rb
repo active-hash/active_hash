@@ -260,6 +260,13 @@ describe ActiveHash::Base, "associations" do
         association.should_not be_nil
         association.klass.name.should == SchoolStatus.name
       end
+
+      it "handles custom association names" do
+        School.belongs_to_active_hash :status, :class_name => 'SchoolStatus'
+        association = School.reflect_on_association(:status)
+        association.should_not be_nil
+        association.klass.name.should == SchoolStatus.name
+      end
     end
   end
 
