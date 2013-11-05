@@ -1,3 +1,6 @@
+2013-11-05 (v1.2.2)
+  - fix bug in gemspec that made it impossible to use w/ Rails 4
+
 2013-10-24 (v1.2.1)
   - fixed nasty bug in belongs_to that would prevent users from passing procs (thanks for the issue freebird0221)
   - fixed bug where passing in a separate class name to belongs_to_active_hash would raise an exception (mauriciopasquier)
