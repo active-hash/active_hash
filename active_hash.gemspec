@@ -83,19 +83,22 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<rspec>, ["~> 2.2.0"])
       s.add_development_dependency(*sqlite_gem)
       s.add_development_dependency(%q<activerecord>, supported_rails_versions)
-      s.add_development_dependency(%q<appraisal>)
+      s.add_development_dependency(%q<wwtd>)
+      s.add_development_dependency(%q<rake>)
     else
       s.add_dependency(%q<activesupport>, supported_rails_versions)
       s.add_dependency(%q<rspec>, ["~> 2.2.0"])
       s.add_dependency(*sqlite_gem)
       s.add_dependency(%q<activerecord>, supported_rails_versions)
-      s.add_dependency(%q<appraisal>)
+      s.add_dependency(%q<wwtd>)
+      s.add_dependency(%q<rake>)
     end
   else
     s.add_dependency(%q<activesupport>, supported_rails_versions)
     s.add_dependency(%q<rspec>, ["~> 2.2.0"])
     s.add_dependency(*sqlite_gem)
     s.add_dependency(%q<activerecord>, supported_rails_versions)
-    s.add_dependency(%q<appraisal>)
+    s.add_dependency(%q<wwtd>)
+    s.add_dependency(%q<rake>)
   end
 end
