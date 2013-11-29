@@ -1,3 +1,6 @@
+2013-11-29 (v1.2.3)
+  - fix bug where active hash would call `.all` on models when setting has_many (grosser)
+
 2013-11-05 (v1.2.2)
   - fix bug in gemspec that made it impossible to use w/ Rails 4
 
