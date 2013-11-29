@@ -82,7 +82,7 @@ module ActiveHash
           klass = options[:class_name].constantize
           primary_key_value = send(options[:primary_key])
 
-          if ActiveRecord.const_defined?(:Relation) && klass.all.class < ActiveRecord::Relation
+          if ActiveRecord.const_defined?(:Relation) && klass < ActiveRecord::Relation
             klass.where(options[:foreign_key] => primary_key_value)
           elsif klass.respond_to?(:scoped)
             klass.scoped(:conditions => {options[:foreign_key] => primary_key_value})
