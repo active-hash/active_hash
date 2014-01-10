@@ -1,0 +1,8 @@
+[
+  {"id": 1,
+   "state": "New York",
+   "name": "Albany"},
+  {"id": 2,
+   "state": "Oregon",
+   "name": "Portland"}
+]

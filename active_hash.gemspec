@@ -54,6 +54,7 @@ Gem::Specification.new do |s|
     "spec/active_file/base_spec.rb",
     "spec/active_hash/base_spec.rb",
     "spec/active_yaml/base_spec.rb",
+    "spec/active_json/base_spec.rb",
     "spec/associations/associations_spec.rb",
     "spec/enum/enum_spec.rb",
     "spec/lint_spec.rb",
