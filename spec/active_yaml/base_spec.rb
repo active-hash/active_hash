@@ -116,4 +116,41 @@ describe ActiveYaml::Base do
 
   end
 
+  describe "multiple files" do
+    context "given array files" do
+      before do
+        class Country < ActiveYaml::Base
+          use_multiple_files
+          set_filenames 'countries', 'commonwealths'
+        end
+      end
+      after { Object.send :remove_const, :Country }
+
+      it "loads data from both files" do
+        # countries.yml
+        Country.find_by_name("Canada").should_not be_nil
+
+        # commonwealths.yml
+        Country.find_by_name("Puerto Rico").should_not be_nil
+      end
+    end
+
+    context "given hash files" do
+      before do
+        class State < ActiveYaml::Base
+          use_multiple_files
+          set_filenames 'states', 'provences'
+        end
+      end
+      after { Object.send :remove_const, :State }
+
+      it "loads data from both files" do
+        # countries.yml
+        State.find_by_name("Oregon").should_not be_nil
+
+        # commonwealths.yml
+        State.find_by_name("British Columbia").should_not be_nil
+      end
+    end
+  end
 end

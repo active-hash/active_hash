@@ -10,6 +10,12 @@ describe ActiveFile::Base do
     Object.send :remove_const, :Country
   end
 
+  describe ".multiple_files?" do
+    it "is false" do
+      Country.multiple_files?.should be_false
+    end
+  end
+
   describe ".filename=" do
     before do
       Country.filename = "foo-izzle"
@@ -18,6 +24,7 @@ describe ActiveFile::Base do
         self.filename = "bar-izzle"
       end
     end
+    after { Object.send :remove_const, :Bar }
 
     it "sets the filename on a per-subclass basis" do
       Country.filename.should == "foo-izzle"
@@ -33,6 +40,7 @@ describe ActiveFile::Base do
         set_filename "bar-izzle"
       end
     end
+    after { Object.send :remove_const, :Bar }
 
     it "sets the filename on a per-subclass basis" do
       Country.filename.should == "foo-izzle"
@@ -48,6 +56,7 @@ describe ActiveFile::Base do
         self.root_path = "bar-izzle"
       end
     end
+    after { Object.send :remove_const, :Bar }
 
     it "sets the root_path on a per-subclass basis" do
       Country.root_path.should == "foo-izzle"
@@ -63,6 +72,7 @@ describe ActiveFile::Base do
         set_root_path "bar-izzle"
       end
     end
+    after { Object.send :remove_const, :Bar }
 
     it "sets the root_path on a per-subclass basis" do
       Country.root_path.should == "foo-izzle"

@@ -12,6 +12,7 @@ rescue LoadError
 end
 
 require 'active_hash/base'
+require 'active_file/multiple_files'
 require 'active_file/base'
 require 'active_yaml/base'
 require 'active_yaml/aliases'

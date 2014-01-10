@@ -11,7 +11,13 @@ module ActiveYaml
       end
 
       def raw_data
-        YAML.load_file(full_path)
+        if multiple_files?
+          full_paths.sum do |path|
+            YAML.load_file(path)
+          end
+        else
+          YAML.load_file(full_path)
+        end
       end
 
       def extension
