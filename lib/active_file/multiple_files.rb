@@ -1,7 +1,3 @@
-# class Country < ActiveYaml::Base
-#   extend ActiveFile::MultipleFiles
-#   filenames = [ 'europe', 'north_america', 'africa', 'asia' ]
-# end
 module ActiveFile
   module MultipleFiles
     def multiple_files?
