@@ -334,6 +334,15 @@ Since ActiveYaml just creates a hash from the YAML file, you will have all field
       id: 3
       name: Mexico
 
+### Multiple files per model
+
+You can use multiple files to store your data. You will have to choose between hash or array style as you cannot use both for one model.
+
+    class Country < ActiveYaml::Base
+      use_mutliple_files
+      set_filenames "europe", "america", "asia", "africa"
+    end
+
 ### Using aliases in YAML
 
 Aliases can be used in ActiveYaml using either array or hash style by including `ActiveYaml::Aliases`.

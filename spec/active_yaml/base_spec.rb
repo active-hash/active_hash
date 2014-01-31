@@ -116,4 +116,56 @@ describe ActiveYaml::Base do
 
   end
 
+  describe "multiple files" do
+    context "given array files" do
+      before do
+        class Country < ActiveYaml::Base
+          use_multiple_files
+          set_filenames 'countries', 'commonwealths'
+        end
+      end
+      after { Object.send :remove_const, :Country }
+
+      it "loads data from both files" do
+        # countries.yml
+        Country.find_by_name("Canada").should_not be_nil
+
+        # commonwealths.yml
+        Country.find_by_name("Puerto Rico").should_not be_nil
+      end
+    end
+
+    context "given hash files" do
+      before do
+        class State < ActiveYaml::Base
+          use_multiple_files
+          set_filenames 'states', 'provences'
+        end
+      end
+
+      it "loads data from both files" do
+        # states.yml
+        State.find_by_name("Oregon").should_not be_nil
+
+        # provences.yml
+        State.find_by_name("British Colombia").should_not be_nil
+      end
+    end
+
+    context "given a hash and an array file" do
+      before do
+        class Municipality < ActiveYaml::Base
+          use_multiple_files
+          set_filenames 'states', 'countries'
+        end
+      end
+      after { Object.send :remove_const, :Municipality }
+
+      it "raises an exception" do
+        expect do
+          Municipality.find_by_name("Oregon")
+        end.to raise_error(ActiveHash::FileTypeMismatchError)
+      end
+    end
+  end
 end

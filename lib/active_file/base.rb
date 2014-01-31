@@ -1,6 +1,7 @@
 module ActiveFile
 
   class Base < ActiveHash::Base
+    extend ActiveFile::MultipleFiles
 
     if respond_to?(:class_attribute)
       class_attribute :filename, :root_path, :data_loaded
@@ -35,7 +36,6 @@ module ActiveFile
       end
 
       def full_path
-        actual_root_path = root_path  || Dir.pwd
         actual_filename  = filename   || name.tableize
         File.join(actual_root_path, "#{actual_filename}.#{extension}")
       end
@@ -44,6 +44,11 @@ module ActiveFile
         raise "Override Me"
       end
       protected :extension
+
+      def actual_root_path
+        root_path  || Dir.pwd
+      end
+      protected :actual_root_path
 
       [:find, :find_by_id, :all, :where, :method_missing].each do |method|
         define_method(method) do |*args|
