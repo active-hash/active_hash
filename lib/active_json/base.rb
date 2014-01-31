@@ -1,6 +1,6 @@
 module ActiveJSON
-
   class Base < ActiveFile::Base
+    extend ActiveFile::HashAndArrayFiles
     class << self
       def load_file
         if (data = raw_data).is_a?(Array)
@@ -10,12 +10,13 @@ module ActiveJSON
         end
       end
 
-      def raw_data
-        JSON.load(File.open(full_path, 'r:bom|utf-8'))
-      end
-
       def extension
         "json"
+      end
+
+      private
+      def load_path(path)
+        JSON.load(File.open(path, 'r:bom|utf-8'))
       end
 
     end

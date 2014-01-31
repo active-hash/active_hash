@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "name": "US",
+    "custom_field_1": "value1"
+  },
+  {
+    "id": 2,
+    "name": "Canada",
+    "custom_field_2": "value2"
+  },
+  {
+    "id": 3,
+    "name": "Mexico",
+    "custom_field_3": "value3"
+  }
+]

@@ -1,6 +1,8 @@
-[
-  {"id": 1,
-   "name": "New York"},
-  {"id": 2,
-   "name": "Oregon"}
-]
+{
+  "new_york":
+    {"id": 1,
+      "name": "New York"},
+  "oregon":
+    {"id": 2,
+      "name": "Oregon"}
+}

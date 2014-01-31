@@ -64,6 +64,15 @@ describe ActiveJSON::Base do
         ArrayRow.load_file.should include({"name" => "Row 1", "id" => 1})
       end
     end
+
+    describe "with hash data" do
+      it "returns an array of hashes" do
+        City.load_file.should be_kind_of(Array)
+        City.load_file.should include({"state" => "New York", "name" => "Albany", "id" => 1})
+        City.reload
+        City.all.should include(City.new(:id => 1))
+      end
+    end
   end
 
   describe 'ID finders without reliance on a call to all, even with fields specified' do
@@ -96,4 +105,56 @@ describe ActiveJSON::Base do
 
   end
 
+  describe "multiple files" do
+    context "given array files" do
+      before do
+        class Country < ActiveJSON::Base
+          use_multiple_files
+          set_filenames 'countries', 'commonwealths'
+        end
+      end
+      after { Object.send :remove_const, :Country }
+
+      it "loads data from both files" do
+        # countries.yml
+        Country.find_by_name("Canada").should_not be_nil
+
+        # commonwealths.yml
+        Country.find_by_name("Puerto Rico").should_not be_nil
+      end
+    end
+
+    context "given hash files" do
+      before do
+        class State < ActiveJSON::Base
+          use_multiple_files
+          set_filenames 'states', 'provences'
+        end
+      end
+
+      it "loads data from both files" do
+        # states.yml
+        State.find_by_name("Oregon").should_not be_nil
+
+        # provences.yml
+        State.find_by_name("British Colombia").should_not be_nil
+      end
+    end
+
+    context "given a hash and an array file" do
+      before do
+        class Municipality < ActiveJSON::Base
+          use_multiple_files
+          set_filenames 'states', 'countries'
+        end
+      end
+      after { Object.send :remove_const, :Municipality }
+
+      it "raises an exception" do
+        expect do
+          Municipality.find_by_name("Oregon")
+        end.to raise_error(ActiveHash::FileTypeMismatchError)
+      end
+    end
+  end
 end
