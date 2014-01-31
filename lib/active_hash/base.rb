@@ -9,6 +9,9 @@ module ActiveHash
   class IdError < StandardError
   end
 
+  class FileTypeMismatchError < StandardError
+  end
+
   class Base
 
     if respond_to?(:class_attribute)
