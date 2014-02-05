@@ -334,6 +334,15 @@ Since ActiveYaml just creates a hash from the YAML file, you will have all field
       id: 3
       name: Mexico
 
+### Multiple files per model
+
+You can use multiple files to store your data. You will have to choose between hash or array style as you cannot use both for one model.
+
+    class Country < ActiveYaml::Base
+      use_mutliple_files
+      set_filenames "europe", "america", "asia", "africa"
+    end
+
 ### Using aliases in YAML
 
 Aliases can be used in ActiveYaml using either array or hash style by including `ActiveYaml::Aliases`.
@@ -373,6 +382,59 @@ With that module included, keys beginning with a '/' character can be safely add
     Soda.first.flavor # => sweet
     Soda.first.price # => 1.0
 
+## ActiveJSON
+
+If you want to store your data in JSON files, just inherit from ActiveJSON and specify your path information:
+
+    class Country < ActiveJSON::Base
+    end
+
+By default, this class will look for a json file named "countries.json" in the same directory as the file.  You can either change the directory it looks in, the filename it looks for, or both:
+
+    class Country < ActiveJSON::Base
+      set_root_path "/u/data"
+      set_filename "sample"
+    end
+
+The above example will look for the file "/u/data/sample.json".
+
+Since ActiveJSON just creates a hash from the JSON file, you will have all fields specified in JSON auto-defined for you.  You can format your JSON as an array, or as a hash:
+
+    # array style
+    [
+      {
+        "id": 1,
+        "name": "US",
+        "custom_field_1": "value1"
+      },
+      {
+        "id": 2,
+        "name": "Canada",
+        "custom_field_2": "value2"
+      }
+    ]
+
+    # hash style
+     {
+      { "us":
+        {
+          "id": 1,
+          "name": "US",
+          "custom_field_1": "value1"
+        }
+      },
+      { "canada":
+        {
+          "id": 2,
+          "name": "Canada",
+          "custom_field_2": "value2"
+        }
+      }
+    }
+
+### Multiple files per model
+
+  This works as it does for `ActiveYaml`
 
 ## ActiveFile
 

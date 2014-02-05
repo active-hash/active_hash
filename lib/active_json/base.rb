@@ -1,5 +1,4 @@
-module ActiveYaml
-
+module ActiveJSON
   class Base < ActiveFile::Base
     extend ActiveFile::HashAndArrayFiles
     class << self
@@ -12,13 +11,15 @@ module ActiveYaml
       end
 
       def extension
-        "yml"
+        "json"
       end
 
       private
       def load_path(path)
-        YAML.load_file(path)
+        JSON.load(File.open(path, 'r:bom|utf-8'))
       end
+
     end
   end
+
 end

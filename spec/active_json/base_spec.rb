@@ -1,15 +1,13 @@
 require 'spec_helper'
 
-describe ActiveYaml::Base do
+describe ActiveJSON::Base do
 
   before do
-    ActiveYaml::Base.set_root_path File.expand_path(File.dirname(__FILE__) + "/../fixtures")
+    ActiveJSON::Base.set_root_path File.expand_path(File.dirname(__FILE__) + "/../fixtures")
 
-    class ArrayRow     < ActiveYaml::Base ; end
-    class City         < ActiveYaml::Base ; end
-    class State        < ActiveYaml::Base ; end
-    class ArrayProduct < ActiveYaml::Base ; end # Contain YAML aliases
-    class KeyProduct   < ActiveYaml::Base ; end # Contain YAML aliases
+    class ArrayRow     < ActiveJSON::Base ; end
+    class City         < ActiveJSON::Base ; end
+    class State        < ActiveJSON::Base ; end
   end
 
   after do
@@ -54,20 +52,12 @@ describe ActiveYaml::Base do
   end
 
   describe ".raw_data" do
-
-    it "returns the raw hash data loaded from yaml hash-formatted files" do
-      City.raw_data.should be_kind_of(Hash)
-      City.raw_data.keys.should include("albany", "portland")
-    end
-
     it "returns the raw array data loaded from yaml array-formatted files" do
       ArrayRow.raw_data.should be_kind_of(Array)
     end
-
   end
 
   describe ".load_file" do
-
     describe "with array data" do
       it "returns an array of hashes" do
         ArrayRow.load_file.should be_kind_of(Array)
@@ -78,18 +68,17 @@ describe ActiveYaml::Base do
     describe "with hash data" do
       it "returns an array of hashes" do
         City.load_file.should be_kind_of(Array)
-        City.load_file.should include({"state" => :new_york, "name" => "Albany", "id" => 1})
+        City.load_file.should include({"state" => "New York", "name" => "Albany", "id" => 1})
         City.reload
         City.all.should include(City.new(:id => 1))
       end
     end
-
   end
 
   describe 'ID finders without reliance on a call to all, even with fields specified' do
 
     before do
-      class City < ActiveYaml::Base
+      class City < ActiveJSON::Base
         fields :id, :state, :name
       end
     end
@@ -104,7 +93,7 @@ describe ActiveYaml::Base do
 
   end
 
-  describe 'meta programmed finders and properties for fields that exist in the YAML' do
+  describe 'meta programmed finders and properties for fields that exist in the JSON file' do
 
     it 'should have a finder method for each property' do
       City.find_by_state('Oregon').should_not be_nil
@@ -119,7 +108,7 @@ describe ActiveYaml::Base do
   describe "multiple files" do
     context "given array files" do
       before do
-        class Country < ActiveYaml::Base
+        class Country < ActiveJSON::Base
           use_multiple_files
           set_filenames 'countries', 'commonwealths'
         end
@@ -137,7 +126,7 @@ describe ActiveYaml::Base do
 
     context "given hash files" do
       before do
-        class State < ActiveYaml::Base
+        class State < ActiveJSON::Base
           use_multiple_files
           set_filenames 'states', 'provences'
         end
@@ -154,7 +143,7 @@ describe ActiveYaml::Base do
 
     context "given a hash and an array file" do
       before do
-        class Municipality < ActiveYaml::Base
+        class Municipality < ActiveJSON::Base
           use_multiple_files
           set_filenames 'states', 'countries'
         end
