@@ -531,8 +531,7 @@ To make users' lives easier, please maintain support for:
 
 To that end, run specs against all rubies before committing:
 
-    rake appraisal:install
-    rake appraisal spec
+    wwtd
 
 Once appraisal passes in all supported rubies, follow these steps to release a new version of active_hash:
 
