@@ -86,6 +86,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<activerecord>, supported_rails_versions)
       s.add_development_dependency(%q<wwtd>)
       s.add_development_dependency(%q<rake>)
+      s.add_development_dependency(%q<json>)
     else
       s.add_dependency(%q<activesupport>, supported_rails_versions)
       s.add_dependency(%q<rspec>, ["~> 2.2.0"])

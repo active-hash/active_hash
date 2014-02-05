@@ -1,4 +1,6 @@
 quebec:
+  id: 3
   name: Quebec
 british_columbia:
+  id: 4
   name: British Colombia

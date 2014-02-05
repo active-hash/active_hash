@@ -137,18 +137,22 @@ describe ActiveYaml::Base do
 
     context "given hash files" do
       before do
-        class State < ActiveYaml::Base
+        class MultiState < ActiveYaml::Base
           use_multiple_files
-          set_filenames 'states', 'provences'
+          set_filenames 'states', 'provinces'
         end
+      end
+
+      after do
+        Object.send(:remove_const, :MultiState)
       end
 
       it "loads data from both files" do
         # states.yml
-        State.find_by_name("Oregon").should_not be_nil
+        MultiState.find_by_name("Oregon").should_not be_nil
 
-        # provences.yml
-        State.find_by_name("British Colombia").should_not be_nil
+        # provinces.yml
+        MultiState.find_by_name("British Colombia").should_not be_nil
       end
     end
 

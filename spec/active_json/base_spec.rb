@@ -5,9 +5,12 @@ describe ActiveJSON::Base do
   before do
     ActiveJSON::Base.set_root_path File.expand_path(File.dirname(__FILE__) + "/../fixtures")
 
-    class ArrayRow     < ActiveJSON::Base ; end
-    class City         < ActiveJSON::Base ; end
-    class State        < ActiveJSON::Base ; end
+    class ArrayRow < ActiveJSON::Base;
+    end
+    class City < ActiveJSON::Base;
+    end
+    class State < ActiveJSON::Base;
+    end
   end
 
   after do
@@ -126,18 +129,22 @@ describe ActiveJSON::Base do
 
     context "given hash files" do
       before do
-        class State < ActiveJSON::Base
+        class MultiState < ActiveJSON::Base
           use_multiple_files
-          set_filenames 'states', 'provences'
+          set_filenames 'states', 'provinces'
         end
+      end
+
+      after do
+        Object.send(:remove_const, :MultiState)
       end
 
       it "loads data from both files" do
         # states.yml
-        State.find_by_name("Oregon").should_not be_nil
+        MultiState.find_by_name("Oregon").should_not be_nil
 
-        # provences.yml
-        State.find_by_name("British Colombia").should_not be_nil
+        # provinces.yml
+        MultiState.find_by_name("British Colombia").should_not be_nil
       end
     end
 
@@ -148,7 +155,7 @@ describe ActiveJSON::Base do
           set_filenames 'states', 'countries'
         end
       end
-      after { Object.send :remove_const, :Municipality }
+      after { Object.send(:remove_const, :Municipality) }
 
       it "raises an exception" do
         expect do

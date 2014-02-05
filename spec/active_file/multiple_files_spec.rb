@@ -1,5 +1,4 @@
-require 'pry'
-require 'spec_helper' 
+require 'spec_helper'
 
 describe ActiveFile::MultipleFiles do
   before do
