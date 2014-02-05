@@ -114,7 +114,7 @@ module ActiveHash
       private :add_to_record_index
 
       def validate_unique_id(record)
-        raise IdError.new("Duplicate Id found for record #{record.attributes}") if record_index.has_key?(record.id.to_s)
+        raise IdError.new("Duplicate ID found for record #{record.attributes.inspect}") if record_index.has_key?(record.id.to_s)
       end
 
       private :validate_unique_id
