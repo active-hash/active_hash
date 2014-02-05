@@ -2,14 +2,10 @@
 
 $:.push File.expand_path("../lib", __FILE__)
 require "active_hash/version"
-require "util/ruby_engine"
-require "util/ruby_version"
 
 Gem::Specification.new do |s|
   s.name = %q{active_hash}
   s.version = ActiveHash::Gem::VERSION
-
-  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = [
     "Jeff Dean",
     "Mike Dalessio",
@@ -30,14 +26,15 @@ Gem::Specification.new do |s|
     "Keenan Brock",
     "Desmond Bowe",
     "Matthew O'Riordan",
-    "Brett Richardson"
+    "Brett Richardson",
+    "Rachel Heaton",
   ]
-  s.date = %q{2012-01-18}
   s.email = %q{jeff@zilkey.com}
-  s.extra_rdoc_files = [
-    "LICENSE",
-    "README.md"
-  ]
+  s.summary = %q{An ActiveRecord-like model that uses a hash or file as a datasource}
+  s.description = %q{Includes the ability to specify data using hashes, yml files or JSON files}
+  s.homepage = %q{http://github.com/zilkey/active_hash}
+  s.license = "MIT"
+
   s.files = [
     "CHANGELOG",
     "LICENSE",
@@ -45,62 +42,8 @@ Gem::Specification.new do |s|
     "active_hash.gemspec",
     Dir.glob("lib/**/*")
   ].flatten
-  s.homepage = %q{http://github.com/zilkey/active_hash}
+  s.test_files = s.files.grep(%r{^(test|spec|features)/})
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.7}
-  s.summary = %q{An ActiveRecord-like model that uses a hash or file as a datasource}
-  s.test_files = [
-    "Gemfile",
-    "spec/active_file/base_spec.rb",
-    "spec/active_hash/base_spec.rb",
-    "spec/active_yaml/base_spec.rb",
-    "spec/active_json/base_spec.rb",
-    "spec/associations/associations_spec.rb",
-    "spec/enum/enum_spec.rb",
-    "spec/lint_spec.rb",
-    "spec/spec_helper.rb"
-  ]
 
-  supported_rails_versions = [">= 2.2.2"]
-
-  sqlite_gem = if RubyEngine.jruby?
-    if RubyVersion >= '1.9.3'
-      # Until 1.3.0 is released, we need to depend on a Beta version for JRuby and Rails 4
-      # https://github.com/jruby/activerecord-jdbc-adapter/issues/419#issuecomment-20567142
-      ['activerecord-jdbcsqlite3-adapter', ['>= 1.3.0.beta2']]
-    else
-      ['activerecord-jdbcsqlite3-adapter']
-    end
-  else
-    ['sqlite3']
-  end
-
-  if s.respond_to? :specification_version then
-    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
-    s.specification_version = 3
-
-    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0')
-      s.add_runtime_dependency(%q<activesupport>, supported_rails_versions)
-      s.add_development_dependency(%q<rspec>, ["~> 2.2.0"])
-      s.add_development_dependency(*sqlite_gem)
-      s.add_development_dependency(%q<activerecord>, supported_rails_versions)
-      s.add_development_dependency(%q<wwtd>)
-      s.add_development_dependency(%q<rake>)
-      s.add_development_dependency(%q<json>)
-    else
-      s.add_dependency(%q<activesupport>, supported_rails_versions)
-      s.add_dependency(%q<rspec>, ["~> 2.2.0"])
-      s.add_dependency(*sqlite_gem)
-      s.add_dependency(%q<activerecord>, supported_rails_versions)
-      s.add_dependency(%q<wwtd>)
-      s.add_dependency(%q<rake>)
-    end
-  else
-    s.add_dependency(%q<activesupport>, supported_rails_versions)
-    s.add_dependency(%q<rspec>, ["~> 2.2.0"])
-    s.add_dependency(*sqlite_gem)
-    s.add_dependency(%q<activerecord>, supported_rails_versions)
-    s.add_dependency(%q<wwtd>)
-    s.add_dependency(%q<rake>)
-  end
+  s.add_runtime_dependency('activesupport', '>= 2.2.2')
 end

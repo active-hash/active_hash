@@ -5,4 +5,6 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'active_hash'
 
-require 'util/ruby_version.rb'
+Dir["spec/support/**/*.rb"].each { |f|
+  require File.expand_path(f)
+}
