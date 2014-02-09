@@ -200,7 +200,7 @@ module ActiveHash
         field_names << field_name
 
         define_getter_method(field_name, options[:default])
-        define_setter_method(field_name)
+        define_setter_method(field_name, options[:type])
         define_interrogator_method(field_name)
         define_custom_find_method(field_name)
         define_custom_find_all_method(field_name)
@@ -265,11 +265,12 @@ module ActiveHash
 
       private :define_getter_method
 
-      def define_setter_method(field)
+      def define_setter_method(field, sql_type)
         method_name = "#{field}="
         unless has_instance_method?(method_name)
           define_method(method_name) do |new_val|
-            attributes[field] = new_val
+            column = ActiveRecord::ConnectionAdapters::Column.new(field, nil, sql_type, false)
+            attributes[field] = column.type_cast(new_val)
           end
         end
       end
