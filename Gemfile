@@ -6,6 +6,7 @@ gem 'rspec', '~> 2.2.0'
 gem 'wwtd'
 gem 'rake'
 gem 'json'
+gem 'virtus'
 
 platforms :jruby do
   gem 'activerecord-jdbcsqlite3-adapter', '>= 1.3.6'

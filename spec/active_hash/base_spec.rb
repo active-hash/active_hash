@@ -638,7 +638,7 @@ describe ActiveHash, "Base" do
     context "for fields with type values" do
 
       before do
-        Country.field :population, :type => 'integer', :default => false
+        Country.field :population, :type => 'Integer', :default => false
       end
 
       context "entered values will be converted to set type" do
@@ -656,10 +656,10 @@ describe ActiveHash, "Base" do
 
       end
 
-      context 'valid types, accept ActiveRecord sql types' do
+      context 'valid types, accepts Ruby types' do
 
         before do
-          Country.field :independence_day, :type => 'date', :default => false
+          Country.field :independence_day, :type => 'Date', :default => false
         end
 
         it 'date' do

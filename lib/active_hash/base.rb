@@ -39,6 +39,14 @@ module ActiveHash
         @field_names ||= []
       end
 
+      def types
+        @types ||= {}
+      end
+
+      def set_type(field_name, type)
+        types[field_name] = Virtus::Attribute.build(type)
+      end
+
       def the_meta_class
         class << self
           self
@@ -199,8 +207,9 @@ module ActiveHash
         validate_field(field_name)
         field_names << field_name
 
+        set_type(field_name, options[:type])
         define_getter_method(field_name, options[:default])
-        define_setter_method(field_name, options[:type])
+        define_setter_method(field_name)
         define_interrogator_method(field_name)
         define_custom_find_method(field_name)
         define_custom_find_all_method(field_name)
@@ -265,12 +274,11 @@ module ActiveHash
 
       private :define_getter_method
 
-      def define_setter_method(field, sql_type)
+      def define_setter_method(field)
         method_name = "#{field}="
         unless has_instance_method?(method_name)
           define_method(method_name) do |new_val|
-            column = ActiveRecord::ConnectionAdapters::Column.new(field, nil, sql_type, false)
-            attributes[field] = column.type_cast(new_val)
+            attributes[field] = coerce(field, new_val)
           end
         end
       end
@@ -375,7 +383,7 @@ module ActiveHash
 
     end
 
-    attr_reader :attributes
+    attr_reader :attributes, :types
 
     def initialize(attributes = {})
       attributes.symbolize_keys!
@@ -469,6 +477,12 @@ module ActiveHash
 
     def marked_for_destruction?
       false
+    end
+
+    def coerce(field, new_val)
+      type = self.class.types[field]
+      return attributes[field] = type.coerce(new_val) unless type.nil?
+      return new_value
     end
 
   end
