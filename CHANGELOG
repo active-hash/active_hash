@@ -1,3 +1,9 @@
+2014-02-18 (v1.3.0)
+  - fix bug where including ActiveHash associations would make `belongs_to :imageable, polymorphic: true` blow up
+  - fixed several bugs that prevented active hash from being used without active record / active model
+  - add support for splitting up data sources into multiple files (rheaton)
+  - add support for storing data in json files (rheaton)
+
 2013-11-29 (v1.2.3)
   - fix bug where active hash would call `.all` on models when setting has_many (grosser)
 
