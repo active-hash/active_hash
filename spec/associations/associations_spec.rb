@@ -16,6 +16,8 @@ describe ActiveHash::Base, "associations" do
       establish_connection :adapter => "sqlite3", :database => ":memory:"
       connection.create_table(:schools, :force => true) do |t|
         t.integer :country_id
+        t.string :locateable_type
+        t.integer :locateable_id
         t.integer :city_id
       end
       extend ActiveHash::Associations::ActiveRecordExtensions
@@ -198,6 +200,16 @@ describe ActiveHash::Base, "associations" do
           school.reload
           school.reload.country_id.should == country.id
         end
+      end
+
+      it "doesn't interfere w/ ActiveRecord's polymorphism" do
+        School.belongs_to :locateable, :polymorphic => true
+        school = School.new
+        country = Country.create!
+        school.locateable = country
+        school.locateable.should == country
+        school.save!
+        school.reload.locateable_id.should == country.id
       end
 
       it "sets up an ActiveRecord association for non-ActiveHash objects" do
