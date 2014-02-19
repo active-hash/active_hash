@@ -62,10 +62,6 @@ You can also use _add_:
       add :id => 2, :name => "Canada"
     end
 
-## WARNING
-
-If you add data to an ActiveHash file during an initializer, it will not be reloaded in development in Rails.
-
 ## Auto-Defined fields
 
 ActiveHash will auto-define all fields for you when you load the hash.  For example, if you have the following class:
@@ -105,10 +101,12 @@ You can define data inside your class or outside.  For example, you might have a
     end
 
     # config/initializers/data.rb
-    Country.data = [
-        {:id => 1, :name => "US"},
-        {:id => 2, :name => "Canada"}
-    ]
+    Rails.application.config.to_prepare do
+      Country.data = [
+          {:id => 1, :name => "US"},
+          {:id => 2, :name => "Canada"}
+      ]
+    end
 
 If you prefer to store your data in YAML, see below.
 
@@ -250,10 +248,12 @@ Since ActiveHashes usually are static, we can use shortcuts to assign via an eas
     end
 
     # config/initializers/data.rb
-    Country.data = [
-        {:id => 1, :name => "US"},
-        {:id => 2, :name => "Canada"}
-    ]
+    Rails.application.config.to_prepare do
+      Country.data = [
+          {:id => 1, :name => "US"},
+          {:id => 2, :name => "Canada"}
+      ]
+    end
 
     # Using `rails console`
     john = Person.new
