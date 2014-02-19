@@ -23,7 +23,34 @@ Bundler:
 
 Other:
 
-  gem install active_hash
+    gem install active_hash
+
+## Reason for being
+
+We wrote ActiveHash so that we could use simple, in-memory, ActiveRecord-like data structures that play well with Rails forms, like:
+
+    # in app/models/country.rb
+    class Country < ActiveHash::Base
+      self.data = [
+        {:id => 1, :name => "US"},
+        {:id => 2, :name => "Canada"}
+      ]
+    end
+
+    # in some view
+    <%= collection_select :person, :country_id, Country.all, :id, :name %>
+
+Before ActiveHash, we did things like:
+
+    # in app/models/person.rb
+    class Person < ActiveRecord::Base
+      COUNTRIES = ["US", "Canada"]
+    end
+
+    # in some view
+    <%= collection_select :person, :country_id, Person::COUNTRIES, :to_s, :to_s %>
+
+The majority of ActiveHash uses involve setting up some data at boot time, and never modifying that data at runtime.
 
 ## Usage
 
@@ -228,10 +255,6 @@ With ActiveRecord versions < 3.1, ActiveHash will also work as a polymorphic par
     person.location # => Country.first
 
 However, as of ActiveRecord 3.1 this will not work.  If you need support for that, please open an issue.
-
-You can also use standard rails view helpers, like #collection_select:
-
-    <%= collection_select :person, :country_id, Country.all, :id, :name %>
 
 ### Using shortcuts
 
