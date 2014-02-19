@@ -15,11 +15,6 @@ describe ActiveHash, "Base" do
     expect { Country.transaction }.to raise_error(LocalJumpError)
   end
 
-  # This require must be after the above example so that ActiveRecord
-  # is available in its full glory for the test classes that use it,
-  # but doesn't create a false positive for the above example.
-  require "active_record"
-
   describe ".fields" do
     before do
       Country.fields :name, :iso_name
@@ -816,7 +811,7 @@ describe ActiveHash, "Base" do
     end
   end
 
-  describe "using with belongs_to in ActiveRecord" do
+  describe "using with belongs_to in ActiveRecord", :unless => SKIP_ACTIVE_RECORD do
     before do
       Country.data = [
         {:id => 1, :name => "foo"}
@@ -1012,7 +1007,7 @@ describe ActiveHash, "Base" do
       end
     end
 
-    it "swallows ActiveRecord::Rollback errors" do
+    it "swallows ActiveRecord::Rollback errors", :unless => SKIP_ACTIVE_RECORD do
       proc do
         Country.transaction do
           raise ActiveRecord::Rollback

@@ -1,0 +1,9 @@
+source 'http://rubygems.org/'
+
+gem 'rspec', '~> 2.2.0'
+gem 'wwtd'
+gem 'rake'
+gem 'json'
+gem 'i18n'
+
+gemspec :path => '../'

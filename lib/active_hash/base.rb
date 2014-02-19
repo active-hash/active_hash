@@ -31,6 +31,14 @@ module ActiveHash
 
     class << self
 
+      def cache_key
+        if Object.const_defined?(:ActiveModel)
+          model_name.cache_key
+        else
+          ActiveSupport::Inflector.tableize(self)
+        end
+      end
+
       def primary_key
         "id"
       end
@@ -157,7 +165,10 @@ module ActiveHash
         yield
       rescue LocalJumpError => err
         raise err
-      rescue ActiveRecord::Rollback
+      rescue StandardError => e
+        unless Object.const_defined?(:ActiveRecord) && e.is_a?(ActiveRecord::Rollback)
+          raise e
+        end
       end
 
       def delete_all
@@ -431,11 +442,11 @@ module ActiveHash
     def cache_key
       case
         when new_record?
-          "#{self.class.model_name.cache_key}/new"
+          "#{self.class.cache_key}/new"
         when timestamp = self[:updated_at]
-          "#{self.class.model_name.cache_key}/#{id}-#{timestamp.to_s(:number)}"
+          "#{self.class.cache_key}/#{id}-#{timestamp.to_s(:number)}"
         else
-          "#{self.class.model_name.cache_key}/#{id}"
+          "#{self.class.cache_key}/#{id}"
       end
     end
 
