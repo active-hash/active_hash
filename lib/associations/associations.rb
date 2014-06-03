@@ -97,7 +97,7 @@ module ActiveHash
           elsif klass.respond_to?(:scoped)
             klass.scoped(:conditions => {options[:foreign_key] => primary_key_value})
           else
-            klass.send("find_all_by_#{options[:foreign_key]}", primary_key_value)
+            klass.where(options[:foreign_key] => primary_key_value)
           end
         end
       end
