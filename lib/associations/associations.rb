@@ -44,7 +44,21 @@ module ActiveHash
           end
         end
 
-        if ActiveRecord::Base.respond_to?(:create_reflection)
+        if ActiveRecord::Reflection.respond_to?(:create)
+          reflection = ActiveRecord::Reflection.create(
+            :belongs_to,
+            association_id.to_sym,
+            nil,
+            options,
+            self
+          )
+
+          ActiveRecord::Reflection.add_reflection(
+            self,
+            association_id.to_sym,
+            reflection
+          )
+        else
           method = ActiveRecord::Base.method(:create_reflection)
           if method.respond_to?(:parameters) && method.parameters.length == 5
             create_reflection(
@@ -62,17 +76,8 @@ module ActiveHash
               options[:class_name].constantize
             )
           end
-        else
-          ActiveRecord::Reflection.create(
-            :belongs_to,
-            association_id.to_sym,
-            nil,
-            options,
-            self
-          )
         end
       end
-
     end
 
     def self.included(base)
