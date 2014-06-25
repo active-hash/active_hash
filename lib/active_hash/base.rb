@@ -183,6 +183,8 @@ module ActiveHash
             nil
           when :all
             all
+          when :first
+            all(*args).first
           when Array
             id.map { |i| find(i) }
           else
