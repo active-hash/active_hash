@@ -1,3 +1,5 @@
+require 'yaml'
+
 module ActiveYaml
 
   class Base < ActiveFile::Base
