@@ -1,3 +1,6 @@
+2014-09-03 (v1.4.0)
+  - support Rails 4.2 (agraves, al2o3cr)
+
 2014-02-18 (v1.3.0)
   - fix bug where including ActiveHash associations would make `belongs_to :imageable, polymorphic: true` blow up
   - fixed several bugs that prevented active hash from being used without active record / active model
