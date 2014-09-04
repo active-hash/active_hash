@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-if Object.const_defined?(:ActiveModel)
+if Object.const_defined?(:ActiveModel) && ActiveModel::VERSION::STRING < "4.1.0"
 
   require 'test/unit'
   require 'test/unit/assertions'

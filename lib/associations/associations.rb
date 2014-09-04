@@ -44,25 +44,40 @@ module ActiveHash
           end
         end
 
-        method = ActiveRecord::Base.method(:create_reflection)
-        if method.respond_to?(:parameters) && method.parameters.length == 5
-          create_reflection(
+        if ActiveRecord::Reflection.respond_to?(:create)
+          reflection = ActiveRecord::Reflection.create(
             :belongs_to,
             association_id.to_sym,
             nil,
             options,
             self
           )
-        else
-          create_reflection(
-            :belongs_to,
+
+          ActiveRecord::Reflection.add_reflection(
+            self,
             association_id.to_sym,
-            options,
-            options[:class_name].constantize
+            reflection
           )
+        else
+          method = ActiveRecord::Base.method(:create_reflection)
+          if method.respond_to?(:parameters) && method.parameters.length == 5
+            create_reflection(
+              :belongs_to,
+              association_id.to_sym,
+              nil,
+              options,
+              self
+            )
+          else
+            create_reflection(
+              :belongs_to,
+              association_id.to_sym,
+              options,
+              options[:class_name].constantize
+            )
+          end
         end
       end
-
     end
 
     def self.included(base)
@@ -81,13 +96,14 @@ module ActiveHash
 
           klass = options[:class_name].constantize
           primary_key_value = send(options[:primary_key])
+          foreign_key = options[:foreign_key].to_sym
 
           if Object.const_defined?(:ActiveRecord) && ActiveRecord.const_defined?(:Relation) && klass < ActiveRecord::Relation
-            klass.where(options[:foreign_key] => primary_key_value)
+            klass.where(foreign_key => primary_key_value)
           elsif klass.respond_to?(:scoped)
-            klass.scoped(:conditions => {options[:foreign_key] => primary_key_value})
+            klass.scoped(:conditions => {foreign_key => primary_key_value})
           else
-            klass.send("find_all_by_#{options[:foreign_key]}", primary_key_value)
+            klass.where(foreign_key => primary_key_value)
           end
         end
       end
