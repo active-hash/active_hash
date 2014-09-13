@@ -288,13 +288,12 @@ describe ActiveHash, "Base" do
     end
 
     it "filters the records from a AR-like conditions hash" do
-      record = Country.find_by(name: 'US', language: 'English')
+      record = Country.find_by(:name => 'US', :language => 'English')
       record.id.should == 1
       record.name.should == 'US'
       record.language.should == 'English'
     end
   end
-
 
   describe ".count" do
     before do
