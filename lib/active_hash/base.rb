@@ -269,7 +269,8 @@ module ActiveHash
       def define_getter_method(field, default_value)
         unless has_instance_method?(field)
           define_method(field) do
-            attributes[field].nil? ? default_value : attributes[field]
+            
+            attributes[field].nil? ? (default_value.is_a?(Proc) ? (attributes[field]= default_value.call) : default_value) : attributes[field]
           end
         end
       end
