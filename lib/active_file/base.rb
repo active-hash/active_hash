@@ -11,6 +11,10 @@ module ActiveFile
 
     class << self
 
+      def inherited(child)
+        child.data_loaded = false
+      end
+
       def delete_all
         self.data_loaded = true
         super
