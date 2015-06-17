@@ -46,4 +46,5 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_runtime_dependency('activesupport', '>= 2.2.2')
+  s.required_ruby_version = '>= 1.9.3'
 end
