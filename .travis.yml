@@ -2,6 +2,7 @@ rvm:
   - "1.8.7"
   - "1.9.3"
   - "2.1.2"
+  - "2.2.2"
   - jruby
   #- rbx-2.2.3
 gemfile:
@@ -11,6 +12,7 @@ gemfile:
   - gemfiles/rails_3.2.gemfile
   - gemfiles/rails_4.0.gemfile
   - gemfiles/rails_4.1.gemfile
+  - gemfiles/rails_4.2.gemfile
 matrix:
   include:
     - rvm: 2.1.0
@@ -22,6 +24,8 @@ matrix:
     - rvm: 1.8.7
       gemfile: gemfiles/rails_4.1.gemfile
     - rvm: 2.1.2
+      gemfile: gemfiles/rails_2.3.gemfile
+    - rvm: 2.2.2
       gemfile: gemfiles/rails_2.3.gemfile
     - rvm: rbx-2.2.3
       gemfile: gemfiles/rails_2.3.gemfile
