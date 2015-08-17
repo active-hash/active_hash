@@ -161,6 +161,10 @@ module ActiveHash
         end
       end
 
+      def find_by(options)
+        where(options).first
+      end
+
       def count
         all.length
       end

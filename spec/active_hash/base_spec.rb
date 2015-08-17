@@ -247,6 +247,53 @@ describe ActiveHash, "Base" do
     end
   end
 
+  describe ".find_by" do
+    before do
+      Country.field :name
+      Country.field :language
+      Country.data = [
+        {:id => 1, :name => "US", :language => 'English'},
+        {:id => 2, :name => "Canada", :language => 'English'},
+        {:id => 3, :name => "Mexico", :language => 'Spanish'}
+      ]
+    end
+
+    it "raises ArgumentError if no conditions are provided" do
+      lambda{
+        Country.find_by
+      }.should raise_error(ArgumentError)
+    end
+
+    it "returns first record when passed nil" do
+      Country.find_by(nil).should == Country.first
+    end
+
+    it "returns all data as inflated objects" do
+      Country.find_by(:language => 'English').should be_kind_of(Country)
+    end
+
+    it "populates the data correctly" do
+      record = Country.find_by(:language => 'English')
+      record.id.should == 1
+      record.name.should == "US"
+    end
+
+    it "re-populates the records after data= is called" do
+      Country.data = [
+        {:id => 45, :name => "Canada"}
+      ]
+      record = Country.find_by(:name => 'Canada')
+      record.id.should == 45
+      record.name.should == "Canada"
+    end
+
+    it "filters the records from a AR-like conditions hash" do
+      record = Country.find_by(:name => 'US')
+      record.id.should == 1
+      record.name.should == 'US'
+    end
+  end
+
   describe ".count" do
     before do
       Country.data = [
