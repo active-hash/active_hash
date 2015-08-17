@@ -415,6 +415,10 @@ module ActiveHash
       attributes[key]
     end
 
+    def _read_attribute(key)
+      attributes[key]
+    end
+
     def []=(key, val)
       attributes[key] = val
     end

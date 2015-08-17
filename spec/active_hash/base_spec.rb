@@ -583,13 +583,19 @@ describe ActiveHash, "Base" do
       country.attributes.should == {:foo => :bar}
     end
 
-    it "is works with #[]" do
+    it "works with #[]" do
       Country.field :foo
       country = Country.new(:foo => :bar)
       country[:foo].should == :bar
     end
 
-    it "is works with #[]=" do
+    it "works with _read_attribute" do
+      Country.field :foo
+      country = Country.new(:foo => :bar)
+      country._read_attribute(:foo).should == :bar
+    end
+
+    it "works with #[]=" do
       Country.field :foo
       country = Country.new
       country[:foo] = :bar
