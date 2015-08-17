@@ -73,7 +73,7 @@ describe ActiveHash::Base, "enum" do
         Borough::BROOKLYN.population.should == 2556598
         brooklyn = Borough.find_by_name("Brooklyn")
         brooklyn.population = 2556600
-        brooklyn.save.should be_true
+        brooklyn.save.should be_truthy
         Borough::BROOKLYN.population.should == 2556600
       end
     end
@@ -85,16 +85,16 @@ describe ActiveHash::Base, "enum" do
       end
 
       it "doesn't create constants for records missing the enum accessor field" do
-        Borough.create(:name => "").should be_true
-        Borough.create(:population => 12).should be_true
+        Borough.create(:name => "").should be_truthy
+        Borough.create(:population => 12).should be_truthy
       end
     end
 
     describe ".delete_all" do
       it "unsets all constants for deleted records" do
-        Borough.const_defined?("STATEN_ISLAND").should be_true
-        Borough.delete_all.should be_true
-        Borough.const_defined?("STATEN_ISLAND").should be_false
+        Borough.const_defined?("STATEN_ISLAND").should be_truthy
+        Borough.delete_all.should be_truthy
+        Borough.const_defined?("STATEN_ISLAND").should be_falsey
       end
     end
   end

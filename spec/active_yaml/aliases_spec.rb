@@ -23,8 +23,7 @@ describe ActiveYaml::Aliases do
     let(:model) { ArrayProduct }
 
     describe '.all' do
-      subject { model.all }
-      its(:length) { should == 4 }
+      specify { expect(model.all.length).to eq 4 }
     end
 
     describe 'aliased attributes' do
@@ -46,8 +45,7 @@ describe ActiveYaml::Aliases do
     let(:model) { KeyProduct }
 
     describe '.all' do
-      subject { model.all }
-      its(:length) { should == 4 }
+      specify { expect(model.all.length).to eq 4 }
     end
 
     describe 'aliased attributes' do
