@@ -47,7 +47,7 @@ describe ActiveFile::MultipleFiles do
 
   describe ".multiple_files?" do
     it "is true" do
-      Country.multiple_files?.should be_true
+      Country.multiple_files?.should be_truthy
     end
 
     context "on a per class basis" do
@@ -58,8 +58,8 @@ describe ActiveFile::MultipleFiles do
       after { Object.send :remove_const, :Bar }
 
       it "is true for classes with filenames" do
-        Country.multiple_files?.should be_true
-        Bar.multiple_files?.should be_false
+        Country.multiple_files?.should be_truthy
+        Bar.multiple_files?.should be_falsey
       end
     end
   end

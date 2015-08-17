@@ -12,7 +12,7 @@ describe ActiveFile::Base do
 
   describe ".multiple_files?" do
     it "is false" do
-      Country.multiple_files?.should be_false
+      Country.multiple_files?.should be_falsey
     end
   end
 
@@ -107,9 +107,9 @@ describe ActiveFile::Base do
             raise "should not have been called"
           end
         end
-        Country.dirty.should be_false
+        Country.dirty.should be_falsey
         Country.reload
-        Country.dirty.should be_false
+        Country.dirty.should be_falsey
       end
     end
 
@@ -120,10 +120,10 @@ describe ActiveFile::Base do
             {"new_york"=>{"name"=>"New York", "id"=>2}}.values
           end
         end
-        Country.dirty.should be_false
+        Country.dirty.should be_falsey
         Country.find_by_id(2).should be_nil
         Country.reload(true)
-        Country.dirty.should be_false
+        Country.dirty.should be_falsey
         Country.find(2).name.should == "New York"
       end
     end
@@ -131,9 +131,9 @@ describe ActiveFile::Base do
     context "when the data has been modified" do
       it "reloads the data" do
         Country.create!
-        Country.dirty.should be_true
+        Country.dirty.should be_truthy
         Country.reload
-        Country.dirty.should be_false
+        Country.dirty.should be_falsey
       end
     end
   end

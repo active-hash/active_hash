@@ -108,9 +108,9 @@ describe ActiveHash, "Base" do
     end
 
     it "marks the class as dirty" do
-      Country.dirty.should be_false
+      Country.dirty.should be_falsey
       Country.data = []
-      Country.dirty.should be_true
+      Country.dirty.should be_truthy
     end
   end
 
@@ -126,9 +126,9 @@ describe ActiveHash, "Base" do
     end
 
     it "marks the class as dirty" do
-      Country.dirty.should be_false
+      Country.dirty.should be_falsey
       Country.add :name => "Russia"
-      Country.dirty.should be_true
+      Country.dirty.should be_truthy
     end
 
     it "returns the record" do
@@ -707,19 +707,19 @@ describe ActiveHash, "Base" do
     end
 
     it "should return true with the same class and id" do
-      Country.new(:id => 23).eql?(Country.new(:id => 23)).should be_true
+      Country.new(:id => 23).eql?(Country.new(:id => 23)).should be_truthy
     end
 
     it "should return false with the same class and different ids" do
-      Country.new(:id => 24).eql?(Country.new(:id => 23)).should be_false
+      Country.new(:id => 24).eql?(Country.new(:id => 23)).should be_falsey
     end
 
     it "should return false with the different classes and the same id" do
-      Country.new(:id => 23).eql?(Region.new(:id => 23)).should be_false
+      Country.new(:id => 23).eql?(Region.new(:id => 23)).should be_falsey
     end
 
     it "returns false when id is nil" do
-      Country.new.eql?(Country.new).should be_false
+      Country.new.eql?(Country.new).should be_falsey
     end
   end
 
@@ -887,21 +887,21 @@ describe ActiveHash, "Base" do
     it "adds the new object to the data collection" do
       Country.all.should be_empty
       country = Country.new :id => 1, :name => "foo"
-      country.save.should be_true
+      country.save.should be_truthy
       Country.all.should == [country]
     end
 
     it "adds the new object to the data collection" do
       Country.all.should be_empty
       country = Country.new :id => 1, :name => "foo"
-      country.save!.should be_true
+      country.save!.should be_truthy
       Country.all.should == [country]
     end
 
     it "marks the class as dirty" do
-      Country.dirty.should be_false
+      Country.dirty.should be_falsey
       Country.new(:id => 1, :name => "foo").save
-      Country.dirty.should be_true
+      Country.dirty.should be_truthy
     end
 
     it "it is a no-op if the object has already been added to the collection" do
@@ -971,9 +971,9 @@ describe ActiveHash, "Base" do
     end
 
     it "marks the class as dirty" do
-      Country.dirty.should be_false
+      Country.dirty.should be_falsey
       Country.create! :id => 1, :name => "foo"
-      Country.dirty.should be_true
+      Country.dirty.should be_truthy
     end
 
   end
@@ -1043,9 +1043,9 @@ describe ActiveHash, "Base" do
     end
 
     it "marks the class as dirty" do
-      Country.dirty.should be_false
+      Country.dirty.should be_falsey
       Country.delete_all
-      Country.dirty.should be_true
+      Country.dirty.should be_truthy
     end
 
   end
