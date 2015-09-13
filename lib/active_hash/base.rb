@@ -15,9 +15,9 @@ module ActiveHash
   class Base
 
     if respond_to?(:class_attribute)
-      class_attribute :_data, :dirty
+      class_attribute :_data, :dirty, :default_attributes
     else
-      class_inheritable_accessor :_data, :dirty
+      class_inheritable_accessor :_data, :dirty, :default_attributes
     end
 
     if Object.const_defined?(:ActiveModel)
@@ -214,6 +214,7 @@ module ActiveHash
         validate_field(field_name)
         field_names << field_name
 
+        add_default_value(field_name, options[:default]) if options[:default]
         define_getter_method(field_name, options[:default])
         define_setter_method(field_name)
         define_interrogator_method(field_name)
@@ -269,6 +270,11 @@ module ActiveHash
       end
 
       private :configuration_for_custom_finder
+
+      def add_default_value field_name, default_value
+        self.default_attributes ||= {}
+        self.default_attributes[field_name] = default_value
+      end
 
       def define_getter_method(field, default_value)
         unless has_instance_method?(field)
@@ -389,13 +395,19 @@ module ActiveHash
 
     end
 
-    attr_reader :attributes
-
     def initialize(attributes = {})
       attributes.symbolize_keys!
       @attributes = attributes
       attributes.dup.each do |key, value|
         send "#{key}=", value
+      end
+    end
+
+    def attributes
+      if self.class.default_attributes
+        self.class.default_attributes.merge @attributes
+      else
+        @attributes
       end
     end
 

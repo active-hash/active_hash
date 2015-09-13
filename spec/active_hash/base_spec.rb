@@ -628,6 +628,13 @@ describe ActiveHash, "Base" do
         country = Country.new
         country.name.should == "foobar"
       end
+
+      context "#attributes" do
+        it "returns the default value when not present" do
+          country = Country.new
+          country.attributes[:name].should == "foobar"
+        end
+      end
     end
   end
 
