@@ -35,7 +35,7 @@ module ActiveHash
         if Object.const_defined?(:ActiveModel)
           model_name.cache_key
         else
-          ActiveSupport::Inflector.tableize(self)
+          ActiveSupport::Inflector.tableize(self).downcase
         end
       end
 
@@ -59,6 +59,10 @@ module ActiveHash
 
       def pluralize_table_names
         true
+      end
+
+      def empty?
+        @records.empty?
       end
 
       def data

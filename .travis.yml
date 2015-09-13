@@ -13,7 +13,7 @@ gemfile:
   - gemfiles/rails_4.1.gemfile
 matrix:
   include:
-    - rvm: 2.1.0
+    - rvm: 2.2.3
       gemfile: gemfiles/rails_4.0.no-active-record.gemfile
       env: SKIP_ACTIVE_RECORD=true
   exclude:
