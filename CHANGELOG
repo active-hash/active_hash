@@ -1,4 +1,4 @@
-unreleased (unreleased)
+2015-09-13 (v1.4.1)
   - fix bug where `#attributes` didn't contain default values #107
   - add support for `.find_by` and `#_read_attribute`. Thanks, @andrewfader!
 
