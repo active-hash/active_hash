@@ -62,7 +62,7 @@ module ActiveHash
       end
 
       def empty?
-        @records.empty?
+        false
       end
 
       def data
