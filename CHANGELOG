@@ -1,3 +1,6 @@
+unreleased (unreleased)
+  - fix bug where `#attributes` didn't contain default values #107
+
 2014-09-03 (v1.4.0)
   - support Rails 4.2 (agraves, al2o3cr)
 
