@@ -292,6 +292,27 @@ describe ActiveHash, "Base" do
       record.id.should == 1
       record.name.should == 'US'
     end
+
+    it "finds the record with the specified id as a string" do
+      record = Country.find_by(:id => 1)
+      record.name.should == 'US'
+    end
+  end
+
+  describe ".match_options?" do
+    before do
+      Country.data = [
+        {:id => 1, :name => "US"}
+      ]
+    end
+
+    it "returns true when matched options" do
+      Country.send(:match_options?, Country.first, {:name => "US"}).should be_truthy
+    end
+
+    it "returns false when unmatched options" do
+      Country.send(:match_options?, Country.first, {:name => "Canada"}).should be_falsey
+    end
   end
 
   describe ".count" do

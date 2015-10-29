@@ -157,13 +157,28 @@ module ActiveHash
       def where(options)
         return @records if options.nil?
         (@records || []).select do |record|
-          options.all? { |col, match| record[col] == match }
+          match_options?(record, options)
         end
       end
 
       def find_by(options)
-        where(options).first
+        return all.first if options.nil?
+        options.symbolize_keys!
+
+        if id = options.delete(:id)
+          candidates = Array(id).map { |i| find_by_id(id) }
+        end
+
+        (candidates || all).detect do |record|
+          match_options?(record, options)
+        end
       end
+
+      def match_options?(record, options)
+        options.all? { |col, match| record[col] == match }
+      end
+
+      private :match_options?
 
       def count
         all.length
