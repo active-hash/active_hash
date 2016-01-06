@@ -317,7 +317,7 @@ module ActiveHash
         unless has_singleton_method?(method_name)
           the_meta_class.instance_eval do
             define_method(method_name) do |*args|
-              options = args.extract_options!
+              args.extract_options!
               identifier = args[0]
               all.detect { |record| record.send(field_name) == identifier }
             end
@@ -333,7 +333,7 @@ module ActiveHash
           the_meta_class.instance_eval do
             unless singleton_methods.include?(method_name)
               define_method(method_name) do |*args|
-                options = args.extract_options!
+                args.extract_options!
                 identifier = args[0]
                 all.select { |record| record.send(field_name) == identifier }
               end
