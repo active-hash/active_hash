@@ -13,14 +13,14 @@ module ActiveYaml
 
       def raw_data
         YAML.load_file(full_path).reject do |k, v|
-          v.kind_of? Hash and k.match /^\//i
+          v.kind_of? Hash and k.match(/^\//i)
         end
       end
 
     end
 
     def initialize(attributes={})
-      super unless attributes.keys.index { |k| k.to_s.match /^\//i }
+      super unless attributes.keys.index { |k| k.to_s.match(/^\//i) }
     end
   end
 
