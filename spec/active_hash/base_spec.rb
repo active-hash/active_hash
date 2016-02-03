@@ -15,6 +15,25 @@ describe ActiveHash, "Base" do
     expect { Country.transaction }.to raise_error(LocalJumpError)
   end
 
+  describe ".new" do
+    it "yields a block" do
+      expect { |b| Country.new(&b) }.to yield_with_args(Country)
+    end
+
+    context "initializing with a block" do
+      subject do
+        Country.fields :name
+        Country.new do |country|
+          country.name = 'Germany'
+        end
+      end
+
+      it "sets assigns the fields" do
+        expect(subject.name).to eq('Germany')
+      end
+    end
+  end
+
   describe ".fields" do
     before do
       Country.fields :name, :iso_name
