@@ -661,6 +661,12 @@ describe ActiveHash, "Base" do
       country._read_attribute(:foo).should == :bar
     end
 
+    it "works with read_attribute" do
+      Country.field :foo
+      country = Country.new(:foo => :bar)
+      country.read_attribute(:foo).should == :bar
+    end
+
     it "works with #[]=" do
       Country.field :foo
       country = Country.new
