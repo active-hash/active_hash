@@ -422,7 +422,7 @@ module ActiveHash
     def _read_attribute(key)
       attributes[key]
     end
-    alias :read_attribute :_read_attribute
+    alias_method :read_attribute, :_read_attribute
 
     def []=(key, val)
       attributes[key] = val
