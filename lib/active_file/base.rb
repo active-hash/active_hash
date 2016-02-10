@@ -46,7 +46,7 @@ module ActiveFile
       protected :extension
 
       def actual_root_path
-        root_path  || Dir.pwd
+        root_path  || File.dirname(File.realpath(__FILE__))
       end
       protected :actual_root_path
 
