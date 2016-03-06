@@ -155,15 +155,34 @@ module ActiveHash
       end
 
       def where(options)
-        return @records if options.nil?
-        (@records || []).select do |record|
-          options.all? { |col, match| record[col] == match }
+        return @records if options.blank?
+
+        # use index if searching by id
+        if (ids = (options.delete(:id) || options.delete("id")))
+          candidates = Array.wrap(ids).map { |id| find_by_id(id) }
+        end
+        return candidates if options.blank?
+
+        (candidates || @records || []).select do |record|
+          match_options?(record, options)
         end
       end
 
       def find_by(options)
         where(options).first
       end
+
+      def match_options?(record, options)
+        options.all? do |col, match|
+          if match.kind_of?(Array)
+            match.include?(record[col])
+          else
+            record[col] == match
+          end
+        end
+      end
+
+      private :match_options?
 
       def count
         all.length

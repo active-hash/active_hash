@@ -226,6 +226,10 @@ describe ActiveHash, "Base" do
       Country.where(nil).should == Country.all
     end
 
+    it "returns all records when an empty hash" do
+      Country.where({}).should == Country.all
+    end
+
     it "returns all data as inflated objects" do
       Country.where(:language => 'English').all? { |country| country.should be_kind_of(Country) }
     end
@@ -263,6 +267,14 @@ describe ActiveHash, "Base" do
           {:id => 2, :name => "Mexico", :language => 'Spanish'}
         ]
       end.should raise_error(ActiveHash::IdError)
+    end
+
+    it "returns multiple records for multiple ids" do
+      expect(Country.where(:id => %w(1 2)).map(&:id)).to match_array([1,2])
+    end
+
+    it "filters records for multiple values" do
+      expect(Country.where(:name => %w(US Canada)).map(&:name)).to match_array(%w(US Canada))
     end
   end
 
@@ -310,6 +322,19 @@ describe ActiveHash, "Base" do
       record = Country.find_by(:name => 'US')
       record.id.should == 1
       record.name.should == 'US'
+    end
+
+    it "finds the record with the specified id as a string" do
+      record = Country.find_by(:id => '1')
+      record.name.should == 'US'
+    end
+
+    it "returns the record that matches options" do
+      expect(Country.find_by(:name => "US").id).to eq(1)
+    end
+
+    it "returns nil when not matched in candidates" do
+      expect(Country.find_by(:name => "UK")).to be_nil
     end
   end
 
