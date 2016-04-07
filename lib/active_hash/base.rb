@@ -170,7 +170,7 @@ module ActiveHash
       end
 
       def where_from_string(options)
-        options = options.gsub(" = ", " == ")
+        options = options.strip.gsub(" = ", " == ")
         @records.select do |record|
           begin
             eval("record." + options)
