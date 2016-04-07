@@ -145,10 +145,20 @@ describe ActiveHash, "Base" do
       end
     end  
 
-    it "calls the .before_filter methods twice before two instance were created" do      
+    it "calls the .before_filter methods twice before two instances were created" do      
       expect($counter).to receive(:call).twice
       BeforeKlass.data = [{:name => "US"}, {:name => "Canada"}]
     end
+
+    it "calls the .before_filter methods before one instances was added" do      
+      expect($counter).to receive(:call).once
+      BeforeKlass.create
+      expect($counter).to receive(:call).once
+      new_instance = BeforeKlass.new
+      new_instance.save
+      expect($counter).not_to receive(:call)
+      new_instance = BeforeKlass.new      
+    end       
   end
 
   describe ".after_filter" do
@@ -163,10 +173,20 @@ describe ActiveHash, "Base" do
       end
     end  
 
-    it "calls the .after_filter methods twice after two instance were created" do      
+    it "calls the .after_filter methods twice after two instances were created" do      
       expect($counter).to receive(:call).twice
       AfterKlass.data = [{:name => "US"}, {:name => "Canada"}]
     end
+
+    it "calls the .after_filter methods after one instances was added" do      
+      expect($counter).to receive(:call).once
+      AfterKlass.create
+      expect($counter).to receive(:call).once
+      new_instance = AfterKlass.new
+      new_instance.save
+      expect($counter).not_to receive(:call)
+      new_instance = AfterKlass.new       
+    end 
   end
 
   describe ".add" do

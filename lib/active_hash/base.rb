@@ -76,10 +76,8 @@ module ActiveHash
         if array_of_hashes
           auto_assign_fields(array_of_hashes)
           array_of_hashes.each do |hash|
-            record = new(hash)
-            send_before_filters(record)
+            record = new(hash)            
             insert record
-            send_after_filters(record)
           end
         end
       end
@@ -91,13 +89,14 @@ module ActiveHash
       end
 
       def insert(record)
+        send_before_filters(record)
         @records ||= []
         record.attributes[:id] ||= next_id
         validate_unique_id(record) if dirty
         mark_dirty
-
         add_to_record_index({ record.id.to_s => @records.length })
         @records << record
+        send_after_filters(record)
       end
 
       def next_id
