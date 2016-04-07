@@ -133,6 +133,42 @@ describe ActiveHash, "Base" do
     end
   end
 
+  describe ".before_filter" do
+    before do
+      $counter = double("Fake", :call => nil)
+      class BeforeKlass < ActiveHash::Base
+        before_filter :fake_before_method
+
+        def fake_before_method
+          $counter.call
+        end
+      end
+    end  
+
+    it "calls the .before_filter methods twice before two instance were created" do      
+      expect($counter).to receive(:call).twice
+      BeforeKlass.data = [{:name => "US"}, {:name => "Canada"}]
+    end
+  end
+
+  describe ".after_filter" do
+    before do     
+      $counter = double("Fake", :call => nil)
+      class AfterKlass < ActiveHash::Base     
+        after_filter :fake_after_method
+
+        def fake_after_method
+          $counter.call
+        end
+      end
+    end  
+
+    it "calls the .after_filter methods twice after two instance were created" do      
+      expect($counter).to receive(:call).twice
+      AfterKlass.data = [{:name => "US"}, {:name => "Canada"}]
+    end
+  end
+
   describe ".add" do
     before do
       Country.fields :name

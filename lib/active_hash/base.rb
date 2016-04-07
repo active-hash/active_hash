@@ -13,7 +13,6 @@ module ActiveHash
   end
 
   class Base
-
     if respond_to?(:class_attribute)
       class_attribute :_data, :dirty, :default_attributes
     else
@@ -77,7 +76,10 @@ module ActiveHash
         if array_of_hashes
           auto_assign_fields(array_of_hashes)
           array_of_hashes.each do |hash|
-            insert new(hash)
+            record = new(hash)
+            send_before_filters(record)
+            insert record
+            send_after_filters(record)
           end
         end
       end
@@ -145,6 +147,30 @@ module ActiveHash
         record.save!
         record
       end
+
+      def before_filter(*args)
+        @before_filters = *args        
+      end
+
+      def after_filter(*args)
+        @after_filters = *args        
+      end 
+
+      def send_before_filters(record)
+        return unless defined?(@before_filters)
+        @before_filters.each do |filter|
+          record.send(filter)
+        end
+      end  
+
+      def send_after_filters(record)
+        return unless defined?(@after_filters)
+        @after_filters.each do |filter|
+          record.send(filter)
+        end
+      end 
+
+      private :send_before_filters, :send_after_filters
 
       def all(options={})
         if options.has_key?(:conditions)

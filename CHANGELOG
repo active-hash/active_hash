@@ -1,3 +1,7 @@
+2016-04-07 (v1.4.2)
+  - add support for rails like queries: Country.where("id > 5")
+  - add an after_fil_load filter.
+
 2015-09-13 (v1.4.1)
   - fix bug where `#attributes` didn't contain default values #107
   - add support for `.find_by` and `#_read_attribute`. Thanks, @andrewfader!
