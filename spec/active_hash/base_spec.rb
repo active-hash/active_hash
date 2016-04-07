@@ -284,9 +284,10 @@ describe ActiveHash, "Base" do
       Country.field :language
       Country.field :population
       Country.data = [
-        {:id => 1, :name => "US",     :language => 'English', :population => 318},
-        {:id => 2, :name => "Canada", :language => 'English', :population => 35},
-        {:id => 3, :name => "Mexico", :language => 'Spanish', :population => 122}
+        {:id => 1, :name => "US",        :language => 'English', :population => 318},
+        {:id => 2, :name => "Canada",    :language => 'English', :population => 35},
+        {:id => 3, :name => "Mexico",    :language => 'Spanish', :population => 122},
+        {:id => 4, :name => "Australia", :language => 'English', :population => nil}
       ]
     end 
 
@@ -310,6 +311,12 @@ describe ActiveHash, "Base" do
     it "returns the correct record when queried by a string and the argument is '<'" do
       record = Country.where("population < 122")
       expect(record.first.name).to eq("Canada") 
+      expect(record.size).to eq(1)       
+    end
+
+    it "responds gracefully to a nil record" do
+      record = Country.where("population = nil")
+      expect(record.first.name).to eq("Australia") 
       expect(record.size).to eq(1)       
     end        
   end

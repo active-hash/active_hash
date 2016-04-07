@@ -172,7 +172,15 @@ module ActiveHash
       def where_from_string(options)
         options = options.gsub(" = ", " == ")
         @records.select do |record|
-          eval("record." + options)
+          begin
+            eval("record." + options)
+          rescue NoMethodError => e # catch errors like undefined method `>' for nil:NilClass
+            if e.message =~ /nil:NilClass/
+              next
+            else
+              raise e
+            end
+          end
         end
       end
 
