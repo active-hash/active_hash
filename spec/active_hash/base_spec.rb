@@ -278,6 +278,41 @@ describe ActiveHash, "Base" do
     end
   end
 
+  describe ".where_from_string" do
+    before do
+      Country.field :name
+      Country.field :language
+      Country.field :population
+      Country.data = [
+        {:id => 1, :name => "US",     :language => 'English', :population => 318},
+        {:id => 2, :name => "Canada", :language => 'English', :population => 35},
+        {:id => 3, :name => "Mexico", :language => 'Spanish', :population => 122}
+      ]
+    end 
+
+    it "returns the correct record when queried by an integer as hash value" do
+      record = Country.where(:population => 122)
+      expect(record.first.name).to eq("Mexico")
+    end  
+
+    it "returns the correct record when queried by a string and the argument is '='" do
+      record = Country.where("population = 122")
+      expect(record.first.name).to eq("Mexico")      
+    end 
+
+    it "returns the correct record when queried by a string and the argument is '>'" do
+      record = Country.where("population > 122")
+      expect(record.first.name).to eq("US")
+      expect(record.size).to eq(1)      
+    end  
+
+    it "returns the correct record when queried by a string and the argument is '<'" do
+      record = Country.where("population < 122")
+      expect(record.first.name).to eq("Canada") 
+      expect(record.size).to eq(1)       
+    end        
+  end
+
   describe ".find_by" do
     before do
       Country.field :name
