@@ -156,6 +156,7 @@ module ActiveHash
 
       def where(options)
         return @records if options.blank?
+        return where_from_string(options) if options.is_a? String
 
         # use index if searching by id
         if (ids = (options.delete(:id) || options.delete("id")))
@@ -167,6 +168,15 @@ module ActiveHash
           match_options?(record, options)
         end
       end
+
+      def where_from_string(options)
+        options = options.gsub(" = ", " == ")
+        @records.select do |record|
+          eval("record." + options)
+        end
+      end
+
+      private :where_from_string
 
       def find_by(options)
         where(options).first

@@ -292,6 +292,7 @@ describe ActiveHash, "Base" do
 
     it "returns the correct record when queried by an integer as hash value" do
       record = Country.where(:population => 122)
+      expect(record.size).to eq(1)
       expect(record.first.name).to eq("Mexico")
     end  
 
