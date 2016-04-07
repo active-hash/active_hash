@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
     "Matthew O'Riordan",
     "Brett Richardson",
     "Rachel Heaton",
+    "Rudy Yazdi"
   ]
   s.email = %q{jeff@zilkey.com}
   s.summary = %q{An ActiveRecord-like model that uses a hash or file as a datasource}
