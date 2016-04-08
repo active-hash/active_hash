@@ -196,14 +196,24 @@ module ActiveHash
 
       def where_from_string(options)
         options = options.strip.gsub(" = ", " == ")
-        @records.select do |record|
-          begin
-            eval("record." + options)
-          rescue NoMethodError => e # catch errors like undefined method `>' for nil:NilClass
-            if e.message =~ /nil:NilClass/
-              next
-            else
-              raise e
+        if options =~ / AND /
+          records = nil
+          options.split(/ AND /).each do |option|
+            records ||= where_from_string(option)
+            records = records && where_from_string(option)
+            break if records.size == 0
+          end
+          records
+        else
+          @records.select do |record|
+            begin
+              eval("record." + options)
+            rescue NoMethodError => e # catch errors like undefined method `>' for nil:NilClass
+              if e.message =~ /nil:NilClass/
+                next
+              else
+                raise e
+              end
             end
           end
         end

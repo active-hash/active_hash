@@ -374,7 +374,13 @@ describe ActiveHash, "Base" do
       record = Country.where("population = nil")
       expect(record.first.name).to eq("Australia") 
       expect(record.size).to eq(1)       
-    end        
+    end  
+
+    it "handles AND operator in the query" do
+      record = Country.where("population > 100 AND id < 2")
+      expect(record.first.name).to eq("US") 
+      expect(record.size).to eq(1)         
+    end      
   end
 
   describe ".find_by" do
