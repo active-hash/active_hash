@@ -205,7 +205,7 @@ module ActiveHash
           end
           records
         else
-          @records.select do |record|
+          all.select do |record|
             begin
               eval("record." + options)
             rescue NoMethodError => e # catch errors like undefined method `>' for nil:NilClass
