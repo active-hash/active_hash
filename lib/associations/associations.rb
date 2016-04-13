@@ -95,7 +95,6 @@ module ActiveHash
             :scope => self.class.parent
           }.merge(options)
 
-          options[:scope].const_set(options[:class_name], Class.new) if !options[:scope].const_defined?(options[:class_name])
           klass = options[:scope].const_get(options[:class_name])
           primary_key_value = send(options[:primary_key])
           foreign_key = options[:foreign_key].to_sym
@@ -118,7 +117,6 @@ module ActiveHash
             :scope => self.class.parent
           }.merge(options)
 
-          options[:scope].const_set(options[:class_name], Class.new) if !options[:scope].const_defined?(options[:class_name])
           klass = options[:scope].const_get(options[:class_name])
 
           if klass.respond_to?(:scoped) && options[:conditions]
@@ -138,11 +136,9 @@ module ActiveHash
         }.merge(options)
 
         field options[:foreign_key].to_sym
-        options[:scope].const_set(options[:class_name], Class.new) if !options[:scope].const_defined?(options[:class_name])
-        klass = options[:scope].const_get(options[:class_name])
 
         define_method(association_id) do
-          klass.send("find_by_#{options[:primary_key]}", send(options[:foreign_key]))
+          options[:scope].const_get(options[:class_name]).send("find_by_#{options[:primary_key]}", send(options[:foreign_key]))
         end
 
         define_method("#{association_id}=") do |new_value|
