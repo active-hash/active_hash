@@ -91,10 +91,11 @@ module ActiveHash
           options = {
             :class_name => association_id.to_s.classify,
             :foreign_key => self.class.to_s.foreign_key,
-            :primary_key => self.class.primary_key
+            :primary_key => self.class.primary_key,
+            :scope => self.class.parent
           }.merge(options)
 
-          klass = options[:class_name].constantize
+          klass = options[:scope].const_get(options[:class_name])
           primary_key_value = send(options[:primary_key])
           foreign_key = options[:foreign_key].to_sym
 

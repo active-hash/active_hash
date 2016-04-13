@@ -13,12 +13,22 @@ describe ActiveHash::Base, "associations" do
 
     class SchoolStatus < ActiveHash::Base
     end
+
+    module Special
+      class Author < ActiveHash::Base
+        include ActiveHash::Associations
+      end 
+      class City < ActiveHash::Base
+        include ActiveHash::Associations
+      end           
+    end
   end
 
   after do
     Object.send :remove_const, :City
     Object.send :remove_const, :Author
     Object.send :remove_const, :SchoolStatus
+    Special.send :remove_const, :Author
   end
 
   describe "#has_many" do
@@ -44,6 +54,48 @@ describe ActiveHash::Base, "associations" do
           city.writers.should == [@included_author_1, @included_author_2]
         end
       end
+
+      context "with default options when the target class is nested" do
+        before do
+          Special::Author.field :city_id
+          @included_author_1 = Special::Author.create :city_id => 1
+          @included_author_2 = Special::Author.create :city_id => 1
+          @excluded_author = Special::Author.create :city_id => 2
+        end
+
+        it "find the correct records" do
+          City.has_many :authors, :scope => Special
+          city = City.create :id => 1
+          city.authors.should == [@included_author_1, @included_author_2]
+        end
+
+        it "uses the correct class name when passed" do
+          City.has_many :writers, :scope => Special, :class_name => "Author"
+          city = City.create :id => 1
+          city.writers.should == [@included_author_1, @included_author_2]
+        end
+      end      
+
+      context "with default options when both source and target class are nested" do
+        before do
+          Special::Author.field :city_id
+          @included_author_1 = Special::Author.create :city_id => 1
+          @included_author_2 = Special::Author.create :city_id => 1
+          @excluded_author = Special::Author.create :city_id => 2
+        end
+
+        it "find the correct records" do
+          Special::City.has_many :authors
+          city = Special::City.create :id => 1
+          city.authors.should == [@included_author_1, @included_author_2]
+        end
+
+        it "uses the correct class name when passed" do
+          Special::City.has_many :writers, :class_name => "Author"
+          city = Special::City.create :id => 1
+          city.writers.should == [@included_author_1, @included_author_2]
+        end
+      end        
 
       context "with a primary_key option" do
         before do
