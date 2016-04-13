@@ -138,7 +138,8 @@ module ActiveHash
         field options[:foreign_key].to_sym
 
         define_method(association_id) do
-          options[:scope].const_get(options[:class_name]).send("find_by_#{options[:primary_key]}", send(options[:foreign_key]))
+          klass = options[:scope].const_get(options[:class_name])
+          klass.send("find_by_#{options[:primary_key]}", send(options[:foreign_key]))
         end
 
         define_method("#{association_id}=") do |new_value|
