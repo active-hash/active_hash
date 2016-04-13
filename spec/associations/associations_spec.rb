@@ -55,7 +55,7 @@ describe ActiveHash::Base, "associations" do
         end
       end
 
-      context "with default options when the target class is nested" do
+      context "with default options when the target model is nested" do
         before do
           Special::Author.field :city_id
           @included_author_1 = Special::Author.create :city_id => 1
@@ -76,7 +76,7 @@ describe ActiveHash::Base, "associations" do
         end
       end      
 
-      context "with default options when both source and target class are nested" do
+      context "with default options when both source and target models are nested" do
         before do
           Special::Author.field :city_id
           @included_author_1 = Special::Author.create :city_id => 1
@@ -146,6 +146,24 @@ describe ActiveHash::Base, "associations" do
         Author.belongs_to :city
         author = Author.create :city_id => 123
         author.city.should be_nil
+      end
+    end
+
+    context "with an ActiveHash parent when target model is nested" do
+      it "find the correct records" do
+        Author.belongs_to :city, :scope => Special
+        city = Special::City.create
+        author = Author.create :city_id => city.id
+        author.city.should == city
+      end
+    end
+
+    context "with an ActiveHash parent when both source and target models are nested" do
+      it "find the correct records" do
+        Special::Author.belongs_to :city, :scope => Special
+        city = Special::City.create
+        author = Special::Author.create :city_id => city.id
+        author.city.should == city
       end
     end
 
@@ -224,6 +242,32 @@ describe ActiveHash::Base, "associations" do
         city.author.should be_nil
       end
     end
+
+    context "with ActiveHash children when target model is nested" do
+      before do
+        City.has_one :author, :scope => Special
+        Special::Author.field :city_id
+      end
+
+      it "find the correct records" do
+        city = City.create :id => 1
+        author = Special::Author.create :city_id => 1
+        city.author.should == author
+      end
+    end    
+
+    context "with ActiveHash children when both source and target modela are nested" do
+      before do
+        Special::City.has_one :author
+        Special::Author.field :city_id
+      end
+
+      it "find the correct records" do
+        city = Special::City.create :id => 1
+        author = Special::Author.create :city_id => 1
+        city.author.should == author
+      end
+    end      
   end
 
   describe "#marked_for_destruction?" do
