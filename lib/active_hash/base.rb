@@ -148,11 +148,11 @@ module ActiveHash
       end
 
       def before_filter(*args)
-        @before_filters = *args        
+        @before_filters = [*args]        
       end
 
       def after_filter(*args)
-        @after_filters = *args        
+        @after_filters = [*args]        
       end 
 
       def send_before_filters(record)
