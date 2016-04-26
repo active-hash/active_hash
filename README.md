@@ -328,7 +328,7 @@ Once you define a belongs to, you also get the setter method:
 class City < ActiveHash::Base
   include ActiveHash::Associations
   belongs_to :state
-end
+end 
 
 city = City.new
 city.state = State.first
