@@ -1,6 +1,6 @@
 2016-04-07 (v1.4.2)
   - add support for rails like queries: Country.where("id > 5")
-  - add an after_fil_load filter.
+  - add before_filter and after_filter.
   - add support for Associations when the target model is nested under a module.
 
 2015-09-13 (v1.4.1)
