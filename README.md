@@ -151,7 +151,7 @@ Country.find :all       # => same as .all
 Country.find :all, args # => the second argument is totally ignored, but allows it to play nicely with AR
 Country.find_by_id 1    # => find the first object that matches the id
 Country.where(:id => 1) # => returns the first country object
-Country.where("id > 4") # => returns the country objects which their id is bigger than 4
+Country.where("id > 4") # => returns the country objects with id bigger than 4
 ```
 It also gives you a few dynamic finder methods.  For example, if you defined :name as a field, you'd get:
 ```ruby
@@ -209,7 +209,7 @@ country.new_record?     # => false
 Country.all             # [ <Country :id => 1>, <Country :id => 2>  ]
 ```
 Notice that when adding records to the collection, it will auto-increment the id for you by default.  If you use string ids, it will not auto-increment the id.  Available methods are:
-```
+```ruby
 Country.insert( record )
 Country#save
 Country#save!
