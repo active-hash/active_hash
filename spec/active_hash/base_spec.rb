@@ -407,6 +407,20 @@ describe ActiveHash, "Base" do
       end
     end
 
+    context "with :first" do
+      it "returns the first record" do
+        Country.find(:first).should == Country.new(:id => 1)
+      end
+
+      it "returns the first record that matches the search criteria" do
+        Country.find(:first, :conditions => {:id => 2}).should == Country.new(:id => 2)
+      end
+
+      it "returns nil if none matches the search criteria" do
+        Country.find(:first, :conditions => {:id => 3}).should == nil
+      end
+    end
+
     context "with 2 arguments" do
       it "returns the record with the given id and ignores the conditions" do
         Country.find(1, :conditions => "foo=bar").should == Country.new(:id => 1)
