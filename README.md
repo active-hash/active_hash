@@ -489,6 +489,20 @@ In Rails, in development mode, it reloads the entire class, which reloads the fi
 
 NOTE:  By default, .full_path refers to the current working directory.  In a rails app, this will be RAILS_ROOT.
 
+
+## Reloading ActiveYaml, ActiveJSON and ActiveFile
+
+During the development you may often change your data and want to see your changes immediately.
+Call `Model.reload(true)` to force reload the data from disk.
+
+In Rails, you can use this snippet. Please just note it resets the state every request, which may not always be desired.
+
+```ruby
+before_filter do
+  [Model1, Model2, Model3].each { |m| m.reload(true) }
+end
+```
+
 ## Enum
 
 ActiveHash can expose its data in an Enumeration by setting constants for each record. This allows records to be accessed in code through a constant set in the ActiveHash class.
