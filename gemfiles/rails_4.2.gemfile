@@ -1,11 +1,10 @@
 source 'http://rubygems.org/'
 
-gem 'activerecord', '~> 3.2.0'
+gem 'activerecord', '~> 4.2.0'
 gem 'rspec', '~> 2.2.0'
 gem 'wwtd'
 gem 'rake'
 gem 'json'
-gem 'i18n', '~> 0.6.11'
 gem 'test-unit'
 
 platform :jruby do
