@@ -90,7 +90,7 @@ module ActiveHash
 
       def insert(record)
         @records ||= []
-        record.attributes[:id] ||= next_id
+        record[:id] ||= next_id
         validate_unique_id(record) if dirty
         mark_dirty
 
@@ -315,7 +315,7 @@ module ActiveHash
         method_name = "#{field}="
         unless has_instance_method?(method_name)
           define_method(method_name) do |new_val|
-            attributes[field] = new_val
+            @attributes[field] = new_val
           end
         end
       end
@@ -431,7 +431,7 @@ module ActiveHash
 
     def attributes
       if self.class.default_attributes
-        self.class.default_attributes.merge @attributes
+        (self.class.default_attributes.merge @attributes).freeze
       else
         @attributes
       end
@@ -447,7 +447,7 @@ module ActiveHash
     alias_method :read_attribute, :_read_attribute
 
     def []=(key, val)
-      attributes[key] = val
+      @attributes[key] = val
     end
 
     def id
@@ -455,7 +455,7 @@ module ActiveHash
     end
 
     def id=(id)
-      attributes[:id] = id
+      @attributes[:id] = id
     end
 
     alias quoted_id id
