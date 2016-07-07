@@ -5,8 +5,13 @@ gemspec
 gem 'rspec', '~> 2.2.0'
 gem 'wwtd'
 gem 'rake'
-gem 'json'
 gem 'test-unit'
+
+if RUBY_VERSION < '2.0.0'
+  gem 'json', '< 2.0.0'
+else
+  gem 'json'
+end
 
 platforms :jruby do
   gem 'activerecord-jdbcsqlite3-adapter', '>= 1.3.6'
