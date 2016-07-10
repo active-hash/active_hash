@@ -150,7 +150,7 @@ module ActiveHash
         if options.has_key?(:conditions)
           where(options[:conditions])
         else
-          @records || []
+          @records && @records.clone || []
         end
       end
 
@@ -161,15 +161,18 @@ module ActiveHash
         if (ids = (options.delete(:id) || options.delete("id")))
           candidates = Array.wrap(ids).map { |id| find_by_id(id) }
         end
-        return candidates if options.blank?
+        return candidates.clone if options.blank?
 
         (candidates || @records || []).select do |record|
           match_options?(record, options)
+        end.map do |record|
+          record.clone
         end
       end
 
       def find_by(options)
-        where(options).first
+        result = where(options).first
+        result && result.clone || nil
       end
 
       def match_options?(record, options)

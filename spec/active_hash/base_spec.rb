@@ -203,6 +203,15 @@ describe ActiveHash, "Base" do
       record.first.id.should == 1
       record.first.name.should == 'US'
     end
+
+    it "returns objects without instance variables" do
+      record = Country.all(:conditions => {:name => 'US'}).first
+      record.instance_variable_set(:@temporary, "value")
+      record.instance_variables.should include(:@temporary)
+
+      new_instance = Country.all(:conditions => {:name => 'US'}).first
+      new_instance.instance_variables.should_not include(:@temporary)
+    end
   end
 
   describe ".where" do
@@ -276,6 +285,15 @@ describe ActiveHash, "Base" do
     it "filters records for multiple values" do
       expect(Country.where(:name => %w(US Canada)).map(&:name)).to match_array(%w(US Canada))
     end
+
+    it "returns objects without instance variables" do
+      record = Country.where(:name => 'US').first
+      record.instance_variable_set(:@temporary, "value")
+      record.instance_variables.should include(:@temporary)
+
+      new_instance = Country.where(:name => 'US').first
+      new_instance.instance_variables.should_not include(:@temporary)
+    end
   end
 
   describe ".find_by" do
@@ -335,6 +353,15 @@ describe ActiveHash, "Base" do
 
     it "returns nil when not matched in candidates" do
       expect(Country.find_by(:name => "UK")).to be_nil
+    end
+
+    it "returns objects without instance variables" do
+      record = Country.find_by(:id => '1')
+      record.instance_variable_set(:@temporary, "value")
+      record.instance_variables.should include(:@temporary)
+
+      new_instance = Country.find_by(:id => '1')
+      new_instance.instance_variables.should_not include(:@temporary)
     end
   end
 
