@@ -63,6 +63,29 @@ describe ActiveYaml::Aliases do
     end
   end
 
+  describe 'Loading multiple files' do
+    let(:model) { MultipleFiles }
+    let(:coke) { model.where(name: 'Coke').first }
+    let(:schweppes) { model.where(name: 'Schweppes').first }
+
+    before do
+      class MultipleFiles < ActiveYaml::Base
+        include ActiveYaml::Aliases
+        use_multiple_files
+        set_filenames 'array_products', 'array_products_2'
+      end
+    end
+
+    after do
+      Object.send :remove_const, :MultipleFiles
+    end
+
+    it 'returns correct data from both files' do
+      expect(coke.flavor).to eq 'sweet'
+      expect(schweppes.flavor).to eq 'bitter'
+    end
+  end
+
   # As Ruby < 1.9.3 uses the Sych YAML engine
   # it includes a bug whereby an aliased value is treated as a string
   # we just skip over this issue because it's a Ruby bug

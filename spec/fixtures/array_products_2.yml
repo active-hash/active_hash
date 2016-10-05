@@ -1,0 +1,10 @@
+- /aliases:
+  soda_flavor: &soda_flavor
+    bitter
+  soda_price: &soda_price
+    1.5
+
+- id: 5
+  name: Schweppes
+  flavor: *soda_flavor
+  price: *soda_price
