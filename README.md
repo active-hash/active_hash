@@ -217,7 +217,7 @@ class Person < ActiveRecord::Base
   belongs_to :country
 end
 ```
-However, as of ActiveRecord 3.1 support for ActiveRecord's `belong_to` is broken.  Instead, you must extend ActiveHash::Associations::ActiveRecordExtensions method:
+However, as of ActiveRecord 3.1 support for ActiveRecord's `belongs_to` is broken.  Instead, you must extend ActiveHash::Associations::ActiveRecordExtensions method:
 ```ruby
 class Country < ActiveHash::Base
 end
