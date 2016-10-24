@@ -22,7 +22,7 @@ Bundler:
 gem 'active_hash'
 ```
 Other:
-```ruby
+```
 gem install active_hash
 ```
 ## Reason for being
@@ -150,6 +150,8 @@ Country.find [1,2]      # => returns all Country objects with ids in the array
 Country.find :all       # => same as .all
 Country.find :all, args # => the second argument is totally ignored, but allows it to play nicely with AR
 Country.find_by_id 1    # => find the first object that matches the id
+Country.where(:id => 1) # => returns the first country object
+Country.where("id > 4") # => returns the country objects with id bigger than 4
 ```
 It also gives you a few dynamic finder methods.  For example, if you defined :name as a field, you'd get:
 ```ruby
@@ -161,7 +163,7 @@ Country.find_all_by_id_and_name 1, "Germany"  # => returns an array of objects m
 ## Instance Methods
 
 ActiveHash objects implement enough of the ActiveRecord api to satisfy most common needs.  For example:
-```
+```ruby
 Country#id          # => returns the id or nil
 Country#id=         # => sets the id attribute
 Country#quoted_id   # => returns the numeric id
@@ -172,11 +174,27 @@ Country#hash        # => the hash of the id (or the hash of nil)
 Country#eql?        # => compares type and id, returns false if id is nil
 ```
 ActiveHash also gives you methods related to the fields you defined.  For example, if you defined :name as a field, you'd get:
-```
+```ruby
 Country#name        # => returns the passed in name
 Country#name?       # => returns true if the name is not blank
 Country#name=       # => sets the name
 ```
+## Before and After filters
+
+You can use rails style before_filter and after_filter for adding an object.
+
+```ruby
+class Country < ActiveHash::Base
+  before_filter :reject_europ
+
+  private
+
+  def reject_europe
+    raise "European countries are not allowed." if self.continent == "Europe"
+  end
+end
+```
+
 ## Saving in-memory records
 
 The ActiveHash::Base.all method functions like an in-memory data store.  You can save your records to the the .all array by using standard ActiveRecord create and save methods:
@@ -191,7 +209,7 @@ country.new_record?     # => false
 Country.all             # [ <Country :id => 1>, <Country :id => 2>  ]
 ```
 Notice that when adding records to the collection, it will auto-increment the id for you by default.  If you use string ids, it will not auto-increment the id.  Available methods are:
-```
+```ruby
 Country.insert( record )
 Country#save
 Country#save!
@@ -310,7 +328,7 @@ Once you define a belongs to, you also get the setter method:
 class City < ActiveHash::Base
   include ActiveHash::Associations
   belongs_to :state
-end
+end 
 
 city = City.new
 city.state = State.first

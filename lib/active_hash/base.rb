@@ -13,7 +13,6 @@ module ActiveHash
   end
 
   class Base
-
     if respond_to?(:class_attribute)
       class_attribute :_data, :dirty, :default_attributes
     else
@@ -77,7 +76,8 @@ module ActiveHash
         if array_of_hashes
           auto_assign_fields(array_of_hashes)
           array_of_hashes.each do |hash|
-            insert new(hash)
+            record = new(hash)            
+            insert record
           end
         end
       end
@@ -89,13 +89,14 @@ module ActiveHash
       end
 
       def insert(record)
+        send_before_filters(record)
         @records ||= []
         record.attributes[:id] ||= next_id
         validate_unique_id(record) if dirty
         mark_dirty
-
         add_to_record_index({ record.id.to_s => @records.length })
         @records << record
+        send_after_filters(record)
       end
 
       def next_id
@@ -146,6 +147,30 @@ module ActiveHash
         record
       end
 
+      def before_filter(*args)
+        @before_filters = [*args]        
+      end
+
+      def after_filter(*args)
+        @after_filters = [*args]        
+      end 
+
+      def send_before_filters(record)
+        return unless defined?(@before_filters)
+        @before_filters.each do |filter|
+          record.send(filter)
+        end
+      end  
+
+      def send_after_filters(record)
+        return unless defined?(@after_filters)
+        @after_filters.each do |filter|
+          record.send(filter)
+        end
+      end 
+
+      private :send_before_filters, :send_after_filters
+
       def all(options={})
         if options.has_key?(:conditions)
           where(options[:conditions])
@@ -156,6 +181,7 @@ module ActiveHash
 
       def where(options)
         return @records if options.blank?
+        return where_from_string(options) if options.is_a? String
 
         # use index if searching by id
         if (ids = (options.delete(:id) || options.delete("id")))
@@ -167,6 +193,33 @@ module ActiveHash
           match_options?(record, options)
         end
       end
+
+      def where_from_string(options)
+        options = options.strip.gsub(" = ", " == ")
+        if options =~ / AND /
+          records = nil
+          options.split(/ AND /).each do |option|
+            records ||= where_from_string(option)
+            records = records && where_from_string(option)
+            break if records.size == 0
+          end
+          records
+        else
+          all.select do |record|
+            begin
+              eval("record." + options)
+            rescue NoMethodError => e # catch errors like undefined method `>' for nil:NilClass
+              if e.message =~ /nil:NilClass/
+                next
+              else
+                raise e
+              end
+            end
+          end
+        end
+      end
+
+      private :where_from_string
 
       def find_by(options)
         where(options).first

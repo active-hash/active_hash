@@ -91,10 +91,11 @@ module ActiveHash
           options = {
             :class_name => association_id.to_s.classify,
             :foreign_key => self.class.to_s.foreign_key,
-            :primary_key => self.class.primary_key
+            :primary_key => self.class.primary_key,
+            :scope => self.class.parent
           }.merge(options)
 
-          klass = options[:class_name].constantize
+          klass = options[:scope].const_get(options[:class_name])
           primary_key_value = send(options[:primary_key])
           foreign_key = options[:foreign_key].to_sym
 
@@ -112,15 +113,16 @@ module ActiveHash
         define_method(association_id) do
           options = {
             :class_name => association_id.to_s.classify,
-            :foreign_key => self.class.to_s.foreign_key
+            :foreign_key => self.class.to_s.foreign_key,
+            :scope => self.class.parent
           }.merge(options)
 
-          scope = options[:class_name].constantize
+          klass = options[:scope].const_get(options[:class_name])
 
-          if scope.respond_to?(:scoped) && options[:conditions]
-            scope = scope.scoped(:conditions => options[:conditions])
+          if klass.respond_to?(:scoped) && options[:conditions]
+            klass = klass.scoped(:conditions => options[:conditions])
           end
-          scope.send("find_by_#{options[:foreign_key]}", id)
+          klass.send("find_by_#{options[:foreign_key]}", id)
         end
       end
 
@@ -129,13 +131,15 @@ module ActiveHash
         options = {
           :class_name => association_id.to_s.classify,
           :foreign_key => association_id.to_s.foreign_key,
-          :primary_key => "id"
+          :primary_key => "id",
+          :scope => self.class.parent
         }.merge(options)
 
         field options[:foreign_key].to_sym
 
         define_method(association_id) do
-          options[:class_name].constantize.send("find_by_#{options[:primary_key]}", send(options[:foreign_key]))
+          klass = options[:scope].const_get(options[:class_name])
+          klass.send("find_by_#{options[:primary_key]}", send(options[:foreign_key]))
         end
 
         define_method("#{association_id}=") do |new_value|

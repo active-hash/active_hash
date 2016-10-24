@@ -133,6 +133,62 @@ describe ActiveHash, "Base" do
     end
   end
 
+  describe ".before_filter" do
+    before do
+      $counter = double("Fake", :call => nil)
+      class BeforeKlass < ActiveHash::Base
+        before_filter :fake_before_method
+
+        def fake_before_method
+          $counter.call
+        end
+      end
+    end  
+
+    it "calls the .before_filter methods twice before two instances were created" do      
+      expect($counter).to receive(:call).twice
+      BeforeKlass.data = [{:name => "US"}, {:name => "Canada"}]
+    end
+
+    it "calls the .before_filter methods before one instances was added" do      
+      expect($counter).to receive(:call).once
+      BeforeKlass.create
+      expect($counter).to receive(:call).once
+      new_instance = BeforeKlass.new
+      new_instance.save
+      expect($counter).not_to receive(:call)
+      new_instance = BeforeKlass.new      
+    end       
+  end
+
+  describe ".after_filter" do
+    before do     
+      $counter = double("Fake", :call => nil)
+      class AfterKlass < ActiveHash::Base     
+        after_filter :fake_after_method
+
+        def fake_after_method
+          $counter.call
+        end
+      end
+    end  
+
+    it "calls the .after_filter methods twice after two instances were created" do      
+      expect($counter).to receive(:call).twice
+      AfterKlass.data = [{:name => "US"}, {:name => "Canada"}]
+    end
+
+    it "calls the .after_filter methods after one instances was added" do      
+      expect($counter).to receive(:call).once
+      AfterKlass.create
+      expect($counter).to receive(:call).once
+      new_instance = AfterKlass.new
+      new_instance.save
+      expect($counter).not_to receive(:call)
+      new_instance = AfterKlass.new       
+    end 
+  end
+
   describe ".add" do
     before do
       Country.fields :name
@@ -276,6 +332,55 @@ describe ActiveHash, "Base" do
     it "filters records for multiple values" do
       expect(Country.where(:name => %w(US Canada)).map(&:name)).to match_array(%w(US Canada))
     end
+  end
+
+  describe ".where_from_string" do
+    before do
+      Country.field :name
+      Country.field :language
+      Country.field :population
+      Country.data = [
+        {:id => 1, :name => "US",        :language => 'English', :population => 318},
+        {:id => 2, :name => "Canada",    :language => 'English', :population => 35},
+        {:id => 3, :name => "Mexico",    :language => 'Spanish', :population => 122},
+        {:id => 4, :name => "Australia", :language => 'English', :population => nil}
+      ]
+    end 
+
+    it "returns the correct record when queried by an integer as hash value" do
+      record = Country.where(:population => 122)
+      expect(record.size).to eq(1)
+      expect(record.first.name).to eq("Mexico")
+    end  
+
+    it "returns the correct record when queried by a string and the argument is '='" do
+      record = Country.where("population = 122")
+      expect(record.first.name).to eq("Mexico")      
+    end 
+
+    it "returns the correct record when queried by a string and the argument is '>'" do
+      record = Country.where("population > 122")
+      expect(record.first.name).to eq("US")
+      expect(record.size).to eq(1)      
+    end  
+
+    it "returns the correct record when queried by a string and the argument is '<'" do
+      record = Country.where("population < 122")
+      expect(record.first.name).to eq("Canada") 
+      expect(record.size).to eq(1)       
+    end
+
+    it "responds gracefully to a nil record" do
+      record = Country.where("population = nil")
+      expect(record.first.name).to eq("Australia") 
+      expect(record.size).to eq(1)       
+    end  
+
+    it "handles AND operator in the query" do
+      record = Country.where("population > 100 AND id < 2")
+      expect(record.first.name).to eq("US") 
+      expect(record.size).to eq(1)         
+    end      
   end
 
   describe ".find_by" do
