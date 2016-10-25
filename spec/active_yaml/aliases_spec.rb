@@ -65,8 +65,8 @@ describe ActiveYaml::Aliases do
 
   describe 'Loading multiple files' do
     let(:model) { MultipleFiles }
-    let(:coke) { model.where(name: 'Coke').first }
-    let(:schweppes) { model.where(name: 'Schweppes').first }
+    let(:coke) { model.where(:name => 'Coke').first }
+    let(:schweppes) { model.where(:name => 'Schweppes').first }
 
     before do
       class MultipleFiles < ActiveYaml::Base

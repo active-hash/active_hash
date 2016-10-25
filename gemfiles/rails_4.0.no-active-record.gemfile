@@ -3,7 +3,13 @@ source 'http://rubygems.org/'
 gem 'rspec', '~> 2.2.0'
 gem 'wwtd'
 gem 'rake'
-gem 'json'
 gem 'i18n'
+gem 'test-unit'
+
+if RUBY_VERSION < "2"
+  gem 'json', '< 2.0.0'
+else
+  gem 'json'
+end
 
 gemspec :path => '../'
