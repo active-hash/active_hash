@@ -150,7 +150,7 @@ module ActiveHash
         if options.has_key?(:conditions)
           where(options[:conditions])
         else
-          @records || []
+          @records ||= []
         end
       end
 
