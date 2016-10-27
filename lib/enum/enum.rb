@@ -16,7 +16,7 @@ module ActiveHash
 
       def insert(record)
         super
-        set_constant(record) if @enum_accessors.present?
+        set_constant(record) if defined?(@enum_accessors)
       end
 
       def delete_all
