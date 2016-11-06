@@ -4,7 +4,7 @@ $:.push File.expand_path("../lib", __FILE__)
 require "active_hash/version"
 
 Gem::Specification.new do |s|
-  s.name = %q{active_hash}
+  s.name = "active_hash"
   s.version = ActiveHash::Gem::VERSION
   s.authors = [
     "Jeff Dean",
@@ -43,7 +43,6 @@ Gem::Specification.new do |s|
     Dir.glob("lib/**/*")
   ].flatten
   s.test_files = s.files.grep(%r{^(test|spec|features)/})
-  s.require_paths = ["lib"]
-
   s.add_runtime_dependency('activesupport', '>= 2.2.2')
+  s.required_ruby_version = '>= 1.9.3'
 end

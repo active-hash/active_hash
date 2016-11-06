@@ -1,6 +1,6 @@
 sudo: false
+cache: bundler
 rvm:
-  #- "1.8.7" # only test rails < 4.0 (deprecated, reduced coverage)
   - "1.9.3"
   - "2.1.5"
   - "2.2.4"
@@ -16,12 +16,10 @@ gemfile:
   - gemfiles/rails_4.2.gemfile
 matrix:
   include:
-    - rvm: 1.8.7
-      gemfile: gemfiles/rails_2.3.gemfile
-    - rvm: 1.8.7
-      gemfile: gemfiles/rails_3.2.gemfile
     - rvm: 1.9.3
       gemfile: gemfiles/rails_2.3.gemfile
+    - rvm: 1.9.3
+      gemfile: gemfiles/rails_3.2.gemfile
     - rvm: 2.2.4
       gemfile: gemfiles/rails_4.0.no-active-record.gemfile
       env: SKIP_ACTIVE_RECORD=true
