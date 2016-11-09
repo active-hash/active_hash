@@ -302,7 +302,7 @@ module ActiveHash
       end
 
       def define_getter_method(field, default_value)
-        unless has_instance_method?(field)
+        unless instance_methods.include?(field.to_sym)
           define_method(field) do
             attributes[field].nil? ? default_value : attributes[field]
           end
@@ -312,8 +312,8 @@ module ActiveHash
       private :define_getter_method
 
       def define_setter_method(field)
-        method_name = "#{field}="
-        unless has_instance_method?(method_name)
+        method_name = :"#{field}="
+        unless instance_methods.include?(method_name)
           define_method(method_name) do |new_val|
             attributes[field] = new_val
           end
@@ -324,7 +324,7 @@ module ActiveHash
 
       def define_interrogator_method(field)
         method_name = :"#{field}?"
-        unless has_instance_method?(method_name)
+        unless instance_methods.include?(method_name)
           define_method(method_name) do
             send(field).present?
           end
@@ -405,12 +405,6 @@ module ActiveHash
       end
 
       private :mark_clean
-
-      def has_instance_method?(name)
-        instance_methods.map { |method| method.to_sym }.include?(name)
-      end
-
-      private :has_instance_method?
 
       def has_singleton_method?(name)
         singleton_methods.map { |method| method.to_sym }.include?(name)
