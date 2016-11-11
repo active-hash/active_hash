@@ -335,7 +335,7 @@ module ActiveHash
 
       def define_custom_find_method(field_name)
         method_name = :"find_by_#{field_name}"
-        unless has_singleton_method?(method_name)
+        unless singleton_methods.include?(method_name)
           the_meta_class.instance_eval do
             define_method(method_name) do |*args|
               args.extract_options!
@@ -350,7 +350,7 @@ module ActiveHash
 
       def define_custom_find_all_method(field_name)
         method_name = :"find_all_by_#{field_name}"
-        unless has_singleton_method?(method_name)
+        unless singleton_methods.include?(method_name)
           the_meta_class.instance_eval do
             unless singleton_methods.include?(method_name)
               define_method(method_name) do |*args|
@@ -405,12 +405,6 @@ module ActiveHash
       end
 
       private :mark_clean
-
-      def has_singleton_method?(name)
-        singleton_methods.map { |method| method.to_sym }.include?(name)
-      end
-
-      private :has_singleton_method?
 
     end
 
