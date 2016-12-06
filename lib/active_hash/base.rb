@@ -174,10 +174,8 @@ module ActiveHash
 
       def match_options?(record, options)
         options.all? do |col, match|
-          if match.kind_of?(Array)
-            match.include?(record[col])
-          else
-            record[col] == match
+          [match].flatten.any? do |value|
+            [record[col]].flatten.include?(value)
           end
         end
       end
