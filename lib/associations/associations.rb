@@ -8,7 +8,14 @@ module ActiveHash
         options = our_args.extract_options!
         name = our_args.shift
         options = {:class_name => name.to_s.camelize }.merge(options)
-        klass = options[:class_name].constantize rescue nil
+        klass =
+          begin
+            options[:class_name].constantize
+          rescue
+            nil
+          rescue LoadError
+            nil
+          end
         if klass && klass < ActiveHash::Base
           belongs_to_active_hash(name, options)
         else
