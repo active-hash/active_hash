@@ -77,7 +77,7 @@ module ActiveHash
         if array_of_hashes
           auto_assign_fields(array_of_hashes)
           array_of_hashes.each do |hash|
-            insert new(hash)
+            insert new(hash) if hash.kind_of? Hash
           end
         end
       end
@@ -367,11 +367,9 @@ module ActiveHash
 
       def auto_assign_fields(array_of_hashes)
         (array_of_hashes || []).inject([]) do |array, row|
-          row.symbolize_keys!
-          row.keys.each do |key|
-            unless key.to_s == "id"
-              array << key
-            end
+          if row.kind_of? Hash # Allow a non-hash for YAML aliases
+            row.symbolize_keys!
+            row.keys.each { |key| array << key unless key.to_s == "id" }
           end
           array
         end.uniq.each do |key|
@@ -409,6 +407,7 @@ module ActiveHash
     end
 
     def initialize(attributes = {})
+      return nil unless attributes.kind_of? Hash
       attributes.symbolize_keys!
       @attributes = attributes
       attributes.dup.each do |key, value|
