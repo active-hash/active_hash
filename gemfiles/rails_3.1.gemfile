@@ -3,7 +3,7 @@ source 'http://rubygems.org/'
 gem 'activerecord', '~> 3.1.0'
 gem 'rspec', '~> 2.2.0'
 gem 'wwtd'
-gem 'rake'
+gem 'rake', '~> 10.0'
 gem 'i18n', '~> 0.6.11'
 gem 'test-unit'
 
