@@ -172,6 +172,10 @@ module ActiveHash
         where(options).first
       end
 
+      def find_by!(options)
+        find_by(options) || (raise RecordNotFound.new("Couldn't find #{name}"))
+      end
+
       def match_options?(record, options)
         options.all? do |col, match|
           if match.kind_of?(Array)
