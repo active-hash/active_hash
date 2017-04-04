@@ -338,6 +338,28 @@ describe ActiveHash, "Base" do
     end
   end
 
+  describe ".find_by!" do
+    before do
+      Country.field :name
+      Country.field :language
+      Country.data = [
+        {:id => 1, :name => "US", :language => 'English'}
+      ]
+    end
+
+    subject { Country.find_by!(name: word) }
+
+    context 'when data exists' do
+      let(:word) { 'US' }
+      it { expect(subject.id).to eq 1 }
+    end
+
+    context 'when data not found' do
+      let(:word) { 'UK' }
+      it { expect{ subject }.to raise_error ActiveHash::RecordNotFound }
+    end
+  end
+
   describe ".count" do
     before do
       Country.data = [
