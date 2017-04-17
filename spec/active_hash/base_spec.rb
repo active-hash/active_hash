@@ -269,6 +269,16 @@ describe ActiveHash, "Base" do
       end.should raise_error(ActiveHash::IdError)
     end
 
+    it "returns a record for specified id" do
+      record = Country.where(id: 1)
+      record.first.id.should == 1
+      record.first.name.should == 'US'
+    end
+
+    it "returns empty array" do
+      expect(Country.where(id: nil)).to eq []
+    end
+
     it "returns multiple records for multiple ids" do
       expect(Country.where(:id => %w(1 2)).map(&:id)).to match_array([1,2])
     end
