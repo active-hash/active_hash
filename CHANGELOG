@@ -1,3 +1,6 @@
+2017-04-20 (v1.5.1)
+  - Fix a bug on `.where` [#147](https://github.com/zilkey/active_hash/pull/147)
+
 2017-03-24 (v1.5.0)
   - add support for `.find_by!`(@syguer)
 
