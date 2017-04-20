@@ -158,7 +158,8 @@ module ActiveHash
         return @records if options.blank?
 
         # use index if searching by id
-        if (ids = (options.delete(:id) || options.delete("id")))
+        if options.key?(:id) || options.key?("id")
+          ids = (options.delete(:id) || options.delete("id"))
           candidates = Array.wrap(ids).map { |id| find_by_id(id) }
         end
         return candidates if options.blank?
