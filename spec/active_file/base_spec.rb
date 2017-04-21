@@ -90,6 +90,42 @@ describe ActiveFile::Base do
     end
   end
 
+  describe ".inherited" do
+    before do
+      class Country
+        def self.load_file()
+          {"new_york"=>{"name"=>"New York", "id"=>1}}.values
+        end
+      end
+      Country.reload # initial load
+      class SubCountry < Country; end
+    end
+
+    after { Object.send(:remove_const, :SubCountry) }
+
+    context "when called before .all" do
+      it "data_loaded is false" do
+        SubCountry.data_loaded.should be_falsey
+      end
+
+      it "data is empty" do
+        SubCountry.data.should_not be_empty
+      end
+    end
+
+    context "when called after .all" do
+      before { SubCountry.all }
+
+      it "data_loaded is true" do
+        SubCountry.data_loaded.should be_truthy
+      end
+
+      it "data isn't empty" do
+        SubCountry.data.should_not be_empty
+      end
+    end
+  end
+
   describe ".reload" do
     before do
       class Country
