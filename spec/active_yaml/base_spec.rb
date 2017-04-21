@@ -86,6 +86,20 @@ describe ActiveYaml::Base do
 
   end
 
+  describe 'indifferent_access' do
+    before do
+      class ArrayRow         < ActiveYaml::Base
+        indifferent_access true
+      end
+    end
+    it 'can access with symbol' do
+      ArrayRow.raw_data[0][:name].should eq('Row 1')
+    end
+    it 'defaults to false' do
+      City.raw_data[:albany].should be_nil
+    end
+  end
+
   describe 'ID finders without reliance on a call to all, even with fields specified' do
 
     before do
