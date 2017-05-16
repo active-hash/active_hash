@@ -35,7 +35,7 @@ module ActiveHash
         if Object.const_defined?(:ActiveModel)
           model_name.cache_key
         else
-          ActiveSupport::Inflector.tableize(self).downcase
+          ActiveSupport::Inflector.tableize(self.name).downcase
         end
       end
 
