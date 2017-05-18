@@ -13,11 +13,12 @@ module ActiveFile
 
       def delete_all
         self.data_loaded = true
+        Thread.current[:data_loaded] = true
         super
       end
 
       def reload(force = false)
-        return if !self.dirty && !force && self.data_loaded
+        return if !self.dirty && !force && (self.data_loaded || Thread.current[:data_loaded])
         self.data_loaded = true
         self.data = load_file
         mark_clean
@@ -52,7 +53,7 @@ module ActiveFile
 
       [:find, :find_by_id, :all, :where, :method_missing].each do |method|
         define_method(method) do |*args|
-          reload unless data_loaded
+          reload unless (data_loaded || Thread.current[:data_loaded])
           return super(*args)
         end
       end
