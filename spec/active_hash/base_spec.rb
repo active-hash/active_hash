@@ -206,13 +206,15 @@ describe ActiveHash, "Base" do
   end
 
   describe ".where" do
+    let(:country_without_name) { Country.find(4) }
     before do
       Country.field :name
       Country.field :language
       Country.data = [
         {:id => 1, :name => "US", :language => 'English'},
         {:id => 2, :name => "Canada", :language => 'English'},
-        {:id => 3, :name => "Mexico", :language => 'Spanish'}
+        {:id => 3, :name => "Mexico", :language => 'Spanish'},
+        {:id => 4, :name => nil, :language => 'None'}
       ]
     end
 
@@ -285,6 +287,10 @@ describe ActiveHash, "Base" do
 
     it "filters records for multiple values" do
       expect(Country.where(:name => %w(US Canada)).map(&:name)).to match_array(%w(US Canada))
+    end
+
+    it "matches nil attributes correctly" do
+      expect(Country.where(name: nil)).to match_array [country_without_name]
     end
   end
 
