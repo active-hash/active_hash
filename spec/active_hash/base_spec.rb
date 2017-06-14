@@ -346,6 +346,10 @@ describe ActiveHash, "Base" do
     it "returns nil when not matched in candidates" do
       expect(Country.find_by(:name => "UK")).to be_nil
     end
+
+    it "returns nil when passed a wrong id" do
+      expect(Country.find_by(:id => 4)).to be_nil
+    end
   end
 
   describe ".find_by!" do
@@ -367,6 +371,15 @@ describe ActiveHash, "Base" do
     context 'when data not found' do
       let(:word) { 'UK' }
       it { expect{ subject }.to raise_error ActiveHash::RecordNotFound }
+      it "raises 'RecordNotFound' when passed a wrong id" do
+        expect { Country.find_by!(id: 2) }.
+          to raise_error ActiveHash::RecordNotFound
+      end
+
+      it "raises 'RecordNotFound' when passed wrong id and options" do
+        expect { Country.find_by!(id: 2, name: "FR") }.
+          to raise_error ActiveHash::RecordNotFound
+      end
     end
   end
 
