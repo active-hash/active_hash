@@ -1,3 +1,6 @@
+2017-06-14 (v1.5.2)
+  - Fix find_by when passed an invalid id [#152](https://github.com/zilkey/active_hash/pull/152) Thanks, @davidstosik
+
 2017-04-20 (v1.5.1)
   - Fix a bug on `.where` [#147](https://github.com/zilkey/active_hash/pull/147)
 
