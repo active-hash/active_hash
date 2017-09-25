@@ -364,7 +364,7 @@ mexico:
 You can use multiple files to store your data. You will have to choose between hash or array style as you cannot use both for one model.
 ```ruby
 class Country < ActiveYaml::Base
-  use_mutliple_files
+  use_multiple_files
   set_filenames "europe", "america", "asia", "africa"
 end
 ```
