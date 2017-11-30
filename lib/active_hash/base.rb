@@ -180,9 +180,9 @@ module ActiveHash
       def match_options?(record, options)
         options.all? do |col, match|
           if match.kind_of?(Array)
-            match.include?(record[col])
+            match.map(&:to_s).include?(record[col].to_s)
           else
-            record[col] == match
+            record[col].to_s == match.to_s
           end
         end
       end
