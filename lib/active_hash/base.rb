@@ -180,14 +180,20 @@ module ActiveHash
       def match_options?(record, options)
         options.all? do |col, match|
           if match.kind_of?(Array)
-            match.include?(record[col])
+            match.any? { |v| normalize(v) == normalize(record[col]) }
           else
-            record[col] == match
+            normalize(record[col]) == normalize(match)
           end
         end
       end
 
       private :match_options?
+
+      def normalize(v)
+        v.respond_to?(:to_sym) ? v.to_sym : v
+      end
+
+      private :normalize
 
       def count
         all.length

@@ -286,6 +286,10 @@ describe ActiveHash, "Base" do
     it "filters records for multiple values" do
       expect(Country.where(:name => %w(US Canada)).map(&:name)).to match_array(%w(US Canada))
     end
+
+    it "filters records for multiple symbol values" do
+      expect(Country.where(:name => [:US, :Canada]).map(&:name)).to match_array(%w(US Canada))
+    end
   end
 
   describe ".find_by" do
@@ -341,6 +345,10 @@ describe ActiveHash, "Base" do
 
     it "returns the record that matches options" do
       expect(Country.find_by(:name => "US").id).to eq(1)
+    end
+
+    it "returns the record that matches options with symbol value" do
+      expect(Country.find_by(:name => :US).id).to eq(1)
     end
 
     it "returns nil when not matched in candidates" do
