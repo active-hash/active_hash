@@ -30,7 +30,7 @@ describe ActiveYaml::Aliases do
       subject { model.where(:name => 'Coke').first.attributes }
 
       it('sets strings correctly') { subject[:flavor].should == 'sweet' }
-      it('sets floats correctly') { check_price subject[:price], 1.0 }
+      it('sets floats correctly') { subject[:price].should == 1.0 }
     end
 
     describe 'keys starting with "/"' do
@@ -52,7 +52,7 @@ describe ActiveYaml::Aliases do
       subject { model.where(:name => 'Coke').first.attributes }
 
       it('sets strings correctly') { subject[:flavor].should == 'sweet' }
-      it('sets floats correctly') { check_price subject[:price], 1.0 }
+      it('sets floats correctly') { subject[:price].should == 1.0 }
     end
 
     describe 'keys starting with "/"' do
@@ -83,17 +83,6 @@ describe ActiveYaml::Aliases do
     it 'returns correct data from both files' do
       expect(coke.flavor).to eq 'sweet'
       expect(schweppes.flavor).to eq 'bitter'
-    end
-  end
-
-  # As Ruby < 1.9.3 uses the Sych YAML engine
-  # it includes a bug whereby an aliased value is treated as a string
-  # we just skip over this issue because it's a Ruby bug
-  def check_price(price, expectation)
-    if RubyVersion < '1.9.3'
-      price.to_f.should == 1.0
-    else
-      price.should == 1.0
     end
   end
 end
