@@ -25,6 +25,13 @@ Other:
 ```ruby
 gem install active_hash
 ```
+
+**Currently version 2.x doesn't support Ruby < 2.4 and Rails < 5**. If you use these versions, please use 1.x.
+
+```ruby
+gem 'active_hash', '~> 1.5.3'
+```
+
 ## Reason for being
 
 We wrote ActiveHash so that we could use simple, in-memory, ActiveRecord-like data structures that play well with Rails forms, like:
@@ -210,16 +217,6 @@ Country.delete_all  # => does not affect the yaml files in any way - just clears
 
 One common use case for ActiveHash is to have top-level objects in memory that ActiveRecord objects belong to.
 
-In versions of ActiveRecord previous to 3.1, you should be able to do the following:
-```ruby
-class Country < ActiveHash::Base
-end
-
-class Person < ActiveRecord::Base
-  belongs_to :country
-end
-```
-However, as of ActiveRecord 3.1 support for ActiveRecord's `belongs_to` is broken.  Instead, you must extend ActiveHash::Associations::ActiveRecordExtensions method:
 ```ruby
 class Country < ActiveHash::Base
 end
@@ -242,21 +239,6 @@ class Person < ActiveRecord::Base
   belongs_to_active_hash :country
 end
 ```
-With ActiveRecord versions < 3.1, ActiveHash will also work as a polymorphic parent:
-```ruby
-class Country < ActiveHash::Base
-end
-
-class Person < ActiveRecord::Base
-  belongs_to :location, :polymorphic => true
-end
-
-person = Person.new
-person.location = Country.first
-person.save
-person.location # => Country.first
-```
-However, as of ActiveRecord 3.1 this will not work.  If you need support for that, please open an issue.
 
 ### Using shortcuts
 
@@ -563,10 +545,8 @@ If your changes seem reasonable and the specs pass I'll give you commit rights t
 
 To make users' lives easier, please maintain support for:
 
-  * Ruby 1.8.7
-  * Ruby Enterprise 1.8.7
-  * Ruby 1.92
-  * ActiveRecord/ActiveSupport from 2.3.2 through edge
+  * Ruby 2.4
+  * ActiveRecord/ActiveSupport from 5.0 through edge
 
 To that end, run specs against all rubies before committing:
 
