@@ -4,7 +4,7 @@ module ActiveFile
     extend ActiveFile::MultipleFiles
 
     if respond_to?(:class_attribute)
-      class_attribute :filename, :root_path, :data_loaded
+      class_attribute :filename, :root_path, :data_loaded, instance_reader: false, instance_writer: false
     else
       class_inheritable_accessor :filename, :root_path, :data_loaded
     end
