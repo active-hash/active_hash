@@ -1,3 +1,6 @@
+2017-06-14 (v1.5.3)
+  - Support symbol values in where and find_by [#156](https://github.com/zilkey/active_hash/pull/156) Thanks, @south37
+
 2017-06-14 (v1.5.2)
   - Fix find_by when passed an invalid id [#152](https://github.com/zilkey/active_hash/pull/152) Thanks, @davidstosik
 
