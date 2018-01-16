@@ -1,8 +1,19 @@
 module ActiveHash
   module Associations
+    def fetch_associations(target_model:, method: :find_by, filter:, conditions: nil)
+      base = apply_scope(model: target_model, conditions: conditions)
+      base.send(method, filter)
+    end
+
+    def apply_scope(model:, conditions: nil)
+      if conditions && model.respond_to?(:scoped)
+        model.scoped(conditions: conditions)
+      else
+        model
+      end
+    end
 
     module ActiveRecordExtensions
-
       def belongs_to(*args)
         our_args = args.dup
         options = our_args.extract_options!
@@ -34,7 +45,7 @@ module ActiveHash
         options[:shortcuts] = [options[:shortcuts]] unless options[:shortcuts].kind_of?(Array)
 
         define_method(association_id) do
-          options[:class_name].constantize.send("find_by_#{options[:primary_key]}", send(options[:foreign_key]))
+          options[:class_name].constantize.send(:find_by, options[:primary_key] => send(options[:foreign_key]))
         end
 
         define_method("#{association_id}=") do |new_value|
@@ -92,65 +103,59 @@ module ActiveHash
     end
 
     module Methods
-      def has_many(association_id, options = {})
+      def association_metadata(type, association_name, options = {})
+        association_name  = association_name.to_s
+        association_class = association_name.classify.constantize
+        current_class     = name.constantize
 
-        define_method(association_id) do
-          options = {
-            :class_name => association_id.to_s.classify,
-            :foreign_key => self.class.to_s.foreign_key,
-            :primary_key => self.class.primary_key
-          }.merge(options)
-
-          klass = options[:class_name].constantize
-          primary_key_value = send(options[:primary_key])
-          foreign_key = options[:foreign_key].to_sym
-
-          if Object.const_defined?(:ActiveRecord) && ActiveRecord.const_defined?(:Relation) && klass < ActiveRecord::Relation
-            klass.where(foreign_key => primary_key_value)
-          elsif klass.respond_to?(:scoped)
-            klass.scoped(:conditions => {foreign_key => primary_key_value})
-          else
-            klass.where(foreign_key => primary_key_value)
-          end
-        end
-      end
-
-      def has_one(association_id, options = {})
-        define_method(association_id) do
-          options = {
-            :class_name => association_id.to_s.classify,
-            :foreign_key => self.class.to_s.foreign_key
-          }.merge(options)
-
-          scope = options[:class_name].constantize
-
-          if scope.respond_to?(:scoped) && options[:conditions]
-            scope = scope.scoped(:conditions => options[:conditions])
-          end
-          scope.send("find_by_#{options[:foreign_key]}", id)
-        end
-      end
-
-      def belongs_to(association_id, options = {})
-
-        options = {
-          :class_name => association_id.to_s.classify,
-          :foreign_key => association_id.to_s.foreign_key,
-          :primary_key => "id"
+        {
+          target_model: association_class,
+          primary_key: type == :belongs_to ? association_class.primary_key : current_class.primary_key,
+          foreign_key: type == :belongs_to ? association_name.foreign_key : name.foreign_key
         }.merge(options)
+      end
 
-        field options[:foreign_key].to_sym
+      def has_many(association_name, options = {})
+        meta = association_metadata(:has_many, association_name, options)
 
-        define_method(association_id) do
-          options[:class_name].constantize.send("find_by_#{options[:primary_key]}", send(options[:foreign_key]))
+        define_method(association_name) do
+          args = meta
+            .slice(:target_model, :conditions)
+            .merge(
+              method: :where,
+              filter: { meta[:foreign_key] => public_send(meta[:primary_key]) }
+            )
+          fetch_associations(args)
+        end
+      end
+
+      def has_one(association_name, options = {})
+        meta = association_metadata(:has_one, association_name , options)
+
+        define_method(association_name) do
+          args = meta
+            .slice(:target_model, :conditions)
+            .merge(filter: { meta[:foreign_key] => public_send(meta[:primary_key]) })
+          fetch_associations(args)
+        end
+      end
+
+      def belongs_to(association_name, options = {})
+        meta = association_metadata(:belongs_to, association_name, options)
+
+        field meta[:foreign_key].to_sym
+
+        define_method(association_name) do
+          args = meta
+            .slice(:target_model)
+            .merge(filter: { meta[:primary_key] => public_send(meta[:foreign_key]) })
+          fetch_associations(args)
         end
 
-        define_method("#{association_id}=") do |new_value|
-          attributes[options[:foreign_key].to_sym] = new_value ? new_value.send(options[:primary_key]) : nil
+        define_method("#{association_name}=") do |new_value|
+          attributes[meta[:foreign_key].to_sym] = new_value ? new_value.send(meta[:primary_key]) : nil
         end
-
       end
     end
-
   end
 end
