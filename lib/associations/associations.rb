@@ -104,15 +104,28 @@ module ActiveHash
 
     module Methods
       def association_metadata(type, association_name, options = {})
-        association_name  = association_name.to_s
-        association_class = association_name.classify.constantize
-        current_class     = name.constantize
-
+        association_names = association_name.to_s
+        association_class = (options[:class_name] || association_names.classify).constantize
         {
           target_model: association_class,
-          primary_key: type == :belongs_to ? association_class.primary_key : current_class.primary_key,
-          foreign_key: type == :belongs_to ? association_name.foreign_key : name.foreign_key
+          primary_key: normalize_primary_key(type, association_class),
+          foreign_key: normalize_foreign_key(type, association_name, options)
         }.merge(options)
+      end
+
+      def normalize_primary_key(type, association_class)
+        primary_key = type == :belongs_to ? association_class.primary_key : name.constantize.primary_key
+        primary_key.to_sym
+      end
+
+      def normalize_foreign_key(type, association_name, options)
+        foreign_key =
+          if type == :belongs_to
+            options[:foreign_key] || (options[:class_name] || association_name).to_s.foreign_key
+          else
+            name.foreign_key
+          end
+        foreign_key.to_sym
       end
 
       def has_many(association_name, options = {})
