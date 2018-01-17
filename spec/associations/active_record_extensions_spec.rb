@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'byebug'
 
 unless SKIP_ACTIVE_RECORD
   require 'active_record'
@@ -72,12 +71,12 @@ unless SKIP_ACTIVE_RECORD
             Author.has_many :books
           end
 
-          it "find the correct records" do
+          it "finds the correct records" do
             author = Author.create :id => 1
             author.books.should == [@book_1, @book_2]
           end
 
-          it "return a scope so that we can apply further scopes" do
+          it "returns a scope so that we can apply further scopes" do
             author = Author.create :id => 1
             author.books.published.should == [@book_1]
           end
@@ -97,7 +96,7 @@ unless SKIP_ACTIVE_RECORD
             author.books.should == [@book_2, @book_3]
           end
 
-          it "return a scope so that we can apply further scopes" do
+          it "returns a scope so that we can apply further scopes" do
             author = Author.create :id => 1, :book_identifier => 2
             author.books.published.should == [@book_3]
           end
@@ -216,7 +215,7 @@ unless SKIP_ACTIVE_RECORD
             school.city_name.should == 'gothan'
           end
 
-          it "have custom shortcut" do
+          it "has custom shortcut" do
             School.belongs_to_active_hash :city, :shortcuts => :friendly_name
             City.data = [{:id => 1, :friendly_name => 'Gothan City'}]
             city = City.find_by_friendly_name 'Gothan City'
@@ -256,9 +255,8 @@ unless SKIP_ACTIVE_RECORD
     end
 
     describe "#belongs_to" do
-
       context "with an ActiveRecord parent" do
-        it "find the correct records" do
+        it "finds the correct records" do
           City.belongs_to :country
           country = Country.create
           city = City.create :country_id => country.id
@@ -280,7 +278,7 @@ unless SKIP_ACTIVE_RECORD
           Author.has_one :book
         end
 
-        it "find the correct records" do
+        it "finds the correct records" do
           book = Book.create! :author_id => 1, :published => true
           author = Author.create :id => 1
           author.book.should == book
