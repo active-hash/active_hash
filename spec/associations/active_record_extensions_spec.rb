@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'byebug'
 
 unless SKIP_ACTIVE_RECORD
   require 'active_record'
@@ -115,7 +116,7 @@ unless SKIP_ACTIVE_RECORD
             author.books.should == [@book_1, @book_2]
           end
 
-          it "return a scope so that we can apply further scopes" do
+          it "returns a scope so that we can apply further scopes" do
             author = Author.create :id => 1
             author.books.published.should == [@book_1]
           end
@@ -123,18 +124,15 @@ unless SKIP_ACTIVE_RECORD
 
         it "only uses 1 query" do
           Author.has_many :books
-          author = Author.create :id => 1
-          Book.should_receive(:find_by_sql)
+          author = Author.create!(id: 1)
+          Book.should_receive(:where)
           author.books.to_a
         end
       end
-
     end
 
     describe ActiveHash::Associations::ActiveRecordExtensions do
-
       describe "#belongs_to" do
-
         if ActiveRecord::VERSION::MAJOR > 3
           it "doesn't interfere with AR's procs in belongs_to methods" do
             School.belongs_to :country, lambda { where() }

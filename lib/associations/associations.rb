@@ -114,18 +114,14 @@ module ActiveHash
       end
 
       def normalize_primary_key(type, association_class)
-        primary_key = type == :belongs_to ? association_class.primary_key : name.constantize.primary_key
-        primary_key.to_sym
+        klass = type == :belongs_to ? association_class : name.constantize
+        klass.primary_key.to_sym
       end
 
       def normalize_foreign_key(type, association_name, options)
-        foreign_key =
-          if type == :belongs_to
-            options[:foreign_key] || (options[:class_name] || association_name).to_s.foreign_key
-          else
-            name.foreign_key
-          end
-        foreign_key.to_sym
+        return options[:foreign_key].to_sym if options[:foreign_key]
+        class_name = type == :belongs_to ? (options[:class_name] || association_name) : name
+        class_name.to_s.foreign_key.to_sym
       end
 
       def has_many(association_name, options = {})
