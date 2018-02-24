@@ -5,17 +5,27 @@ describe ActiveYaml::Base do
   before do
     ActiveYaml::Base.set_root_path File.expand_path(File.dirname(__FILE__) + "/../fixtures")
 
+    ENV['USER_PASSWORD'] = 'secret'
+
     class ArrayRow     < ActiveYaml::Base ; end
     class City         < ActiveYaml::Base ; end
     class State        < ActiveYaml::Base ; end
     class ArrayProduct < ActiveYaml::Base ; end # Contain YAML aliases
     class KeyProduct   < ActiveYaml::Base ; end # Contain YAML aliases
+    class User         < ActiveYaml::Base ; end # Contain ERB (embedded ruby)
   end
 
   after do
     Object.send :remove_const, :ArrayRow
     Object.send :remove_const, :City
     Object.send :remove_const, :State
+  end
+
+  describe ".load_path" do
+    it 'can execute embedded ruby' do
+       User.first.email.should =~ /^user[0-9]*@email.com$/
+       User.first.password.should == 'secret'
+    end
   end
 
   describe ".all" do

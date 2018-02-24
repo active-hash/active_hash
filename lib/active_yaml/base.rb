@@ -19,7 +19,7 @@ module ActiveYaml
 
       private
       def load_path(path)
-        YAML.load_file(path)
+        YAML.load(ERB.new(File.read(path)).result)
       end
     end
   end
