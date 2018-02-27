@@ -1,3 +1,7 @@
+2018-02-27 (v2.0.0)
+  - Drop old Ruby and Rails support [#157](https://github.com/zilkey/active_hash/pull/157)
+  - Don't generate instance accessors for class attributes [#136](https://github.com/zilkey/active_hash/pull/136) Thanks, @rainhead
+
 2017-06-14 (v1.5.3)
   - Support symbol values in where and find_by [#156](https://github.com/zilkey/active_hash/pull/156) Thanks, @south37
 
