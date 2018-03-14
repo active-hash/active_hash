@@ -389,6 +389,17 @@ Soda.length # => 1
 Soda.first.flavor # => sweet
 Soda.first.price # => 1.0
 ```
+
+### Using ERB ruby in YAML
+
+Embedded ruby can bu used in ActiveYaml using erb brackets `<% %>` and `<%= %>` to set the result of a ruby operation as a value in the yaml file.
+
+```
+- id: 1
+  email: <%= "user#{rand(100)}@email.com" %>
+  password: <%= ENV['USER_PASSWORD'] %>
+```
+
 ## ActiveJSON
 
 If you want to store your data in JSON files, just inherit from ActiveJSON and specify your path information:
