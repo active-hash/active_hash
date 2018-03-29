@@ -50,6 +50,20 @@ describe ActiveHash::Base, "enum" do
       end.should raise_error(ActiveHash::Enum::DuplicateEnumAccessor)
     end
 
+    it "can use enum accessor constant with same name as top-level constant" do
+      expect do
+        Class.new(ActiveHash::Base) do
+          include ActiveHash::Enum
+          self.data = [
+            {:type => 'JSON'},
+            {:type => 'YAML'},
+            {:type => 'XML'}
+          ]
+          enum_accessor :type
+        end
+      end.not_to raise_error
+    end
+
     it "removes non-word characters from values before setting constants" do
       Movie = Class.new(ActiveHash::Base) do
         include ActiveHash::Enum
