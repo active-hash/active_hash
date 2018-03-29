@@ -397,6 +397,11 @@ module ActiveHash
         ActiveHash::Base
       end
 
+      # Needed for ActiveRecord polymorphic associations(rails/rails#32148)
+      def polymorphic_name
+        base_class.name
+      end
+
       def reload
         reset_record_index
         self.data = _data
