@@ -23,7 +23,7 @@ module ActiveHash
         if @enum_accessors.present?
           @records.each do |record|
             constant = constant_for(record, @enum_accessors)
-            remove_const(constant) if const_defined?(constant)
+            remove_const(constant) if const_defined?(constant, false)
           end
         end
         super
@@ -33,10 +33,10 @@ module ActiveHash
         constant = constant_for(record, @enum_accessors)
         return nil if constant.blank?
 
-        unless const_defined?(constant)
+        unless const_defined?(constant, false)
           const_set(constant, record)
         else
-          raise DuplicateEnumAccessor, "#{constant} already defined for #{self.class}" unless const_get(constant) == record
+          raise DuplicateEnumAccessor, "#{constant} already defined for #{self.class}" unless const_get(constant, false) == record
         end
       end
 
