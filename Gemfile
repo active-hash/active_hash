@@ -21,4 +21,4 @@ platforms :ruby do
   gem 'sqlite3'
 end
 
-gem 'activerecord', '>= 2.2.2'
+gem 'activerecord', '>= 5.0.0'
