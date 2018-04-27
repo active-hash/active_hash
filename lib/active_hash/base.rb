@@ -199,6 +199,10 @@ module ActiveHash
         all.length
       end
 
+      def pluck(*column_names)
+        column_names.map { |column_name| all.map(&column_name.to_sym) }.inject(&:zip)
+      end
+
       def transaction
         yield
       rescue LocalJumpError => err
