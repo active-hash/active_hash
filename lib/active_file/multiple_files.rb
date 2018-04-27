@@ -5,11 +5,7 @@ module ActiveFile
     end
 
     def use_multiple_files
-      if respond_to?(:class_attribute)
-        class_attribute :filenames, instance_reader: false, instance_writer: false
-      else
-        class_inheritable_accessor :filenames
-      end
+      class_attribute :filenames, instance_reader: false, instance_writer: false
 
       def self.set_filenames(*filenames)
         self.filenames = filenames

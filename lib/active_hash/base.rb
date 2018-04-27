@@ -14,11 +14,7 @@ module ActiveHash
 
   class Base
 
-    if respond_to?(:class_attribute)
-      class_attribute :_data, :dirty, :default_attributes
-    else
-      class_inheritable_accessor :_data, :dirty, :default_attributes
-    end
+    class_attribute :_data, :dirty, :default_attributes
 
     if Object.const_defined?(:ActiveModel)
       extend ActiveModel::Naming
