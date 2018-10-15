@@ -404,6 +404,23 @@ describe ActiveHash, "Base" do
     end
   end
 
+  describe ".pluck" do
+    before do
+      Country.data = [
+        {:id => 1, :name => "US"},
+        {:id => 2, :name => "Canada"}
+      ]
+    end
+
+    it "returns an two dimensional Array of attributes values" do
+      expect(Country.pluck(:id, :name)).to match_array([[1,"US"], [2, "Canada"]])
+    end
+
+    it "returns an Array of attribute values" do
+      expect(Country.pluck(:id)).to match_array([1,2])
+    end
+  end
+
   describe ".first" do
     before do
       Country.data = [
