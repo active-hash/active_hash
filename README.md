@@ -207,7 +207,7 @@ Country#save!
 Country.create
 Country.create!
 ```
-As such, ActiveHash::Base and its descendants should work with Fixjour or FactoryGirl, so you can treat ActiveHash records the same way you would any other ActiveRecord model in tests.
+As such, ActiveHash::Base and its descendants should work with Fixjour or FactoryBot, so you can treat ActiveHash records the same way you would any other ActiveRecord model in tests.
 
 To clear all records from the in-memory array, call delete_all:
 ```ruby
