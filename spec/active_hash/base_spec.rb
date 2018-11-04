@@ -216,10 +216,8 @@ describe ActiveHash, "Base" do
       ]
     end
 
-    it "raises ArgumentError if no conditions are provided" do
-      lambda{
-        Country.where
-      }.should raise_error(ArgumentError)
+    it "returns WhereChain class if no conditions are provided" do
+      Country.where.class.should == ActiveHash::Base::WhereChain
     end
 
     it "returns all records when passed nil" do
@@ -289,6 +287,92 @@ describe ActiveHash, "Base" do
 
     it "filters records for multiple symbol values" do
       expect(Country.where(:name => [:US, :Canada]).map(&:name)).to match_array(%w(US Canada))
+    end
+  end
+
+  describe ".where.not" do
+    before do
+      Country.field :name
+      Country.field :language
+      Country.data = [
+        {:id => 1, :name => "US", :language => 'English'},
+        {:id => 2, :name => "Canada", :language => 'English'},
+        {:id => 3, :name => "Mexico", :language => 'Spanish'}
+      ]
+    end
+
+    it "raises ArgumentError if no conditions are provided" do
+      lambda{
+        Country.where.not
+      }.should raise_error(ArgumentError)
+    end
+
+    it "returns all records when passed nil" do
+      Country.where.not(nil).should == Country.all
+    end
+
+    it "returns all records when an empty hash" do
+      Country.where.not({}).should == Country.all
+    end
+
+    it "returns all records as inflated objects" do
+      Country.where.not(:language => 'English').all? { |country| country.should be_kind_of(Country) }
+    end
+
+    it "populates the records correctly" do
+      records = Country.where.not(:language => 'Spanish')
+      records.first.id.should == 1
+      records.first.name.should == "US"
+      records.last.id.should == 2
+      records.last.name.should == "Canada"
+      records.length.should == 2
+    end
+
+    it "re-populates the records after data= is called" do
+      Country.data = [
+        {:id => 45, :name => "Canada"}
+      ]
+      records = Country.where.not(:name => "US")
+      records.first.id.should == 45
+      records.first.name.should == "Canada"
+      records.length.should == 1
+    end
+
+    it "filters the records from a AR-like conditions hash" do
+      record = Country.where.not(:name => 'US')
+      record.first.id.should == 2
+      record.first.name.should == 'Canada'
+      record.last.id.should == 3
+      record.last.name.should == 'Mexico'
+      record.length.should == 2
+    end
+
+    it "returns the records for NOT specified id" do
+      record = Country.where.not(id: 1)
+      record.first.id.should == 2
+      record.first.name.should == 'Canada'
+      record.last.id.should == 3
+      record.last.name.should == 'Mexico'
+    end
+
+    it "returns all records when id is nil" do
+      expect(Country.where.not(:id => nil)).to eq Country.all
+    end
+
+    it "filters records for multiple ids" do
+      expect(Country.where.not(:id => [1, 2]).pluck(:id)).to match_array([3])
+    end
+
+    it "filters records for multiple values" do
+      expect(Country.where.not(:name => %w[US Canada]).pluck(:name)).to match_array(%w[Mexico])
+    end
+
+    it "filters records for multiple symbol values" do
+      expect(Country.where.not(:name => %i[US Canada]).pluck(:name)).to match_array(%w[Mexico])
+    end
+
+    it "filters records for multiple conditions" do
+      expect(Country.where.not(:id => 1, :name => 'Mexico')).to match_array([Country.find(2)])
     end
   end
 
