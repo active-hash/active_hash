@@ -148,17 +148,19 @@ If you prefer to store your data in YAML, see below.
 
 ActiveHash gives you ActiveRecord-esque methods like:
 ```ruby
-Country.all                  # => returns all Country objects
-Country.count                # => returns the length of the .data array
-Country.first                # => returns the first country object
-Country.last                 # => returns the last country object
-Country.find 1               # => returns the first country object with that id
-Country.find [1,2]           # => returns all Country objects with ids in the array
-Country.find :all            # => same as .all
-Country.find :all, args      # => the second argument is totally ignored, but allows it to play nicely with AR
-Country.find_by_id 1         # => find the first object that matches the id
-Country.find_by(name: 'US')  # => returns the first country object with specified argument
-Country.find_by!(name: 'US') # => same as find_by, but raise exception when not found
+Country.all                    # => returns all Country objects
+Country.count                  # => returns the length of the .data array
+Country.first                  # => returns the first country object
+Country.last                   # => returns the last country object
+Country.find 1                 # => returns the first country object with that id
+Country.find [1,2]             # => returns all Country objects with ids in the array
+Country.find :all              # => same as .all
+Country.find :all, args        # => the second argument is totally ignored, but allows it to play nicely with AR
+Country.find_by_id 1           # => find the first object that matches the id
+Country.find_by(name: 'US')    # => returns the first country object with specified argument
+Country.find_by!(name: 'US')   # => same as find_by, but raise exception when not found
+Country.where(name: 'US')      # => returns all records with name: 'US'
+Country.where.not(name: 'US')  # => returns all records without name: 'US'
 ```
 It also gives you a few dynamic finder methods.  For example, if you defined :name as a field, you'd get:
 ```ruby
