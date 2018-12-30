@@ -7,6 +7,7 @@ before_install:
 rvm:
   - "2.4.4"
   - "2.5.1"
+  - "2.6.0"
 gemfile:
   - gemfiles/rails_5.0.gemfile
   - gemfiles/rails_5.1.gemfile
