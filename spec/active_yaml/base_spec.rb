@@ -13,6 +13,7 @@ describe ActiveYaml::Base do
     class ArrayProduct < ActiveYaml::Base ; end # Contain YAML aliases
     class KeyProduct   < ActiveYaml::Base ; end # Contain YAML aliases
     class User         < ActiveYaml::Base ; end # Contain ERB (embedded ruby)
+    class Empty        < ActiveYaml::Base ; end # Empty YAML
   end
 
   after do
@@ -25,6 +26,10 @@ describe ActiveYaml::Base do
     it 'can execute embedded ruby' do
        User.first.email.should =~ /^user[0-9]*@email.com$/
        User.first.password.should == 'secret'
+    end
+
+    it 'can load empty yaml' do
+      Empty.first.should be_nil
     end
   end
 

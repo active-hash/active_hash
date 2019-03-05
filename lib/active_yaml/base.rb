@@ -8,7 +8,7 @@ module ActiveYaml
       def load_file
         if (data = raw_data).is_a?(Array)
           data
-        else
+        elsif data.respond_to?(:values)
           data.values
         end
       end
