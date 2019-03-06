@@ -1320,5 +1320,61 @@ describe ActiveHash, "Base" do
     end
 
   end
+  
+  describe '.scope' do
+    context 'for query without argument' do      
+      before do
+        Country.field :name
+        Country.field :language
+        Country.data = [
+          {:id => 1, :name => "US", :language => 'English'},
+          {:id => 2, :name => "Canada", :language => 'English'},
+          {:id => 3, :name => "Mexico", :language => 'Spanish'}
+        ]
+        Country.scope :english_language, -> { where(language: 'English') }
+      end
+      
+      it 'should define a scope method' do
+        expect(Country.respond_to?(:english_language)).to be_truthy
+      end
+      
+      it 'should return the query used to define the scope' do
+        expect(Country.english_language).to eq Country.where(language: 'English')
+      end
+      
+      it 'should behave like the query used to define the scope' do
+        expect(Country.english_language.count).to eq 2
+        expect(Country.english_language.first.id).to eq 1
+        expect(Country.english_language.second.id).to eq 2
+      end
+    end
+    
+    context 'for query with argument' do
+      before do
+        Country.field :name
+        Country.field :language
+        Country.data = [
+          {:id => 1, :name => "US", :language => 'English'},
+          {:id => 2, :name => "Canada", :language => 'English'},
+          {:id => 3, :name => "Mexico", :language => 'Spanish'}
+        ]
+        Country.scope :with_language, ->(language) { where(language: language) }
+      end
+      
+      it 'should define a scope method' do
+        expect(Country.respond_to?(:with_language)).to be_truthy
+      end
+      
+      it 'should return the query used to define the scope' do
+        expect(Country.with_language('English')).to eq Country.where(language: 'English')
+      end
+      
+      it 'should behave like the query used to define the scope' do
+        expect(Country.with_language('English').count).to eq 2
+        expect(Country.with_language('English').first.id).to eq 1
+        expect(Country.with_language('English').second.id).to eq 2
+      end
+    end
+  end
 
 end

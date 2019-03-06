@@ -465,6 +465,12 @@ module ActiveHash
       end
 
       private :mark_clean
+      
+      def scope(name, body)
+        singleton_class.define_method(name) do |*args|
+          instance_exec(*args, &body)
+        end
+      end
 
     end
 
