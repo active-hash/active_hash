@@ -469,8 +469,10 @@ module ActiveHash
       def scope(name, body)
         raise ArgumentError, 'body needs to be callable' unless body.respond_to?(:call)
         
-        singleton_class.define_method(name) do |*args|
-          instance_exec(*args, &body)
+        the_meta_class.instance_eval do
+          define_method(name) do |*args|
+            instance_exec(*args, &body)
+          end
         end
       end
 
