@@ -1375,6 +1375,22 @@ describe ActiveHash, "Base" do
         expect(Country.with_language('English').second.id).to eq 2
       end
     end
+    
+    context 'when scope body is not a lambda' do
+      before do
+        Country.field :name
+        Country.field :language
+        Country.data = [
+          {:id => 1, :name => "US", :language => 'English'},
+          {:id => 2, :name => "Canada", :language => 'English'},
+          {:id => 3, :name => "Mexico", :language => 'Spanish'}
+        ]
+      end
+      
+      it 'should raise an error' do
+        expect { Country.scope :invalid_scope, :not_a_callable }.to raise_error(ArgumentError, 'body needs to be callable')
+      end
+    end
   end
 
 end

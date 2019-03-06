@@ -467,6 +467,8 @@ module ActiveHash
       private :mark_clean
       
       def scope(name, body)
+        raise ArgumentError, 'body needs to be callable' unless body.respond_to?(:call)
+        
         singleton_class.define_method(name) do |*args|
           instance_exec(*args, &body)
         end
