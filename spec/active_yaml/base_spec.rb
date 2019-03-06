@@ -13,18 +13,24 @@ describe ActiveYaml::Base do
     class ArrayProduct < ActiveYaml::Base ; end # Contain YAML aliases
     class KeyProduct   < ActiveYaml::Base ; end # Contain YAML aliases
     class User         < ActiveYaml::Base ; end # Contain ERB (embedded ruby)
+    class Empty        < ActiveYaml::Base ; end # Empty YAML
   end
 
   after do
     Object.send :remove_const, :ArrayRow
     Object.send :remove_const, :City
     Object.send :remove_const, :State
+    Object.send :remove_const, :Empty
   end
 
   describe ".load_path" do
     it 'can execute embedded ruby' do
        User.first.email.should =~ /^user[0-9]*@email.com$/
        User.first.password.should == 'secret'
+    end
+
+    it 'can load empty yaml' do
+      Empty.first.should be_nil
     end
   end
 
