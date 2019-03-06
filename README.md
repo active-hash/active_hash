@@ -169,6 +169,14 @@ Country.find_all_by_name "foo"                # => returns an array of the objec
 Country.find_by_id_and_name 1, "Germany"      # => returns the first object matching that id and name
 Country.find_all_by_id_and_name 1, "Germany"  # => returns an array of objects matching that name and id
 ```
+
+Furthermore, it allows to create custom scope query methods, similar to how it's possible with ActiveRecord:
+
+```ruby
+Country.scope :english, -> { where(language: 'English') } # Creates a class method Country.english performing the given query
+Country.scope :with_language, ->(language) { where(language: language) } # Creates a class method Country.with_language(language) performing the given query
+```
+
 ## Instance Methods
 
 ActiveHash objects implement enough of the ActiveRecord api to satisfy most common needs.  For example:
