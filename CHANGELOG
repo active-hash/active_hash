@@ -1,3 +1,6 @@
+2019-03-06 (v2.2.1)
+  - Allow empty YAML [#171](https://github.com/zilkey/active_hash/pull/171) Thanks, @ppworks
+
 2018-11-22 (v2.2.0)
   - Support pluck method [#164](https://github.com/zilkey/active_hash/pull/164) Thanks, @ihatov08
   - Support where.not method [#167](https://github.com/zilkey/active_hash/pull/167) Thanks, @DialBird
