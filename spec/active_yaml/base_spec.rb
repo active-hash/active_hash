@@ -20,6 +20,7 @@ describe ActiveYaml::Base do
     Object.send :remove_const, :ArrayRow
     Object.send :remove_const, :City
     Object.send :remove_const, :State
+    Object.send :remove_const, :Empty
   end
 
   describe ".load_path" do

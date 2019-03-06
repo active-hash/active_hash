@@ -5,18 +5,27 @@ describe ActiveJSON::Base do
   before do
     ActiveJSON::Base.set_root_path File.expand_path(File.dirname(__FILE__) + "/../fixtures")
 
-    class ArrayRow < ActiveJSON::Base;
-    end
-    class City < ActiveJSON::Base;
-    end
-    class State < ActiveJSON::Base;
-    end
+    class ArrayRow < ActiveJSON::Base; end
+    class City < ActiveJSON::Base; end
+    class State < ActiveJSON::Base; end
+    class Empty < ActiveJSON::Base ; end # Empty JSON
   end
 
   after do
     Object.send :remove_const, :ArrayRow
     Object.send :remove_const, :City
     Object.send :remove_const, :State
+    Object.send :remove_const, :Empty
+  end
+
+  describe ".load_path" do
+    it 'can execute embedded ruby' do
+       State.first.name.should =~ /^New York/
+    end
+
+    it 'can load empty yaml' do
+      Empty.first.should be_nil
+    end
   end
 
   describe ".all" do
