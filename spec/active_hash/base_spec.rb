@@ -601,6 +601,14 @@ describe ActiveHash, "Base" do
         end.should raise_error(ActiveHash::RecordNotFound, /Couldn't find Country with ID=0/)
       end
     end
+
+    context "with nil" do
+      it "raises ActiveHash::RecordNotFound when id is nil" do
+        proc do
+          Country.find(nil)
+        end.should raise_error(ActiveHash::RecordNotFound, /Couldn't find Country without an ID/)
+      end
+    end
   end
 
   describe ".find_by_id" do
