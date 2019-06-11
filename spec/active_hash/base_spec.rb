@@ -281,6 +281,16 @@ describe ActiveHash, "Base" do
       expect(Country.where(:id => %w(1 2)).map(&:id)).to match_array([1,2])
     end
 
+    it "returns multiple records for range argument" do
+      expect(Country.where(:id => 1..2).map(&:id)).to match_array([1,2])
+    end
+
+    if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("2.6.0")
+      it "returns multiple records for infinite range argument" do
+        expect(Country.where(:id => eval("2..")).map(&:id)).to match_array([2,3])
+      end
+    end
+
     it "filters records for multiple values" do
       expect(Country.where(:name => %w(US Canada)).map(&:name)).to match_array(%w(US Canada))
     end
