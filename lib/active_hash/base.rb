@@ -261,14 +261,14 @@ module ActiveHash
 
       def find(id, * args)
         case id
-          when nil
-            nil
           when :all
             all
           when :first
             all(*args).first
           when Array
             id.map { |i| find(i) }
+          when nil
+            raise RecordNotFound.new("Couldn't find #{name} without an ID")
           else
             find_by_id(id) || begin
               raise RecordNotFound.new("Couldn't find #{name} with ID=#{id}")
