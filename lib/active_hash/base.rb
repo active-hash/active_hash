@@ -200,6 +200,7 @@ module ActiveHash
         # use index if searching by id
         if options.key?(:id) || options.key?("id")
           ids = (options.delete(:id) || options.delete("id"))
+          ids = range_to_array(ids) if ids.is_a?(Range)
           candidates = Array.wrap(ids).map { |id| find_by_id(id) }.compact
         end
         return candidates if options.blank?
@@ -234,6 +235,15 @@ module ActiveHash
       end
 
       private :normalize
+
+      def range_to_array(range)
+        return range.to_a unless range.end.nil?
+
+        e = data.last[:id]
+        (range.begin..e).to_a
+      end
+
+      private :range_to_array
 
       def count
         all.length
