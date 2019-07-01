@@ -475,6 +475,16 @@ module ActiveHash
       end
 
       private :mark_clean
+      
+      def scope(name, body)
+        raise ArgumentError, 'body needs to be callable' unless body.respond_to?(:call)
+        
+        the_meta_class.instance_eval do
+          define_method(name) do |*args|
+            instance_exec(*args, &body)
+          end
+        end
+      end
 
     end
 
