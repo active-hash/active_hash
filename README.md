@@ -161,6 +161,7 @@ Country.find_by(name: 'US')    # => returns the first country object with specif
 Country.find_by!(name: 'US')   # => same as find_by, but raise exception when not found
 Country.where(name: 'US')      # => returns all records with name: 'US'
 Country.where.not(name: 'US')  # => returns all records without name: 'US'
+Country.order(name: :desc)     # => returns all records ordered by name attribute in DESC order
 ```
 It also gives you a few dynamic finder methods.  For example, if you defined :name as a field, you'd get:
 ```ruby
