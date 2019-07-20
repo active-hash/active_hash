@@ -218,6 +218,18 @@ module ActiveHash
         find_by(options) || (raise RecordNotFound.new("Couldn't find #{name}"))
       end
 
+      def order(*options)
+        check_if_method_has_arguments!(:order, options)
+        return @records if options.blank?
+
+        processed_args = preprocess_order_args(options)
+        candidates = @records.dup
+
+        order_by_args!(candidates, processed_args)
+
+        candidates
+      end
+
       def match_options?(record, options)
         options.all? do |col, match|
           if match.kind_of?(Array)
@@ -244,6 +256,46 @@ module ActiveHash
       end
 
       private :range_to_array
+
+      def check_if_method_has_arguments!(method_name, args)
+        if args.blank?
+          raise ArgumentError, "The method .#{method_name}() must contain arguments."
+        end
+      end
+
+      private :check_if_method_has_arguments!
+
+      def preprocess_order_args(order_args)
+        order_args.reject!(&:blank?)
+        return order_args.reverse! unless order_args.first.is_a?(String)
+
+        ary = order_args.first.split(", ")
+        ary.map! { |e| e.split(/\W+/) }.reverse!
+      end
+
+      private :preprocess_order_args
+
+      def order_by_args!(candidates, args)
+        args.each do |arg|
+          field, dir = if arg.is_a?(Hash)
+                         arg.to_a.flatten.map(&:to_sym)
+                       elsif arg.is_a?(Array)
+                         arg.map(&:to_sym)
+                       else
+                         arg.to_sym
+                       end
+
+          candidates.sort! do |a, b|
+            if dir.present? && dir.to_sym.upcase.equal?(:DESC)
+              b[field] <=> a[field]
+            else
+              a[field] <=> b[field]
+            end
+          end
+        end
+      end
+
+      private :order_by_args!
 
       def count
         all.length
