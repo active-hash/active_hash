@@ -182,33 +182,11 @@ module ActiveHash
         record
       end
 
-      def all(options={})
-        if options.has_key?(:conditions)
-          where(options[:conditions])
-        else
-          @records ||= []
-        end
+      def all(options = {})
+        ActiveHash::ResultSet.new(self, @records || [], options[:conditions] || {})
       end
 
-      def where(options = :chain)
-        if options == :chain
-          return WhereChain.new(self)
-        elsif options.blank?
-          return @records
-        end
-
-        # use index if searching by id
-        if options.key?(:id) || options.key?("id")
-          ids = (options.delete(:id) || options.delete("id"))
-          ids = range_to_array(ids) if ids.is_a?(Range)
-          candidates = Array.wrap(ids).map { |id| find_by_id(id) }.compact
-        end
-        return candidates if options.blank?
-
-        (candidates || @records || []).select do |record|
-          match_options?(record, options)
-        end
-      end
+      delegate :where, to: :all
 
       def find_by(options)
         where(options).first
