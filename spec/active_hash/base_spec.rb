@@ -400,7 +400,7 @@ describe ActiveHash, "Base" do
     end
 
     it "filters records for multiple conditions" do
-      expect(Country.where.not(:id => 1, :name => 'Mexico')).to match_array([Country.find(2)])
+      expect(Country.where.not(:id => 1, :name => 'Mexico').to_a).to match_array([Country.find(2)])
     end
   end
 
@@ -1375,7 +1375,7 @@ describe ActiveHash, "Base" do
       end
       
       it 'should return the query used to define the scope' do
-        expect(Country.english_language).to eq Country.where(language: 'English')
+        expect(Country.english_language.to_a).to eq Country.where(language: 'English').to_a
       end
       
       it 'should behave like the query used to define the scope' do
@@ -1402,7 +1402,7 @@ describe ActiveHash, "Base" do
       end
       
       it 'should return the query used to define the scope' do
-        expect(Country.with_language('English')).to eq Country.where(language: 'English')
+        expect(Country.with_language('English').to_a).to eq Country.where(language: 'English').to_a
       end
       
       it 'should behave like the query used to define the scope' do

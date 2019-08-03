@@ -4,9 +4,8 @@ module ActiveHash
     
     delegate :each, to: :records # Make Enumerable work
     delegate :equal?, :==, :===, :eql?, to: :records
-    
-    delegate_missing_to :records
-    
+    delegate :empty?, :length, :first, :second, :third, :last, to: :records
+        
     def initialize(klass, all_records, query_hash = nil)
       self.klass = klass
       self.all_records = all_records
