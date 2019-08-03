@@ -215,6 +215,10 @@ describe ActiveHash, "Base" do
         {:id => 3, :name => "Mexico", :language => 'Spanish'}
       ]
     end
+    
+    it 'returns a ResultSet class if conditions are provided' do
+      Country.where(language: 'English').class.should == ActiveHash::ResultSet
+    end
 
     it "returns WhereChain class if no conditions are provided" do
       Country.where.class.should == ActiveHash::Base::WhereChain
@@ -325,6 +329,10 @@ describe ActiveHash, "Base" do
       lambda{
         Country.where.not
       }.should raise_error(ArgumentError)
+    end
+    
+    it 'returns a chainable ResultSet when conditions are passed' do
+      Country.where.not(language: 'Spanish').class.should == ActiveHash::ResultSet
     end
 
     it "returns all records when passed nil" do

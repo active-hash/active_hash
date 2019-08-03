@@ -3,7 +3,6 @@ module ActiveHash
     include Enumerable
     
     delegate :each, to: :records # Make Enumerable work
-    
     delegate :equal?, :==, :===, :eql?, to: :records
     
     delegate_missing_to :records

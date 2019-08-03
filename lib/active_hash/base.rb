@@ -23,7 +23,7 @@ module ActiveHash
       end
 
       def not(options)
-        return @records if options.blank?
+        return @scope if options.blank?
 
         # use index if searching by id
         if options.key?(:id) || options.key?("id")
@@ -32,9 +32,11 @@ module ActiveHash
         end
         return candidates if options.blank?
 
-        (candidates || @records || []).reject do |record|
+        filtered_records = (candidates || @records || []).reject do |record|
           match_options?(record, options)
         end
+        
+        ActiveHash::ResultSet.new(@scope.klass, filtered_records, {})
       end
 
       def match_options?(record, options)
