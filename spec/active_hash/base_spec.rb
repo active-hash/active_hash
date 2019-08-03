@@ -216,8 +216,8 @@ describe ActiveHash, "Base" do
       ]
     end
     
-    it 'returns a ResultSet class if conditions are provided' do
-      Country.where(language: 'English').class.should == ActiveHash::ResultSet
+    it 'returns a Relation class if conditions are provided' do
+      Country.where(language: 'English').class.should == ActiveHash::Relation
     end
 
     it "returns WhereChain class if no conditions are provided" do
@@ -331,8 +331,8 @@ describe ActiveHash, "Base" do
       }.should raise_error(ArgumentError)
     end
     
-    it 'returns a chainable ResultSet when conditions are passed' do
-      Country.where.not(language: 'Spanish').class.should == ActiveHash::ResultSet
+    it 'returns a chainable Relation when conditions are passed' do
+      Country.where.not(language: 'Spanish').class.should == ActiveHash::Relation
     end
 
     it "returns all records when passed nil" do

@@ -1,5 +1,5 @@
 module ActiveHash
-  class ResultSet
+  class Relation
     include Enumerable
     
     delegate :each, to: :records # Make Enumerable work
