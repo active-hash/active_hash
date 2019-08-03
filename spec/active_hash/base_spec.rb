@@ -221,11 +221,11 @@ describe ActiveHash, "Base" do
     end
 
     it "returns all records when passed nil" do
-      Country.where(nil).should == Country.all
+      Country.where(nil).to_a.should == Country.all.to_a
     end
 
     it "returns all records when an empty hash" do
-      Country.where({}).should == Country.all
+      Country.where({}).to_a.should == Country.all.to_a
     end
 
     it "returns all data as inflated objects" do
@@ -298,6 +298,16 @@ describe ActiveHash, "Base" do
     it "filters records for multiple symbol values" do
       expect(Country.where(:name => [:US, :Canada]).map(&:name)).to match_array(%w(US Canada))
     end
+    
+    it 'is chainable' do
+      where_relation = Country.where(language: 'English')
+      
+      expect(where_relation.length).to eq 2
+      expect(where_relation.map(&:id)).to eq([1, 2])
+      chained_where_relation = where_relation.where(name: 'US')
+      expect(chained_where_relation.length).to eq 1
+      expect(chained_where_relation.map(&:id)).to eq([1])
+    end
   end
 
   describe ".where.not" do
@@ -318,11 +328,11 @@ describe ActiveHash, "Base" do
     end
 
     it "returns all records when passed nil" do
-      Country.where.not(nil).should == Country.all
+      Country.where.not(nil).to_a.should == Country.all.to_a
     end
 
     it "returns all records when an empty hash" do
-      Country.where.not({}).should == Country.all
+      Country.where.not({}).to_a.should == Country.all.to_a
     end
 
     it "returns all records as inflated objects" do
@@ -366,7 +376,7 @@ describe ActiveHash, "Base" do
     end
 
     it "returns all records when id is nil" do
-      expect(Country.where.not(:id => nil)).to eq Country.all
+      expect(Country.where.not(:id => nil).to_a).to eq Country.all.to_a
     end
 
     it "filters records for multiple ids" do
