@@ -4,7 +4,7 @@ module ActiveHash
     
     delegate :each, to: :records # Make Enumerable work
     
-    delegate :first, :last, :length, :equal?, :==, :===, :eql?, to: :records
+    delegate :equal?, :==, :===, :eql?, to: :records
     
     delegate_missing_to :records
     
@@ -24,8 +24,12 @@ module ActiveHash
       self
     end
     
-    def all
-      where({})
+    def all(options = {})
+      if options.has_key?(:conditions)
+        where(options[:conditions])
+      else
+        where({})
+      end
     end
     
     def find_by(options)
@@ -33,7 +37,7 @@ module ActiveHash
     end
 
     def find_by!(options)
-      find_by(options) || (raise RecordNotFound.new("Couldn't find #{name}"))
+      find_by(options) || (raise RecordNotFound.new("Couldn't find #{klass.name}"))
     end
     
     def find(id, * args)
@@ -45,10 +49,10 @@ module ActiveHash
         when Array
           id.map { |i| find(i) }
         when nil
-          raise RecordNotFound.new("Couldn't find #{name} without an ID")
+          raise RecordNotFound.new("Couldn't find #{klass.name} without an ID")
         else
           find_by_id(id) || begin
-            raise RecordNotFound.new("Couldn't find #{name} with ID=#{id}")
+            raise RecordNotFound.new("Couldn't find #{klass.name} with ID=#{id}")
           end
       end
     end
@@ -56,6 +60,14 @@ module ActiveHash
     def find_by_id(id)
       index = klass.send(:record_index)[id.to_s] # TODO: don't use send
       index and records[index]
+    end
+    
+    def count
+      length
+    end
+    
+    def pluck(*column_names)
+      column_names.map { |column_name| all.map(&column_name.to_sym) }.inject(&:zip)
     end
     
     def reload
