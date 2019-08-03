@@ -57,7 +57,7 @@ module ActiveHash
     end
     
     def find_by_id(id)
-      index = klass.send(:record_index)[id.to_s] # TODO: don't use send
+      index = klass.send(:record_index)[id.to_s] # TODO: Make index in Base publicly readable instead of using send?
       index and records[index]
     end
     
@@ -73,15 +73,15 @@ module ActiveHash
       @records = filter_all_records_by_query_hash
     end
     
-    attr_accessor :query_hash, :klass, :all_records, :records_dirty
+    attr_reader :query_hash, :klass, :all_records, :records_dirty
     
     private
     
-    #attr_accessor :query_hash, :klass, :all_records
+    attr_writer :query_hash, :klass, :all_records, :records_dirty
     
     def records
       if @records.nil? || records_dirty
-        @records = filter_all_records_by_query_hash
+        reload
       else
         @records
       end
@@ -125,6 +125,5 @@ module ActiveHash
       e = records.last[:id]
       (range.begin..e).to_a
     end
-
   end
 end
