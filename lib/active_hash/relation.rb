@@ -38,7 +38,7 @@ module ActiveHash
       find_by(options) || (raise RecordNotFound.new("Couldn't find #{klass.name}"))
     end
     
-    def find(id, * args)
+    def find(id, *args)
       case id
         when :all
           all
