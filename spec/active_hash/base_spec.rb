@@ -874,53 +874,60 @@ describe ActiveHash, "Base" do
     end
 
     it "returns all records when passed nil" do
-      expect(Country.order(nil)).to eq Country.all
+      expect(Country.order(nil).to_a).to eq Country.all.to_a
     end
 
     it "returns all records when an empty hash" do
-      expect(Country.order({})).to eq Country.all
+      expect(Country.order({}).to_a).to eq Country.all.to_a
     end
 
     it "returns all records ordered by name attribute in ASC order when ':name' is provieded" do
       countries = Country.order(:name)
-      expect(countries[0]).to eq Country.find_by(name: "Canada")
-      expect(countries[1]).to eq Country.find_by(name: "Mexico")
-      expect(countries[2]).to eq Country.find_by(name: "US")
+      expect(countries.first).to eq Country.find_by(name: "Canada")
+      expect(countries.second).to eq Country.find_by(name: "Mexico")
+      expect(countries.third).to eq Country.find_by(name: "US")
     end
 
     it "returns all records ordered by name attribute in DESC order when 'name: :desc' is provieded" do
       countries = Country.order(name: :desc)
-      expect(countries[0]).to eq Country.find_by(name: "US")
-      expect(countries[1]).to eq Country.find_by(name: "Mexico")
-      expect(countries[2]).to eq Country.find_by(name: "Canada")
+      expect(countries.first).to eq Country.find_by(name: "US")
+      expect(countries.second).to eq Country.find_by(name: "Mexico")
+      expect(countries.third).to eq Country.find_by(name: "Canada")
     end
 
-    it "returns all records ordered by code, followed by name in DESC order attribute in DESC order when ':code, name: :desc' is provieded" do
-      countries = Country.order(:code, name: :desc)
-      expect(countries[0]).to eq Country.find_by(name: "US")
-      expect(countries[1]).to eq Country.find_by(name: "Canada")
-      expect(countries[2]).to eq Country.find_by(name: "Mexico")
+    it "returns all records ordered by code attribute, followed by id attribute in DESC order when ':code, id: :desc' is provieded" do
+      countries = Country.order(:code, id: :desc)
+      expect(countries.first).to eq Country.find_by(name: "Canada")
+      expect(countries.second).to eq Country.find_by(name: "US")
+      expect(countries.third).to eq Country.find_by(name: "Mexico")
     end
 
     it "returns all records ordered by name attribute in ASC order when 'name' is provieded" do
       countries = Country.order("name")
-      expect(countries[0]).to eq Country.find_by(name: "Canada")
-      expect(countries[1]).to eq Country.find_by(name: "Mexico")
-      expect(countries[2]).to eq Country.find_by(name: "US")
+      expect(countries.first).to eq Country.find_by(name: "Canada")
+      expect(countries.second).to eq Country.find_by(name: "Mexico")
+      expect(countries.third).to eq Country.find_by(name: "US")
     end
 
     it "returns all records ordered by name attribute in DESC order when 'name: :desc' is provieded" do
       countries = Country.order("name DESC")
-      expect(countries[0]).to eq Country.find_by(name: "US")
-      expect(countries[1]).to eq Country.find_by(name: "Mexico")
-      expect(countries[2]).to eq Country.find_by(name: "Canada")
+      expect(countries.first).to eq Country.find_by(name: "US")
+      expect(countries.second).to eq Country.find_by(name: "Mexico")
+      expect(countries.third).to eq Country.find_by(name: "Canada")
     end
 
-    it "returns all records ordered by code, followed by name in DESC order attribute in DESC order when ':code, name: :desc' is provieded" do
-      countries = Country.order("code, name DESC")
-      expect(countries[0]).to eq Country.find_by(name: "US")
-      expect(countries[1]).to eq Country.find_by(name: "Canada")
-      expect(countries[2]).to eq Country.find_by(name: "Mexico")
+    it "returns all records ordered by code attributes, followed by id attribute in DESC order when ':code, id: :desc' is provieded" do
+      countries = Country.order("code, id DESC")
+      expect(countries.first).to eq Country.find_by(name: "Canada")
+      expect(countries.second).to eq Country.find_by(name: "US")
+      expect(countries.third).to eq Country.find_by(name: "Mexico")
+    end
+
+    it "populates the data correctly in the order provided" do
+      countries = Country.where(language: 'English').order(id: :desc)
+      expect(countries.count).to eq 2
+      expect(countries.first).to eq Country.find_by(name: "Canada")
+      expect(countries.second).to eq Country.find_by(name: "US")
     end
   end
 
