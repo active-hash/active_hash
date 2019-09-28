@@ -215,17 +215,21 @@ describe ActiveHash, "Base" do
         {:id => 3, :name => "Mexico", :language => 'Spanish'}
       ]
     end
+    
+    it 'returns a Relation class if conditions are provided' do
+      Country.where(language: 'English').class.should == ActiveHash::Relation
+    end
 
     it "returns WhereChain class if no conditions are provided" do
       Country.where.class.should == ActiveHash::Base::WhereChain
     end
 
     it "returns all records when passed nil" do
-      Country.where(nil).should == Country.all
+      Country.where(nil).to_a.should == Country.all.to_a
     end
 
     it "returns all records when an empty hash" do
-      Country.where({}).should == Country.all
+      Country.where({}).to_a.should == Country.all.to_a
     end
 
     it "returns all data as inflated objects" do
@@ -298,6 +302,16 @@ describe ActiveHash, "Base" do
     it "filters records for multiple symbol values" do
       expect(Country.where(:name => [:US, :Canada]).map(&:name)).to match_array(%w(US Canada))
     end
+    
+    it 'is chainable' do
+      where_relation = Country.where(language: 'English')
+      
+      expect(where_relation.length).to eq 2
+      expect(where_relation.map(&:id)).to eq([1, 2])
+      chained_where_relation = where_relation.where(name: 'US')
+      expect(chained_where_relation.length).to eq 1
+      expect(chained_where_relation.map(&:id)).to eq([1])
+    end
   end
 
   describe ".where.not" do
@@ -316,13 +330,17 @@ describe ActiveHash, "Base" do
         Country.where.not
       }.should raise_error(ArgumentError)
     end
+    
+    it 'returns a chainable Relation when conditions are passed' do
+      Country.where.not(language: 'Spanish').class.should == ActiveHash::Relation
+    end
 
     it "returns all records when passed nil" do
-      Country.where.not(nil).should == Country.all
+      Country.where.not(nil).to_a.should == Country.all.to_a
     end
 
     it "returns all records when an empty hash" do
-      Country.where.not({}).should == Country.all
+      Country.where.not({}).to_a.should == Country.all.to_a
     end
 
     it "returns all records as inflated objects" do
@@ -366,7 +384,7 @@ describe ActiveHash, "Base" do
     end
 
     it "returns all records when id is nil" do
-      expect(Country.where.not(:id => nil)).to eq Country.all
+      expect(Country.where.not(:id => nil).to_a).to eq Country.all.to_a
     end
 
     it "filters records for multiple ids" do
@@ -382,7 +400,7 @@ describe ActiveHash, "Base" do
     end
 
     it "filters records for multiple conditions" do
-      expect(Country.where.not(:id => 1, :name => 'Mexico')).to match_array([Country.find(2)])
+      expect(Country.where.not(:id => 1, :name => 'Mexico').to_a).to match_array([Country.find(2)])
     end
   end
 
@@ -1424,7 +1442,7 @@ describe ActiveHash, "Base" do
       end
       
       it 'should return the query used to define the scope' do
-        expect(Country.english_language).to eq Country.where(language: 'English')
+        expect(Country.english_language.to_a).to eq Country.where(language: 'English').to_a
       end
       
       it 'should behave like the query used to define the scope' do
@@ -1451,7 +1469,7 @@ describe ActiveHash, "Base" do
       end
       
       it 'should return the query used to define the scope' do
-        expect(Country.with_language('English')).to eq Country.where(language: 'English')
+        expect(Country.with_language('English').to_a).to eq Country.where(language: 'English').to_a
       end
       
       it 'should behave like the query used to define the scope' do
