@@ -72,6 +72,10 @@ module ActiveHash
       @records = filter_all_records_by_query_hash
     end
     
+    def to_ary
+      records.dup
+    end
+    
     attr_reader :query_hash, :klass, :all_records, :records_dirty
     
     private
