@@ -1,14 +1,16 @@
 require 'spec_helper'
 
 RSpec.describe ActiveHash::Relation do
-  class Country < ActiveHash::Base
-    self.data = [
-      {:id => 1, :name => "US"},
-      {:id => 2, :name => "Canada"}
-    ]
+  let(:model_class) do
+    Class.new(ActiveHash::Base) do
+      self.data = [
+        {:id => 1, :name => "US"},
+        {:id => 2, :name => "Canada"}
+      ]
+    end
   end
   
-  subject { Country.all }
+  subject { model_class.all }
   
   describe '#to_ary' do
     it 'returns an array' do
