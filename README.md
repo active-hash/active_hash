@@ -164,6 +164,7 @@ Country.find 1                 # => returns the first country object with that i
 Country.find [1,2]             # => returns all Country objects with ids in the array
 Country.find :all              # => same as .all
 Country.find :all, args        # => the second argument is totally ignored, but allows it to play nicely with AR
+Country.find { |country| country.name.start_with?('U') } # => returns the first country for which the block evaluates to true
 Country.find_by_id 1           # => find the first object that matches the id
 Country.find_by(name: 'US')    # => returns the first country object with specified argument
 Country.find_by!(name: 'US')   # => same as find_by, but raise exception when not found
