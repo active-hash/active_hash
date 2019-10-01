@@ -74,11 +74,11 @@ module ActiveHash
 
     def order(*options)
       check_if_method_has_arguments!(:order, options)
-      records = where({})
-      return records if options.blank?
+      relation = where({})
+      return relation if options.blank?
 
       processed_args = preprocess_order_args(options)
-      candidates = records.dup
+      candidates = relation.dup
 
       order_by_args!(candidates, processed_args)
 
