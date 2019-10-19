@@ -104,6 +104,12 @@ describe ActiveHash, "Base" do
         Country.field :attributes
       end.should raise_error(ActiveHash::ReservedFieldError)
     end
+
+    it "blows up if you try to overwrite field name that is already defined in Object" do
+      proc do
+        Country.field :display
+      end.should raise_error(ActiveHash::ReservedFieldError)
+    end
   end
 
   describe ".data=" do

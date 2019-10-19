@@ -229,6 +229,9 @@ module ActiveHash
         if [:attributes].include?(field_name.to_sym)
           raise ReservedFieldError.new("#{field_name} is a reserved field in ActiveHash.  Please use another name.")
         end
+        if Object.instance_methods.include?(field_name.to_sym)
+          raise ReservedFieldError.new("#{field_name} is a defied method in Object.  Please use another name.")
+        end       
       end
 
       private :validate_field
