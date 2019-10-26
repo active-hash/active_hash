@@ -188,7 +188,7 @@ module ActiveHash
         ActiveHash::Relation.new(self, @records || [], options[:conditions] || {})
       end
 
-      delegate :where, :find, :find_by, :find_by!, :find_by_id, :count, :pluck, :first, :last, to: :all
+      delegate :where, :find, :find_by, :find_by!, :find_by_id, :count, :pluck, :first, :last, :order, to: :all
 
       def transaction
         yield

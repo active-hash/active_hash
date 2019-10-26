@@ -868,6 +868,80 @@ describe ActiveHash, "Base" do
     end
   end
 
+  describe ".order" do
+    before do
+      Country.field :name
+      Country.field :language
+      Country.field :code
+      Country.data = [
+        { id: 1, name: "US",     language: "English", code: 1 },
+        { id: 2, name: "Canada", language: "English", code: 1 },
+        { id: 3, name: "Mexico", language: "Spanish", code: 52 }
+      ]
+    end
+
+    it "raises ArgumentError if no args are provieded" do
+      expect { Country.order() }.to raise_error(ArgumentError, 'The method .order() must contain arguments.')
+    end
+
+    it "returns all records when passed nil" do
+      expect(Country.order(nil).to_a).to eq Country.all.to_a
+    end
+
+    it "returns all records when an empty hash" do
+      expect(Country.order({}).to_a).to eq Country.all.to_a
+    end
+
+    it "returns all records ordered by name attribute in ASC order when ':name' is provieded" do
+      countries = Country.order(:name)
+      expect(countries.first).to eq Country.find_by(name: "Canada")
+      expect(countries.second).to eq Country.find_by(name: "Mexico")
+      expect(countries.third).to eq Country.find_by(name: "US")
+    end
+
+    it "returns all records ordered by name attribute in DESC order when 'name: :desc' is provieded" do
+      countries = Country.order(name: :desc)
+      expect(countries.first).to eq Country.find_by(name: "US")
+      expect(countries.second).to eq Country.find_by(name: "Mexico")
+      expect(countries.third).to eq Country.find_by(name: "Canada")
+    end
+
+    it "returns all records ordered by code attribute, followed by id attribute in DESC order when ':code, id: :desc' is provieded" do
+      countries = Country.order(:code, id: :desc)
+      expect(countries.first).to eq Country.find_by(name: "Canada")
+      expect(countries.second).to eq Country.find_by(name: "US")
+      expect(countries.third).to eq Country.find_by(name: "Mexico")
+    end
+
+    it "returns all records ordered by name attribute in ASC order when 'name' is provieded" do
+      countries = Country.order("name")
+      expect(countries.first).to eq Country.find_by(name: "Canada")
+      expect(countries.second).to eq Country.find_by(name: "Mexico")
+      expect(countries.third).to eq Country.find_by(name: "US")
+    end
+
+    it "returns all records ordered by name attribute in DESC order when 'name: :desc' is provieded" do
+      countries = Country.order("name DESC")
+      expect(countries.first).to eq Country.find_by(name: "US")
+      expect(countries.second).to eq Country.find_by(name: "Mexico")
+      expect(countries.third).to eq Country.find_by(name: "Canada")
+    end
+
+    it "returns all records ordered by code attributes, followed by id attribute in DESC order when ':code, id: :desc' is provieded" do
+      countries = Country.order("code, id DESC")
+      expect(countries.first).to eq Country.find_by(name: "Canada")
+      expect(countries.second).to eq Country.find_by(name: "US")
+      expect(countries.third).to eq Country.find_by(name: "Mexico")
+    end
+
+    it "populates the data correctly in the order provided" do
+      countries = Country.where(language: 'English').order(id: :desc)
+      expect(countries.count).to eq 2
+      expect(countries.first).to eq Country.find_by(name: "Canada")
+      expect(countries.second).to eq Country.find_by(name: "US")
+    end
+  end
+
   describe "#method_missing" do
     it "doesn't blow up if you call a missing dynamic finder when fields haven't been set" do
       proc do

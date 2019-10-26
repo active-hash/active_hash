@@ -3,7 +3,7 @@ module ActiveHash
     include Enumerable
     
     delegate :each, to: :records # Make Enumerable work
-    delegate :equal?, :==, :===, :eql?, to: :records
+    delegate :equal?, :==, :===, :eql?, :sort!, to: :records
     delegate :empty?, :length, :first, :second, :third, :last, to: :records
         
     def initialize(klass, all_records, query_hash = nil)
@@ -72,11 +72,25 @@ module ActiveHash
     def reload
       @records = filter_all_records_by_query_hash
     end
+
+    def order(*options)
+      check_if_method_has_arguments!(:order, options)
+      relation = where({})
+      return relation if options.blank?
+
+      processed_args = preprocess_order_args(options)
+      candidates = relation.dup
+
+      order_by_args!(candidates, processed_args)
+
+      candidates
+    end
     
     def to_ary
       records.dup
     end
     
+
     attr_reader :query_hash, :klass, :all_records, :records_dirty
     
     private
@@ -128,6 +142,41 @@ module ActiveHash
 
       e = records.last[:id]
       (range.begin..e).to_a
+    end
+
+    def check_if_method_has_arguments!(method_name, args)
+      return unless args.blank?
+
+      raise ArgumentError,
+            "The method .#{method_name}() must contain arguments."
+    end
+
+    def preprocess_order_args(order_args)
+      order_args.reject!(&:blank?)
+      return order_args.reverse! unless order_args.first.is_a?(String)
+
+      ary = order_args.first.split(', ')
+      ary.map! { |e| e.split(/\W+/) }.reverse!
+    end
+
+    def order_by_args!(candidates, args)
+      args.each do |arg|
+        field, dir = if arg.is_a?(Hash)
+                       arg.to_a.flatten.map(&:to_sym)
+                     elsif arg.is_a?(Array)
+                       arg.map(&:to_sym)
+                     else
+                       arg.to_sym
+                     end
+
+        candidates.sort! do |a, b|
+          if dir.present? && dir.to_sym.upcase.equal?(:DESC)
+            b[field] <=> a[field]
+          else
+            a[field] <=> b[field]
+          end
+        end
+      end
     end
   end
 end
