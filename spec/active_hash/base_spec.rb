@@ -631,10 +631,21 @@ describe ActiveHash, "Base" do
     end
 
     context "with nil" do
-      it "raises ActiveHash::RecordNotFound when id is nil" do
-        proc do
-          Country.find(nil)
-        end.should raise_error(ActiveHash::RecordNotFound, /Couldn't find Country without an ID/)
+      context 'and no block' do
+        it "raises ActiveHash::RecordNotFound when id is nil" do
+          proc do
+            Country.find(nil)
+          end.should raise_error(ActiveHash::RecordNotFound, /Couldn't find Country without an ID/)
+        end
+      end
+      
+      context 'and a block' do
+        it 'finds the record by evaluating the block' do
+          country = Country.find { |c| c.id == 1 }
+          
+          expect(country).to be_a(Country)
+          expect(country.name).to eq('US')
+        end
       end
     end
   end
