@@ -225,11 +225,11 @@ describe ActiveHash, "Base" do
     end
 
     it "returns all records when passed nil" do
-      Country.where(nil).to_a.should == Country.all.to_a
+      Country.where(nil).should == Country.all
     end
 
     it "returns all records when an empty hash" do
-      Country.where({}).to_a.should == Country.all.to_a
+      Country.where({}).should == Country.all
     end
 
     it "returns all data as inflated objects" do
@@ -336,11 +336,11 @@ describe ActiveHash, "Base" do
     end
 
     it "returns all records when passed nil" do
-      Country.where.not(nil).to_a.should == Country.all.to_a
+      Country.where.not(nil).should == Country.all
     end
 
     it "returns all records when an empty hash" do
-      Country.where.not({}).to_a.should == Country.all.to_a
+      Country.where.not({}).should == Country.all
     end
 
     it "returns all records as inflated objects" do
@@ -384,7 +384,7 @@ describe ActiveHash, "Base" do
     end
 
     it "returns all records when id is nil" do
-      expect(Country.where.not(:id => nil).to_a).to eq Country.all.to_a
+      expect(Country.where.not(:id => nil)).to eq Country.all
     end
 
     it "filters records for multiple ids" do
@@ -400,7 +400,7 @@ describe ActiveHash, "Base" do
     end
 
     it "filters records for multiple conditions" do
-      expect(Country.where.not(:id => 1, :name => 'Mexico').to_a).to match_array([Country.find(2)])
+      expect(Country.where.not(:id => 1, :name => 'Mexico')).to match_array([Country.find(2)])
     end
   end
 
@@ -631,10 +631,21 @@ describe ActiveHash, "Base" do
     end
 
     context "with nil" do
-      it "raises ActiveHash::RecordNotFound when id is nil" do
-        proc do
-          Country.find(nil)
-        end.should raise_error(ActiveHash::RecordNotFound, /Couldn't find Country without an ID/)
+      context 'and no block' do
+        it "raises ActiveHash::RecordNotFound when id is nil" do
+          proc do
+            Country.find(nil)
+          end.should raise_error(ActiveHash::RecordNotFound, /Couldn't find Country without an ID/)
+        end
+      end
+      
+      context 'and a block' do
+        it 'finds the record by evaluating the block' do
+          country = Country.find { |c| c.id == 1 }
+          
+          expect(country).to be_a(Country)
+          expect(country.name).to eq('US')
+        end
       end
     end
   end
@@ -1449,7 +1460,7 @@ describe ActiveHash, "Base" do
       end
       
       it 'should return the query used to define the scope' do
-        expect(Country.english_language.to_a).to eq Country.where(language: 'English').to_a
+        expect(Country.english_language).to eq Country.where(language: 'English')
       end
       
       it 'should behave like the query used to define the scope' do
@@ -1476,7 +1487,7 @@ describe ActiveHash, "Base" do
       end
       
       it 'should return the query used to define the scope' do
-        expect(Country.with_language('English').to_a).to eq Country.where(language: 'English').to_a
+        expect(Country.with_language('English')).to eq Country.where(language: 'English')
       end
       
       it 'should behave like the query used to define the scope' do
