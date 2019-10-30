@@ -885,11 +885,11 @@ describe ActiveHash, "Base" do
     end
 
     it "returns all records when passed nil" do
-      expect(Country.order(nil).to_a).to eq Country.all.to_a
+      expect(Country.order(nil)).to eq Country.all
     end
 
     it "returns all records when an empty hash" do
-      expect(Country.order({}).to_a).to eq Country.all.to_a
+      expect(Country.order({})).to eq Country.all
     end
 
     it "returns all records ordered by name attribute in ASC order when ':name' is provieded" do
