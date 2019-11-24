@@ -131,7 +131,7 @@ NOTE: auto-defined fields will _not_ override fields you've defined, either on t
 If some of your hash values contain nil, and you want to provide a default, you can specify defaults with the :field method:
 ```ruby
 class Country < ActiveHash::Base
-  field   :is_axis_of_evil, :default => false
+  field :is_axis_of_evil, :default => false
 end
 ```
 ## Defining Data
@@ -208,16 +208,24 @@ Country#name=       # => sets the name
 ```
 ## Saving in-memory records
 
-The ActiveHash::Base.all method functions like an in-memory data store.  You can save your records to the the .all array by using standard ActiveRecord create and save methods:
+The ActiveHash::Base.all method functions like an in-memory data store. You can save your records as ActiveHash::Relation object by using standard ActiveRecord create and save methods:
 ```ruby
-Country.all             # => []
+Country.all
+=> #<ActiveHash::Relation:0x00007f861e043bb0 @klass=Country, @all_records=[], @query_hash={}, @records_dirty=false>
 Country.create
-Country.all             # [ <Country :id => 1> ]
+=> #<Country:0x00007f861b7abce8 @attributes={:id=>1}>
+Country.all
+=> #<ActiveHash::Relation:0x00007f861b7b3628 @klass=Country, @all_records=[#<Country:0x00007f861b7abce8 @attributes={:id=>1}>], @query_hash={}, @records_dirty=false>
 country = Country.new
-country.new_record?     # => true
+=> #<Country:0x00007f861e059938 @attributes={}>
+country.new_record?
+=> true
 country.save
-country.new_record?     # => false
-Country.all             # [ <Country :id => 1>, <Country :id => 2>  ]
+=> true
+country.new_record?
+# => false
+Country.all
+=> #<ActiveHash::Relation:0x00007f861e0ca610 @klass=Country, @all_records=[#<Country:0x00007f861b7abce8 @attributes={:id=>1}>, #<Country:0x00007f861e059938 @attributes={:id=>2}>], @query_hash={}, @records_dirty=false>
 ```
 Notice that when adding records to the collection, it will auto-increment the id for you by default.  If you use string ids, it will not auto-increment the id.  Available methods are:
 ```
