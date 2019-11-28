@@ -11,6 +11,19 @@ RSpec.describe ActiveHash::Relation do
   end
   
   subject { model_class.all }
+
+  describe '#sample' do
+    it 'delegate `sample` to Array' do
+      expect(subject).to respond_to(:sample)
+    end
+
+    it 'return a random element or n random elements' do
+      records = subject
+
+      expect(records.sample).to be_present
+      expect(records.sample(2).count).to eq(2)
+    end
+  end
   
   describe '#to_ary' do
     it 'returns an array' do
