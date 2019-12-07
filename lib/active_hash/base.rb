@@ -229,9 +229,6 @@ module ActiveHash
         if [:attributes].include?(field_name.to_sym)
           raise ReservedFieldError.new("#{field_name} is a reserved field in ActiveHash.  Please use another name.")
         end
-        if Object.instance_methods.include?(field_name.to_sym)
-          raise ReservedFieldError.new("#{field_name} is a defied method in Object.  Please use another name.")
-        end       
       end
 
       private :validate_field
@@ -283,7 +280,7 @@ module ActiveHash
       end
 
       def define_getter_method(field, default_value)
-        unless instance_methods.include?(field.to_sym)
+        unless instance_methods(false).include?(field.to_sym)
           define_method(field) do
             attributes[field].nil? ? default_value : attributes[field]
           end
@@ -294,7 +291,7 @@ module ActiveHash
 
       def define_setter_method(field)
         method_name = :"#{field}="
-        unless instance_methods.include?(method_name)
+        unless instance_methods(false).include?(method_name)
           define_method(method_name) do |new_val|
             @attributes[field] = new_val
           end
@@ -305,7 +302,7 @@ module ActiveHash
 
       def define_interrogator_method(field)
         method_name = :"#{field}?"
-        unless instance_methods.include?(method_name)
+        unless instance_methods(false).include?(method_name)
           define_method(method_name) do
             send(field).present?
           end
@@ -316,7 +313,7 @@ module ActiveHash
 
       def define_custom_find_method(field_name)
         method_name = :"find_by_#{field_name}"
-        unless singleton_methods.include?(method_name)
+        unless singleton_methods(false).include?(method_name)
           the_meta_class.instance_eval do
             define_method(method_name) do |*args|
               args.extract_options!
@@ -331,9 +328,9 @@ module ActiveHash
 
       def define_custom_find_all_method(field_name)
         method_name = :"find_all_by_#{field_name}"
-        unless singleton_methods.include?(method_name)
+        unless singleton_methods(false).include?(method_name)
           the_meta_class.instance_eval do
-            unless singleton_methods.include?(method_name)
+            unless singleton_methods(false).include?(method_name)
               define_method(method_name) do |*args|
                 args.extract_options!
                 identifier = args[0]
