@@ -1,3 +1,9 @@
+2020-01-15 (v3.1.0)
+  - Add ActiveHash::Base.order method inspired by ActiveRecord [#177](https://github.com/zilkey/active_hash/pull/177)
+  - Add #to_ary to ActiveHash::Relation [#182](https://github.com/zilkey/active_hash/pull/182)
+  - Allow #find to behave like Enumerable#find if id is nil and a block is given [#183](https://github.com/zilkey/active_hash/pull/183)
+  - Delegate :sample to `records` [#189](https://github.com/zilkey/active_hash/pull/189)
+
 2019-09-28 (v3.0.0)
   - Make #where chainable [#178](https://github.com/zilkey/active_hash/pull/178)
 
