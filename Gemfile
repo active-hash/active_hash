@@ -4,7 +4,7 @@ gemspec
 
 gem 'rspec', '~> 2.2.0'
 gem 'wwtd'
-gem 'rake'
+gem 'rake', '~> 10.0'
 gem 'test-unit'
 
 if RUBY_VERSION < "2"
