@@ -215,7 +215,7 @@ describe ActiveHash, "Base" do
         {:id => 3, :name => "Mexico", :language => 'Spanish'}
       ]
     end
-    
+
     it 'returns a Relation class if conditions are provided' do
       Country.where(language: 'English').class.should == ActiveHash::Relation
     end
@@ -302,10 +302,10 @@ describe ActiveHash, "Base" do
     it "filters records for multiple symbol values" do
       expect(Country.where(:name => [:US, :Canada]).map(&:name)).to match_array(%w(US Canada))
     end
-    
+
     it 'is chainable' do
       where_relation = Country.where(language: 'English')
-      
+
       expect(where_relation.length).to eq 2
       expect(where_relation.map(&:id)).to eq([1, 2])
       chained_where_relation = where_relation.where(name: 'US')
@@ -330,7 +330,7 @@ describe ActiveHash, "Base" do
         Country.where.not
       }.should raise_error(ArgumentError)
     end
-    
+
     it 'returns a chainable Relation when conditions are passed' do
       Country.where.not(language: 'Spanish').class.should == ActiveHash::Relation
     end
@@ -533,6 +533,23 @@ describe ActiveHash, "Base" do
     end
   end
 
+  describe ".pick" do
+    before do
+      Country.data = [
+        {:id => 1, :name => "US"},
+        {:id => 2, :name => "Canada"}
+      ]
+    end
+
+    it "returns a dimensional Array of attributes values" do
+      expect(Country.pick(:id, :name)).to match_array([1,"US"])
+    end
+
+    it "returns an attribute value" do
+      expect(Country.pick(:id)).to eq 1
+    end
+  end
+
   describe ".first" do
     before do
       Country.data = [
@@ -638,11 +655,11 @@ describe ActiveHash, "Base" do
           end.should raise_error(ActiveHash::RecordNotFound, /Couldn't find Country without an ID/)
         end
       end
-      
+
       context 'and a block' do
         it 'finds the record by evaluating the block' do
           country = Country.find { |c| c.id == 1 }
-          
+
           expect(country).to be_a(Country)
           expect(country.name).to eq('US')
         end
@@ -1441,9 +1458,9 @@ describe ActiveHash, "Base" do
     end
 
   end
-  
+
   describe '.scope' do
-    context 'for query without argument' do      
+    context 'for query without argument' do
       before do
         Country.field :name
         Country.field :language
@@ -1454,22 +1471,22 @@ describe ActiveHash, "Base" do
         ]
         Country.scope :english_language, -> { where(language: 'English') }
       end
-      
+
       it 'should define a scope method' do
         expect(Country.respond_to?(:english_language)).to be_truthy
       end
-      
+
       it 'should return the query used to define the scope' do
         expect(Country.english_language).to eq Country.where(language: 'English')
       end
-      
+
       it 'should behave like the query used to define the scope' do
         expect(Country.english_language.count).to eq 2
         expect(Country.english_language.first.id).to eq 1
         expect(Country.english_language.second.id).to eq 2
       end
     end
-    
+
     context 'for query with argument' do
       before do
         Country.field :name
@@ -1481,22 +1498,22 @@ describe ActiveHash, "Base" do
         ]
         Country.scope :with_language, ->(language) { where(language: language) }
       end
-      
+
       it 'should define a scope method' do
         expect(Country.respond_to?(:with_language)).to be_truthy
       end
-      
+
       it 'should return the query used to define the scope' do
         expect(Country.with_language('English')).to eq Country.where(language: 'English')
       end
-      
+
       it 'should behave like the query used to define the scope' do
         expect(Country.with_language('English').count).to eq 2
         expect(Country.with_language('English').first.id).to eq 1
         expect(Country.with_language('English').second.id).to eq 2
       end
     end
-    
+
     context 'when scope body is not a lambda' do
       before do
         Country.field :name
@@ -1507,7 +1524,7 @@ describe ActiveHash, "Base" do
           {:id => 3, :name => "Mexico", :language => 'Spanish'}
         ]
       end
-      
+
       it 'should raise an error' do
         expect { Country.scope :invalid_scope, :not_a_callable }.to raise_error(ArgumentError, 'body needs to be callable')
       end

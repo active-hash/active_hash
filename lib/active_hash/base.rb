@@ -35,7 +35,7 @@ module ActiveHash
         filtered_records = (candidates || @records || []).reject do |record|
           match_options?(record, options)
         end
-        
+
         ActiveHash::Relation.new(@scope.klass, filtered_records, {})
       end
 
@@ -188,7 +188,7 @@ module ActiveHash
         ActiveHash::Relation.new(self, @records || [], options[:conditions] || {})
       end
 
-      delegate :where, :find, :find_by, :find_by!, :find_by_id, :count, :pluck, :first, :last, :order, to: :all
+      delegate :where, :find, :find_by, :find_by!, :find_by_id, :count, :pluck, :pick, :first, :last, :order, to: :all
 
       def transaction
         yield
@@ -388,10 +388,10 @@ module ActiveHash
       end
 
       private :mark_clean
-      
+
       def scope(name, body)
         raise ArgumentError, 'body needs to be callable' unless body.respond_to?(:call)
-        
+
         the_meta_class.instance_eval do
           define_method(name) do |*args|
             instance_exec(*args, &body)
