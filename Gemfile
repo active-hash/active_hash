@@ -4,7 +4,7 @@ gemspec
 
 gem 'rspec', '~> 2.2.0'
 gem 'wwtd'
-gem 'rake'
+gem 'rake', '~> 10.0'
 gem 'test-unit'
 
 if RUBY_VERSION < "2"
@@ -18,7 +18,7 @@ platforms :jruby do
 end
 
 platforms :ruby do
-  gem 'sqlite3', '~> 1.3.0'
+  gem 'sqlite3', '~> 1.4.0'
 end
 
 gem 'activerecord', '>= 5.0.0'
