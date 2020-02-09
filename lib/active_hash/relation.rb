@@ -12,6 +12,7 @@ module ActiveHash
       self.all_records = all_records
       self.query_hash = query_hash
       self.records_dirty = false
+      self.order_values = []
       self
     end
 
@@ -75,7 +76,14 @@ module ActiveHash
     end
 
     def reload
-      @records = filter_all_records_by_query_hash
+      filtered_records = filter_all_records_by_query_hash
+
+      if order_values.present?
+        filtered_records = filtered_records.dup if filtered_records.equal? all_records
+        order_by_args!(filtered_records)
+      end
+
+      @records = filtered_records
     end
 
     def order(*options)
@@ -83,10 +91,8 @@ module ActiveHash
       relation = where({})
       return relation if options.blank?
 
-      processed_args = preprocess_order_args(options)
       candidates = relation.dup
-
-      order_by_args!(candidates, processed_args)
+      candidates.order_values.concat preprocess_order_args(options)
 
       candidates
     end
@@ -95,12 +101,11 @@ module ActiveHash
       records.dup
     end
 
-
-    attr_reader :query_hash, :klass, :all_records, :records_dirty
+    attr_reader :query_hash, :klass, :all_records, :records_dirty, :order_values
 
     private
 
-    attr_writer :query_hash, :klass, :all_records, :records_dirty
+    attr_writer :query_hash, :klass, :all_records, :records_dirty, :order_values
 
     def records
       if @records.nil? || records_dirty
@@ -164,8 +169,8 @@ module ActiveHash
       ary.map! { |e| e.split(/\W+/) }.reverse!
     end
 
-    def order_by_args!(candidates, args)
-      args.each do |arg|
+    def order_by_args!(candidates)
+      order_values.each do |arg|
         field, dir = if arg.is_a?(Hash)
                        arg.to_a.flatten.map(&:to_sym)
                      elsif arg.is_a?(Array)
