@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 unless SKIP_ACTIVE_RECORD
-  require 'active_record'
   describe ActiveHash::Base, "active record extensions" do
 
     before do
