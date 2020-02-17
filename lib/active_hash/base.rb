@@ -218,8 +218,8 @@ module ActiveHash
         field_names << field_name
 
         add_default_value(field_name, options[:default]) if options[:default]
-        define_getter_method(field_name, options[:default])
-        define_setter_method(field_name)
+        define_getter_method(field_name, options)
+        define_setter_method(field_name) unless options[:private]
         define_interrogator_method(field_name)
         define_custom_find_method(field_name)
         define_custom_find_all_method(field_name)
@@ -279,11 +279,12 @@ module ActiveHash
         self.default_attributes[field_name] = default_value
       end
 
-      def define_getter_method(field, default_value)
+      def define_getter_method(field, options)
         unless instance_methods.include?(field.to_sym)
           define_method(field) do
-            attributes[field].nil? ? default_value : attributes[field]
+            attributes[field].nil? ? options[:default] : attributes[field]
           end
+          private field if options[:private]
         end
       end
 
