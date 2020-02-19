@@ -303,6 +303,16 @@ describe ActiveHash, "Base" do
       expect(Country.where(:name => [:US, :Canada]).map(&:name)).to match_array(%w(US Canada))
     end
 
+    it "raises an ArgumentError for args ​​not Hash" do
+      expect { Country.where([[:name, :US]]) }.to raise_error(ArgumentError)
+    end
+
+    it "raises an ForbiddenAttributesError for args unauthorized parameters" do
+      params = { name: :US }
+      allow(params).to receive(:permitted?).and_return(false)
+      expect { Country.where(params) }.to raise_error(ActiveHash::ForbiddenAttributesError)
+    end
+
     it 'is chainable' do
       where_relation = Country.where(language: 'English')
 

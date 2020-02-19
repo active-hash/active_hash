@@ -12,6 +12,9 @@ module ActiveHash
   class FileTypeMismatchError < StandardError
   end
 
+  class ForbiddenAttributesError < StandardError
+  end
+
   class Base
 
     class_attribute :_data, :dirty, :default_attributes

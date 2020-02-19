@@ -18,6 +18,12 @@ module ActiveHash
     def where(query_hash = :chain)
       return ActiveHash::Base::WhereChain.new(self) if query_hash == :chain
 
+      query_hash = sanitize_for_mass_assignment(query_hash)
+
+      unless Hash === query_hash || query_hash.nil?
+        raise ArgumentError.new "Unsupported argument type: #{query_hash.inspect} (#{query_hash.class})"
+      end
+
       self.records_dirty = true unless query_hash.nil? || query_hash.keys.empty?
       self.query_hash.merge!(query_hash || {})
       self
@@ -181,6 +187,15 @@ module ActiveHash
             a[field] <=> b[field]
           end
         end
+      end
+    end
+
+    def sanitize_for_mass_assignment(attributes)
+      if attributes.respond_to?(:permitted?)
+        raise ActiveHash::ForbiddenAttributesError unless attributes.permitted?
+        attributes.to_h
+      else
+        attributes
       end
     end
   end
