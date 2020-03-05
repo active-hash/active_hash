@@ -23,7 +23,7 @@ describe ActiveJSON::Base do
        expect(State.first.name).to match(/^New York/)
     end
 
-    it 'can load empty yaml' do
+    it 'can load empty JSON' do
       expect(Empty.first).to be_nil
     end
   end
