@@ -116,9 +116,7 @@ module ActiveHash
       end
 
       def data=(array_of_hashes)
-        mark_dirty
-        records.clear
-        reset_record_index
+        delete_all
         self._data = array_of_hashes
         if array_of_hashes
           auto_assign_fields(array_of_hashes)
