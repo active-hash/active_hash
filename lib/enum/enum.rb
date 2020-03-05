@@ -21,7 +21,7 @@ module ActiveHash
 
       def delete_all
         if @enum_accessors.present?
-          @records.each do |record|
+          records.each do |record|
             constant = constant_for(record, @enum_accessors)
             remove_const(constant) if const_defined?(constant, false)
           end
