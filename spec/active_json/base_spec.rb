@@ -46,6 +46,12 @@ describe ActiveJSON::Base do
     end
   end
 
+  describe ".create" do
+    it "does not fail when the loaded JSON was empty" do
+      Empty.create()
+    end
+  end
+
   describe ".delete_all" do
     context "when called before .all" do
       it "causes all to not load data" do
