@@ -383,6 +383,10 @@ describe ActiveHash, "Base" do
       record.last.name.should == 'Mexico'
     end
 
+    it "returns a chainable relation even if id is given" do
+      Country.where.not(id: 1).class.should == ActiveHash::Relation
+    end
+
     it "returns all records when id is nil" do
       expect(Country.where.not(:id => nil)).to eq Country.all
     end
