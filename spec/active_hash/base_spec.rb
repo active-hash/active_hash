@@ -598,9 +598,15 @@ describe ActiveHash, "Base" do
       end
 
       it "raises ActiveHash::RecordNotFound when id not found" do
-        expect do
-          Country.find(0)
-        end.to raise_error(ActiveHash::RecordNotFound, /Couldn't find Country with ID=0/)
+        expect { 
+          Country.find(0) 
+        }.to raise_error(an_instance_of(ActiveHash::RecordNotFound)
+          .and having_attributes(
+            message: "Couldn't find Country with ID=0",
+            primary_key: 'id',
+            id: 0
+          )
+        )
       end
     end
 
