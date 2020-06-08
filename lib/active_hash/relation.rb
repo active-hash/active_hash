@@ -103,7 +103,7 @@ module ActiveHash
     attr_writer :query_hash, :klass, :all_records, :records_dirty
 
     def records
-      if @records.nil? || records_dirty
+      if !defined?(@records) || @records.nil? || records_dirty
         reload
       else
         @records
