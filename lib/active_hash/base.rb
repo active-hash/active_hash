@@ -214,16 +214,24 @@ module ActiveHash
       end
 
       def field(field_name, options = {})
+        return if already_defined?(field_name)
         validate_field(field_name)
         field_names << field_name
 
         add_default_value(field_name, options[:default]) if options[:default]
         define_getter_method(field_name, options)
-        define_setter_method(field_name) unless options[:private]
-        define_interrogator_method(field_name)
+        define_setter_method(field_name, options)
+        define_interrogator_method(field_name, options)
         define_custom_find_method(field_name)
         define_custom_find_all_method(field_name)
       end
+
+      def already_defined?(field_name)
+        field_names.include?(field_name) ||
+          self.instance_methods.include?(field_name) ||
+          self.private_instance_methods.include?(field_name)
+      end
+      private :already_defined?
 
       def validate_field(field_name)
         if [:attributes].include?(field_name.to_sym)
@@ -233,7 +241,7 @@ module ActiveHash
 
       private :validate_field
 
-      def respond_to?(method_name, include_private=false)
+      def respond_to?(method_name, include_private=true)
         super ||
           begin
             config = configuration_for_custom_finder(method_name)
@@ -290,23 +298,25 @@ module ActiveHash
 
       private :define_getter_method
 
-      def define_setter_method(field)
+      def define_setter_method(field, options)
         method_name = :"#{field}="
         unless instance_methods.include?(method_name)
           define_method(method_name) do |new_val|
             @attributes[field] = new_val
           end
+          private method_name if options[:private]
         end
       end
 
       private :define_setter_method
 
-      def define_interrogator_method(field)
+      def define_interrogator_method(field, options)
         method_name = :"#{field}?"
         unless instance_methods.include?(method_name)
           define_method(method_name) do
             send(field).present?
           end
+          private method_name if options[:private]
         end
       end
 
