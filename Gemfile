@@ -2,7 +2,7 @@ source "http://rubygems.org/"
 
 gemspec
 
-gem 'rspec', '~> 2.2.0'
+gem 'rspec', '~> 3.9'
 gem 'wwtd'
 gem 'rake', '~> 10.0'
 gem 'test-unit'
