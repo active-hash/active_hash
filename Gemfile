@@ -4,7 +4,7 @@ gemspec
 
 gem 'rspec', '~> 3.9'
 gem 'wwtd'
-gem 'rake', '~> 10.0'
+gem 'rake'
 gem 'test-unit'
 gem 'json'
 
