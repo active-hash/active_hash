@@ -104,6 +104,13 @@ describe ActiveHash, "Base" do
         Country.field :attributes
       end.should raise_error(ActiveHash::ReservedFieldError)
     end
+
+    it "honors the private option" do
+      Country.data = [{:name => "US", :secret => "xxx"}, {:name => "Canada", :secret => "yyy"}]
+      Country.field :secret, :private => true
+      Country.should_not respond_to(:secret)
+      Country.first.send(:secret).should eq("xxx")
+    end
   end
 
   describe ".data=" do

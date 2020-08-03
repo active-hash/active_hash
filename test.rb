@@ -1,6 +1,12 @@
 $:.unshift 'lib'
 require 'active_hash'
 
+class Bar < ActiveHash::Base
+end
+
+Bar.field :stuff, :private => true
+
+=begin
 class Foo < ActiveHash::Base
   field :name
   field :age
@@ -27,3 +33,4 @@ f = Foo.first
 p f.name
 p f.age
 p f.stuff
+=end
