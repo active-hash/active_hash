@@ -29,14 +29,14 @@ describe ActiveYaml::Aliases do
     describe 'aliased attributes' do
       subject { model.where(:name => 'Coke').first.attributes }
 
-      it('sets strings correctly') { subject[:flavor].should == 'sweet' }
-      it('sets floats correctly') { subject[:price].should == 1.0 }
+      it('sets strings correctly') { expect(subject[:flavor]).to eq('sweet') }
+      it('sets floats correctly') { expect(subject[:price]).to eq(1.0) }
     end
 
     describe 'keys starting with "/"' do
       it 'excludes them' do
         models_including_aliases = model.all.select { |p| p.attributes.keys.include? :'/aliases' }
-        models_including_aliases.should be_empty
+        expect(models_including_aliases).to be_empty
       end
     end
   end
@@ -51,14 +51,14 @@ describe ActiveYaml::Aliases do
     describe 'aliased attributes' do
       subject { model.where(:name => 'Coke').first.attributes }
 
-      it('sets strings correctly') { subject[:flavor].should == 'sweet' }
-      it('sets floats correctly') { subject[:price].should == 1.0 }
+      it('sets strings correctly') { expect(subject[:flavor]).to eq('sweet') }
+      it('sets floats correctly') { expect(subject[:price]).to eq(1.0) }
     end
 
     describe 'keys starting with "/"' do
       it 'excludes them' do
         models_including_aliases = model.all.select { |p| p.attributes.keys.include? :'/aliases' }
-        models_including_aliases.should be_empty
+        expect(models_including_aliases).to be_empty
       end
     end
   end

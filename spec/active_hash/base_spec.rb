@@ -40,69 +40,69 @@ describe ActiveHash, "Base" do
     end
 
     it "defines a reader for each field" do
-      Country.new.should respond_to(:name)
-      Country.new.should respond_to(:iso_name)
+      expect(Country.new).to respond_to(:name)
+      expect(Country.new).to respond_to(:iso_name)
     end
 
     it "defines interrogator methods for each field" do
-      Country.new.should respond_to(:name?)
-      Country.new.should respond_to(:iso_name?)
+      expect(Country.new).to respond_to(:name?)
+      expect(Country.new).to respond_to(:iso_name?)
     end
 
     it "defines single finder methods for each field" do
-      Country.should respond_to(:find_by_name)
-      Country.should respond_to(:find_by_iso_name)
+      expect(Country).to respond_to(:find_by_name)
+      expect(Country).to respond_to(:find_by_iso_name)
     end
 
     it "defines banged single finder methods for each field" do
-      Country.should respond_to(:find_by_name!)
-      Country.should respond_to(:find_by_iso_name!)
+      expect(Country).to respond_to(:find_by_name!)
+      expect(Country).to respond_to(:find_by_iso_name!)
     end
 
     it "defines array finder methods for each field" do
-      Country.should respond_to(:find_all_by_name)
-      Country.should respond_to(:find_all_by_iso_name)
+      expect(Country).to respond_to(:find_all_by_name)
+      expect(Country).to respond_to(:find_all_by_iso_name)
     end
 
     it "does not define banged array finder methods for each field" do
-      Country.should_not respond_to(:find_all_by_name!)
-      Country.should_not respond_to(:find_all_by_iso_name!)
+      expect(Country).not_to respond_to(:find_all_by_name!)
+      expect(Country).not_to respond_to(:find_all_by_iso_name!)
     end
 
     it "defines single finder methods for all combinations of fields" do
-      Country.should respond_to(:find_by_name_and_iso_name)
-      Country.should respond_to(:find_by_iso_name_and_name)
+      expect(Country).to respond_to(:find_by_name_and_iso_name)
+      expect(Country).to respond_to(:find_by_iso_name_and_name)
     end
 
     it "defines banged single finder methods for all combinations of fields" do
-      Country.should respond_to(:find_by_name_and_iso_name!)
-      Country.should respond_to(:find_by_iso_name_and_name!)
+      expect(Country).to respond_to(:find_by_name_and_iso_name!)
+      expect(Country).to respond_to(:find_by_iso_name_and_name!)
     end
 
     it "defines array finder methods for all combinations of fields" do
-      Country.should respond_to(:find_all_by_name_and_iso_name)
-      Country.should respond_to(:find_all_by_iso_name_and_name)
+      expect(Country).to respond_to(:find_all_by_name_and_iso_name)
+      expect(Country).to respond_to(:find_all_by_iso_name_and_name)
     end
 
     it "does not define banged array finder methods for all combinations of fields" do
-      Country.should_not respond_to(:find_all_by_name_and_iso_name!)
-      Country.should_not respond_to(:find_all_by_iso_name_and_name!)
+      expect(Country).not_to respond_to(:find_all_by_name_and_iso_name!)
+      expect(Country).not_to respond_to(:find_all_by_iso_name_and_name!)
     end
 
     it "allows you to pass options to the built-in find_by_* methods (but ignores the hash for now)" do
-      Country.find_by_name("Canada", :select => nil).should be_nil
-      Country.find_all_by_name("Canada", :select => nil).should == []
+      expect(Country.find_by_name("Canada", :select => nil)).to be_nil
+      expect(Country.find_all_by_name("Canada", :select => nil)).to eq([])
     end
 
     it "allows you to pass options to the custom find_by_* methods (but ignores the hash for now)" do
-      Country.find_by_name_and_iso_name("Canada", "CA", :select => nil).should be_nil
-      Country.find_all_by_name_and_iso_name("Canada", "CA", :select => nil).should == []
+      expect(Country.find_by_name_and_iso_name("Canada", "CA", :select => nil)).to be_nil
+      expect(Country.find_all_by_name_and_iso_name("Canada", "CA", :select => nil)).to eq([])
     end
 
     it "blows up if you try to overwrite :attributes" do
-      proc do
+      expect do
         Country.field :attributes
-      end.should raise_error(ActiveHash::ReservedFieldError)
+      end.to raise_error(ActiveHash::ReservedFieldError)
     end
   end
 
@@ -115,21 +115,21 @@ describe ActiveHash, "Base" do
 
     it "populates the object with data and auto-assigns keys" do
       Country.data = [{:name => "US"}, {:name => "Canada"}]
-      Country.data.should == [{:name => "US", :id => 1}, {:name => "Canada", :id => 2}]
+      expect(Country.data).to eq([{:name => "US", :id => 1}, {:name => "Canada", :id => 2}])
     end
 
     it "allows each of it's subclasses to have it's own data" do
       Country.data = [{:name => "US"}, {:name => "Canada"}]
       Region.data = [{:description => "A big region"}, {:description => "A remote region"}]
 
-      Country.data.should == [{:name => "US", :id => 1}, {:name => "Canada", :id => 2}]
-      Region.data.should == [{:description => "A big region", :id => 1}, {:description => "A remote region", :id => 2}]
+      expect(Country.data).to eq([{:name => "US", :id => 1}, {:name => "Canada", :id => 2}])
+      expect(Region.data).to eq([{:description => "A big region", :id => 1}, {:description => "A remote region", :id => 2}])
     end
 
     it "marks the class as dirty" do
-      Country.dirty.should be_falsey
+      expect(Country.dirty).to be_falsey
       Country.data = []
-      Country.dirty.should be_truthy
+      expect(Country.dirty).to be_truthy
     end
   end
 
@@ -139,25 +139,25 @@ describe ActiveHash, "Base" do
     end
 
     it "adds a record" do
-      proc {
+      expect {
         Country.add :name => "Russia"
-      }.should change { Country.count }
+      }.to change { Country.count }
     end
 
     it "marks the class as dirty" do
-      Country.dirty.should be_falsey
+      expect(Country.dirty).to be_falsey
       Country.add :name => "Russia"
-      Country.dirty.should be_truthy
+      expect(Country.dirty).to be_truthy
     end
 
     it "returns the record" do
       record = Country.add :name => "Russia"
-      record.name.should == "Russia"
+      expect(record.name).to eq("Russia")
     end
 
     it "should populate the id" do
       record = Country.add :name => "Russia"
-      record.id.should_not be_nil
+      expect(record.id).not_to be_nil
     end
   end
 
@@ -172,19 +172,19 @@ describe ActiveHash, "Base" do
 
     it "returns an empty array if data is nil" do
       Country.data = nil
-      Country.all.should be_empty
+      expect(Country.all).to be_empty
     end
 
     it "returns all data as inflated objects" do
-      Country.all.all? { |country| country.should be_kind_of(Country) }
+      Country.all.all? { |country| expect(country).to be_kind_of(Country) }
     end
 
     it "populates the data correctly" do
       records = Country.all
-      records.first.id.should == 1
-      records.first.name.should == "US"
-      records.last.id.should == 2
-      records.last.name.should == "Canada"
+      expect(records.first.id).to eq(1)
+      expect(records.first.name).to eq("US")
+      expect(records.last.id).to eq(2)
+      expect(records.last.name).to eq("Canada")
     end
 
     it "re-populates the records after data= is called" do
@@ -192,16 +192,16 @@ describe ActiveHash, "Base" do
         {:id => 45, :name => "Canada"}
       ]
       records = Country.all
-      records.first.id.should == 45
-      records.first.name.should == "Canada"
-      records.length.should == 1
+      expect(records.first.id).to eq(45)
+      expect(records.first.name).to eq("Canada")
+      expect(records.length).to eq(1)
     end
 
     it "filters the records from a AR-like conditions hash" do
       record = Country.all(:conditions => {:name => 'US'})
-      record.count.should == 1
-      record.first.id.should == 1
-      record.first.name.should == 'US'
+      expect(record.count).to eq(1)
+      expect(record.first.id).to eq(1)
+      expect(record.first.name).to eq('US')
     end
   end
 
@@ -217,31 +217,31 @@ describe ActiveHash, "Base" do
     end
 
     it 'returns a Relation class if conditions are provided' do
-      Country.where(language: 'English').class.should == ActiveHash::Relation
+      expect(Country.where(language: 'English').class).to eq(ActiveHash::Relation)
     end
 
     it "returns WhereChain class if no conditions are provided" do
-      Country.where.class.should == ActiveHash::Base::WhereChain
+      expect(Country.where.class).to eq(ActiveHash::Base::WhereChain)
     end
 
     it "returns all records when passed nil" do
-      Country.where(nil).should == Country.all
+      expect(Country.where(nil)).to eq(Country.all)
     end
 
     it "returns all records when an empty hash" do
-      Country.where({}).should == Country.all
+      expect(Country.where({})).to eq(Country.all)
     end
 
     it "returns all data as inflated objects" do
-      Country.where(:language => 'English').all? { |country| country.should be_kind_of(Country) }
+      Country.where(:language => 'English').all? { |country| expect(country).to be_kind_of(Country) }
     end
 
     it "populates the data correctly" do
       records = Country.where(:language => 'English')
-      records.first.id.should == 1
-      records.first.name.should == "US"
-      records.last.id.should == 2
-      records.last.name.should == "Canada"
+      expect(records.first.id).to eq(1)
+      expect(records.first.name).to eq("US")
+      expect(records.last.id).to eq(2)
+      expect(records.last.name).to eq("Canada")
     end
 
     it "re-populates the records after data= is called" do
@@ -249,32 +249,32 @@ describe ActiveHash, "Base" do
         {:id => 45, :name => "Canada"}
       ]
       records = Country.where(:name => 'Canada')
-      records.first.id.should == 45
-      records.first.name.should == "Canada"
-      records.length.should == 1
+      expect(records.first.id).to eq(45)
+      expect(records.first.name).to eq("Canada")
+      expect(records.length).to eq(1)
     end
 
     it "filters the records from a AR-like conditions hash" do
       record = Country.where(:name => 'US')
-      record.count.should == 1
-      record.first.id.should == 1
-      record.first.name.should == 'US'
+      expect(record.count).to eq(1)
+      expect(record.first.id).to eq(1)
+      expect(record.first.name).to eq('US')
     end
 
     it "raises an error if ids aren't unique" do
-      proc do
+      expect do
         Country.data = [
           {:id => 1, :name => "US", :language => 'English'},
           {:id => 2, :name => "Canada", :language => 'English'},
           {:id => 2, :name => "Mexico", :language => 'Spanish'}
         ]
-      end.should raise_error(ActiveHash::IdError)
+      end.to raise_error(ActiveHash::IdError)
     end
 
     it "returns a record for specified id" do
       record = Country.where(id: 1)
-      record.first.id.should == 1
-      record.first.name.should == 'US'
+      expect(record.first.id).to eq(1)
+      expect(record.first.name).to eq('US')
     end
 
     it "returns empty array" do
@@ -326,34 +326,34 @@ describe ActiveHash, "Base" do
     end
 
     it "raises ArgumentError if no conditions are provided" do
-      lambda{
+      expect{
         Country.where.not
-      }.should raise_error(ArgumentError)
+      }.to raise_error(ArgumentError)
     end
 
     it 'returns a chainable Relation when conditions are passed' do
-      Country.where.not(language: 'Spanish').class.should == ActiveHash::Relation
+      expect(Country.where.not(language: 'Spanish').class).to eq(ActiveHash::Relation)
     end
 
     it "returns all records when passed nil" do
-      Country.where.not(nil).should == Country.all
+      expect(Country.where.not(nil)).to eq(Country.all)
     end
 
     it "returns all records when an empty hash" do
-      Country.where.not({}).should == Country.all
+      expect(Country.where.not({})).to eq(Country.all)
     end
 
     it "returns all records as inflated objects" do
-      Country.where.not(:language => 'English').all? { |country| country.should be_kind_of(Country) }
+      Country.where.not(:language => 'English').all? { |country| expect(country).to be_kind_of(Country) }
     end
 
     it "populates the records correctly" do
       records = Country.where.not(:language => 'Spanish')
-      records.first.id.should == 1
-      records.first.name.should == "US"
-      records.last.id.should == 2
-      records.last.name.should == "Canada"
-      records.length.should == 2
+      expect(records.first.id).to eq(1)
+      expect(records.first.name).to eq("US")
+      expect(records.last.id).to eq(2)
+      expect(records.last.name).to eq("Canada")
+      expect(records.length).to eq(2)
     end
 
     it "re-populates the records after data= is called" do
@@ -361,26 +361,26 @@ describe ActiveHash, "Base" do
         {:id => 45, :name => "Canada"}
       ]
       records = Country.where.not(:name => "US")
-      records.first.id.should == 45
-      records.first.name.should == "Canada"
-      records.length.should == 1
+      expect(records.first.id).to eq(45)
+      expect(records.first.name).to eq("Canada")
+      expect(records.length).to eq(1)
     end
 
     it "filters the records from a AR-like conditions hash" do
       record = Country.where.not(:name => 'US')
-      record.first.id.should == 2
-      record.first.name.should == 'Canada'
-      record.last.id.should == 3
-      record.last.name.should == 'Mexico'
-      record.length.should == 2
+      expect(record.first.id).to eq(2)
+      expect(record.first.name).to eq('Canada')
+      expect(record.last.id).to eq(3)
+      expect(record.last.name).to eq('Mexico')
+      expect(record.length).to eq(2)
     end
 
     it "returns the records for NOT specified id" do
       record = Country.where.not(id: 1)
-      record.first.id.should == 2
-      record.first.name.should == 'Canada'
-      record.last.id.should == 3
-      record.last.name.should == 'Mexico'
+      expect(record.first.id).to eq(2)
+      expect(record.first.name).to eq('Canada')
+      expect(record.last.id).to eq(3)
+      expect(record.last.name).to eq('Mexico')
     end
 
     it "returns all records when id is nil" do
@@ -416,23 +416,23 @@ describe ActiveHash, "Base" do
     end
 
     it "raises ArgumentError if no conditions are provided" do
-      lambda{
+      expect{
         Country.find_by
-      }.should raise_error(ArgumentError)
+      }.to raise_error(ArgumentError)
     end
 
     it "returns first record when passed nil" do
-      Country.find_by(nil).should == Country.first
+      expect(Country.find_by(nil)).to eq(Country.first)
     end
 
     it "returns all data as inflated objects" do
-      Country.find_by(:language => 'English').should be_kind_of(Country)
+      expect(Country.find_by(:language => 'English')).to be_kind_of(Country)
     end
 
     it "populates the data correctly" do
       record = Country.find_by(:language => 'English')
-      record.id.should == 1
-      record.name.should == "US"
+      expect(record.id).to eq(1)
+      expect(record.name).to eq("US")
     end
 
     it "re-populates the records after data= is called" do
@@ -440,19 +440,19 @@ describe ActiveHash, "Base" do
         {:id => 45, :name => "Canada"}
       ]
       record = Country.find_by(:name => 'Canada')
-      record.id.should == 45
-      record.name.should == "Canada"
+      expect(record.id).to eq(45)
+      expect(record.name).to eq("Canada")
     end
 
     it "filters the records from a AR-like conditions hash" do
       record = Country.find_by(:name => 'US')
-      record.id.should == 1
-      record.name.should == 'US'
+      expect(record.id).to eq(1)
+      expect(record.name).to eq('US')
     end
 
     it "finds the record with the specified id as a string" do
       record = Country.find_by(:id => '1')
-      record.name.should == 'US'
+      expect(record.name).to eq('US')
     end
 
     it "returns the record that matches options" do
@@ -512,7 +512,7 @@ describe ActiveHash, "Base" do
     end
 
     it "returns the number of elements in the array" do
-      Country.count.should == 2
+      expect(Country.count).to eq(2)
     end
   end
 
@@ -559,7 +559,7 @@ describe ActiveHash, "Base" do
     end
 
     it "returns the first object" do
-      Country.first.should == Country.new(:id => 1)
+      expect(Country.first).to eq(Country.new(:id => 1))
     end
   end
 
@@ -572,7 +572,7 @@ describe ActiveHash, "Base" do
     end
 
     it "returns the last object" do
-      Country.last.should == Country.new(:id => 2)
+      expect(Country.last).to eq(Country.new(:id => 2))
     end
   end
 
@@ -586,44 +586,44 @@ describe ActiveHash, "Base" do
 
     context "with an id" do
       it "finds the record with the specified id" do
-        Country.find(2).id.should == 2
+        expect(Country.find(2).id).to eq(2)
       end
 
       it "finds the record with the specified id as a string" do
-        Country.find("2").id.should == 2
+        expect(Country.find("2").id).to eq(2)
       end
 
       it "raises ActiveHash::RecordNotFound when id not found" do
-        proc do
+        expect do
           Country.find(0)
-        end.should raise_error(ActiveHash::RecordNotFound, /Couldn't find Country with ID=0/)
+        end.to raise_error(ActiveHash::RecordNotFound, /Couldn't find Country with ID=0/)
       end
     end
 
     context "with :all" do
       it "returns all records" do
-        Country.find(:all).should == [Country.new(:id => 1), Country.new(:id => 2)]
+        expect(Country.find(:all)).to eq([Country.new(:id => 1), Country.new(:id => 2)])
       end
     end
 
     context "with :first" do
       it "returns the first record" do
-        Country.find(:first).should == Country.new(:id => 1)
+        expect(Country.find(:first)).to eq(Country.new(:id => 1))
       end
 
       it "returns the first record that matches the search criteria" do
-        Country.find(:first, :conditions => {:id => 2}).should == Country.new(:id => 2)
+        expect(Country.find(:first, :conditions => {:id => 2})).to eq(Country.new(:id => 2))
       end
 
       it "returns nil if none matches the search criteria" do
-        Country.find(:first, :conditions => {:id => 3}).should == nil
+        expect(Country.find(:first, :conditions => {:id => 3})).to eq(nil)
       end
     end
 
     context "with 2 arguments" do
       it "returns the record with the given id and ignores the conditions" do
-        Country.find(1, :conditions => "foo=bar").should == Country.new(:id => 1)
-        Country.find(:all, :conditions => "foo=bar").length.should == 2
+        expect(Country.find(1, :conditions => "foo=bar")).to eq(Country.new(:id => 1))
+        expect(Country.find(:all, :conditions => "foo=bar").length).to eq(2)
       end
     end
 
@@ -637,22 +637,22 @@ describe ActiveHash, "Base" do
       end
 
       it "returns all matching ids" do
-        Country.find([1, 3]).should == [Country.new(:id => 1), Country.new(:id => 3)]
+        expect(Country.find([1, 3])).to eq([Country.new(:id => 1), Country.new(:id => 3)])
       end
 
       it "raises ActiveHash::RecordNotFound when id not found" do
-        proc do
+        expect do
           Country.find([0, 3])
-        end.should raise_error(ActiveHash::RecordNotFound, /Couldn't find Country with ID=0/)
+        end.to raise_error(ActiveHash::RecordNotFound, /Couldn't find Country with ID=0/)
       end
     end
 
     context "with nil" do
       context 'and no block' do
         it "raises ActiveHash::RecordNotFound when id is nil" do
-          proc do
+          expect do
             Country.find(nil)
-          end.should raise_error(ActiveHash::RecordNotFound, /Couldn't find Country without an ID/)
+          end.to raise_error(ActiveHash::RecordNotFound, /Couldn't find Country without an ID/)
         end
       end
 
@@ -677,11 +677,11 @@ describe ActiveHash, "Base" do
 
     context "with an id" do
       it "finds the record with the specified id" do
-        Country.find_by_id(2).id.should == 2
+        expect(Country.find_by_id(2).id).to eq(2)
       end
 
       it "finds the record with the specified id as a string" do
-        Country.find_by_id("2").id.should == 2
+        expect(Country.find_by_id("2").id).to eq(2)
       end
     end
 
@@ -694,19 +694,19 @@ describe ActiveHash, "Base" do
       end
 
       it "finds the record with the specified id" do
-        Country.find_by_id("abc").id.should == "abc"
+        expect(Country.find_by_id("abc").id).to eq("abc")
       end
     end
 
     context "with nil" do
       it "returns nil" do
-        Country.find_by_id(nil).should be_nil
+        expect(Country.find_by_id(nil)).to be_nil
       end
     end
 
     context "with an id not present" do
       it "returns nil" do
-        Country.find_by_id(4567).should be_nil
+        expect(Country.find_by_id(4567)).to be_nil
       end
     end
   end
@@ -728,13 +728,13 @@ describe ActiveHash, "Base" do
       describe "with a match" do
         context "for a non-nil argument" do
           it "returns the first matching record" do
-            Country.find_by_name("US").id.should == 12
+            expect(Country.find_by_name("US").id).to eq(12)
           end
         end
 
         context "for a nil argument" do
           it "returns the first matching record" do
-            Country.find_by_name(nil).id.should == 11
+            expect(Country.find_by_name(nil).id).to eq(11)
           end
         end
       end
@@ -746,13 +746,13 @@ describe ActiveHash, "Base" do
 
         context "for a non-nil argument" do
           it "returns nil" do
-            Country.find_by_name("Mexico").should be_nil
+            expect(Country.find_by_name("Mexico")).to be_nil
           end
         end
 
         context "for a nil argument" do
           it "returns nil" do
-            Country.find_by_name(nil).should be_nil
+            expect(Country.find_by_name(nil)).to be_nil
           end
         end
       end
@@ -762,13 +762,13 @@ describe ActiveHash, "Base" do
       describe "with a match" do
         context "for a non-nil argument" do
           it "returns the first matching record" do
-            Country.find_by_name!("US").id.should == 12
+            expect(Country.find_by_name!("US").id).to eq(12)
           end
         end
 
         context "for a nil argument" do
           it "returns the first matching record" do
-            Country.find_by_name!(nil).id.should == 11
+            expect(Country.find_by_name!(nil).id).to eq(11)
           end
         end
       end
@@ -780,13 +780,13 @@ describe ActiveHash, "Base" do
 
         context "for a non-nil argument" do
           it "raises ActiveHash::RecordNotFound" do
-            lambda { Country.find_by_name!("Mexico") }.should raise_error(ActiveHash::RecordNotFound, /Couldn't find Country with name = Mexico/)
+            expect { Country.find_by_name!("Mexico") }.to raise_error(ActiveHash::RecordNotFound, /Couldn't find Country with name = Mexico/)
           end
         end
 
         context "for a nil argument" do
           it "raises ActiveHash::RecordNotFound" do
-            lambda { Country.find_by_name!(nil) }.should raise_error(ActiveHash::RecordNotFound, /Couldn't find Country with name = /)
+            expect { Country.find_by_name!(nil) }.to raise_error(ActiveHash::RecordNotFound, /Couldn't find Country with name = /)
           end
         end
       end
@@ -796,15 +796,15 @@ describe ActiveHash, "Base" do
       describe "with matches" do
         it "returns all matching records" do
           countries = Country.find_all_by_monarch("The Crown of England")
-          countries.length.should == 2
-          countries.first.name.should == "Canada"
-          countries.last.name.should == "UK"
+          expect(countries.length).to eq(2)
+          expect(countries.first.name).to eq("Canada")
+          expect(countries.last.name).to eq("UK")
         end
       end
 
       describe "without matches" do
         it "returns an empty array" do
-          Country.find_all_by_name("Mexico").should be_empty
+          expect(Country.find_all_by_name("Mexico")).to be_empty
         end
       end
     end
@@ -812,28 +812,28 @@ describe ActiveHash, "Base" do
     describe "find_by_<field_one>_and_<field_two>" do
       describe "with a match" do
         it "returns the first matching record" do
-          Country.find_by_name_and_monarch("Canada", "The Crown of England").id.should == 13
-          Country.find_by_monarch_and_name("The Crown of England", "Canada").id.should == 13
+          expect(Country.find_by_name_and_monarch("Canada", "The Crown of England").id).to eq(13)
+          expect(Country.find_by_monarch_and_name("The Crown of England", "Canada").id).to eq(13)
         end
       end
 
       describe "with a match based on to_s" do
         it "returns the first matching record" do
-          Country.find_by_name_and_id("Canada", "13").id.should == 13
+          expect(Country.find_by_name_and_id("Canada", "13").id).to eq(13)
         end
       end
 
       describe "without a match" do
         it "returns nil" do
-          Country.find_by_name_and_monarch("US", "The Crown of England").should be_nil
+          expect(Country.find_by_name_and_monarch("US", "The Crown of England")).to be_nil
         end
       end
 
       describe "for fields the class doesn't have" do
         it "raises a NoMethodError" do
-          lambda {
+          expect {
             Country.find_by_name_and_shoe_size("US", 10)
-          }.should raise_error(NoMethodError, /undefined method `find_by_name_and_shoe_size' (?:for|on) Country/)
+          }.to raise_error(NoMethodError, /undefined method `find_by_name_and_shoe_size' (?:for|on) Country/)
         end
       end
     end
@@ -841,28 +841,28 @@ describe ActiveHash, "Base" do
     describe "find_by_<field_one>_and_<field_two>!" do
       describe "with a match" do
         it "returns the first matching record" do
-          Country.find_by_name_and_monarch!("Canada", "The Crown of England").id.should == 13
-          Country.find_by_monarch_and_name!("The Crown of England", "Canada").id.should == 13
+          expect(Country.find_by_name_and_monarch!("Canada", "The Crown of England").id).to eq(13)
+          expect(Country.find_by_monarch_and_name!("The Crown of England", "Canada").id).to eq(13)
         end
       end
 
       describe "with a match based on to_s" do
         it "returns the first matching record" do
-          Country.find_by_name_and_id!("Canada", "13").id.should == 13
+          expect(Country.find_by_name_and_id!("Canada", "13").id).to eq(13)
         end
       end
 
       describe "without a match" do
         it "raises ActiveHash::RecordNotFound" do
-          lambda { Country.find_by_name_and_monarch!("US", "The Crown of England") }.should raise_error(ActiveHash::RecordNotFound, /Couldn't find Country with name = US, monarch = The Crown of England/)
+          expect { Country.find_by_name_and_monarch!("US", "The Crown of England") }.to raise_error(ActiveHash::RecordNotFound, /Couldn't find Country with name = US, monarch = The Crown of England/)
         end
       end
 
       describe "for fields the class doesn't have" do
         it "raises a NoMethodError" do
-          lambda {
+          expect {
             Country.find_by_name_and_shoe_size!("US", 10)
-          }.should raise_error(NoMethodError, /undefined method `find_by_name_and_shoe_size!' (?:for|on) Country/)
+          }.to raise_error(NoMethodError, /undefined method `find_by_name_and_shoe_size!' (?:for|on) Country/)
         end
       end
     end
@@ -871,15 +871,15 @@ describe ActiveHash, "Base" do
       describe "with matches" do
         it "returns all matching records" do
           countries = Country.find_all_by_monarch_and_language("The Crown of England", "English")
-          countries.length.should == 2
-          countries.first.name.should == "Canada"
-          countries.last.name.should == "UK"
+          expect(countries.length).to eq(2)
+          expect(countries.first.name).to eq("Canada")
+          expect(countries.last.name).to eq("UK")
         end
       end
 
       describe "without matches" do
         it "returns an empty array" do
-          Country.find_all_by_monarch_and_language("Shaka Zulu", "Zulu").should be_empty
+          expect(Country.find_all_by_monarch_and_language("Shaka Zulu", "Zulu")).to be_empty
         end
       end
     end
@@ -961,9 +961,9 @@ describe ActiveHash, "Base" do
 
   describe "#method_missing" do
     it "doesn't blow up if you call a missing dynamic finder when fields haven't been set" do
-      proc do
+      expect do
         Country.find_by_name("Foo")
-      end.should raise_error(NoMethodError, /undefined method `find_by_name' (?:for|on) Country/)
+      end.to raise_error(NoMethodError, /undefined method `find_by_name' (?:for|on) Country/)
     end
   end
 
@@ -971,38 +971,38 @@ describe ActiveHash, "Base" do
     it "returns the hash passed in the initializer" do
       Country.field :foo
       country = Country.new(:foo => :bar)
-      country.attributes.should == {:foo => :bar}
+      expect(country.attributes).to eq({:foo => :bar})
     end
 
     it "symbolizes keys" do
       Country.field :foo
       country = Country.new("foo" => :bar)
-      country.attributes.should == {:foo => :bar}
+      expect(country.attributes).to eq({:foo => :bar})
     end
 
     it "works with #[]" do
       Country.field :foo
       country = Country.new(:foo => :bar)
-      country[:foo].should == :bar
+      expect(country[:foo]).to eq(:bar)
     end
 
     it "works with _read_attribute" do
       Country.field :foo
       country = Country.new(:foo => :bar)
-      country._read_attribute(:foo).should == :bar
+      expect(country._read_attribute(:foo)).to eq(:bar)
     end
 
     it "works with read_attribute" do
       Country.field :foo
       country = Country.new(:foo => :bar)
-      country.read_attribute(:foo).should == :bar
+      expect(country.read_attribute(:foo)).to eq(:bar)
     end
 
     it "works with #[]=" do
       Country.field :foo
       country = Country.new
       country[:foo] = :bar
-      country.foo.should == :bar
+      expect(country.foo).to eq(:bar)
     end
   end
 
@@ -1014,12 +1014,12 @@ describe ActiveHash, "Base" do
 
       it "returns the given attribute when present" do
         country = Country.new(:name => "Spain")
-        country.name.should == "Spain"
+        expect(country.name).to eq("Spain")
       end
 
       it "returns nil when not present" do
         country = Country.new
-        country.name.should be_nil
+        expect(country.name).to be_nil
       end
     end
 
@@ -1030,18 +1030,18 @@ describe ActiveHash, "Base" do
 
       it "returns the given attribute when present" do
         country = Country.new(:name => "Spain")
-        country.name.should == "Spain"
+        expect(country.name).to eq("Spain")
       end
 
       it "returns the default value when not present" do
         country = Country.new
-        country.name.should == "foobar"
+        expect(country.name).to eq("foobar")
       end
 
       context "#attributes" do
         it "returns the default value when not present" do
           country = Country.new
-          country.attributes[:name].should == "foobar"
+          expect(country.attributes[:name]).to eq("foobar")
         end
       end
     end
@@ -1054,17 +1054,17 @@ describe ActiveHash, "Base" do
 
     it "returns true if the given attribute is non-blank" do
       country = Country.new(:name => "Spain")
-      country.should be_name
+      expect(country).to be_name
     end
 
     it "returns false if the given attribute is blank" do
       country = Country.new(:name => " ")
-      country.name?.should == false
+      expect(country.name?).to eq(false)
     end
 
     it "returns false if the given attribute was not passed" do
       country = Country.new
-      country.should_not be_name
+      expect(country).not_to be_name
     end
   end
 
@@ -1072,40 +1072,40 @@ describe ActiveHash, "Base" do
     context "when not passed an id" do
       it "returns nil" do
         country = Country.new
-        country.id.should be_nil
+        expect(country.id).to be_nil
       end
     end
   end
 
   describe "#quoted_id" do
     it "should return id" do
-      Country.new(:id => 2).quoted_id.should == 2
+      expect(Country.new(:id => 2).quoted_id).to eq(2)
     end
   end
 
   describe "#to_param" do
     it "should return id as a string" do
-      Country.create(:id => 2).to_param.should == "2"
+      expect(Country.create(:id => 2).to_param).to eq("2")
     end
   end
 
   describe "#persisted" do
     it "should return true if the object has been saved" do
-      Country.create(:id => 2).should be_persisted
+      expect(Country.create(:id => 2)).to be_persisted
     end
 
     it "should return false if the object has not been saved" do
-      Country.new(:id => 2).should_not be_persisted
+      expect(Country.new(:id => 2)).not_to be_persisted
     end
   end
 
   describe "#persisted" do
     it "should return true if the object has been saved" do
-      Country.create(:id => 2).should be_persisted
+      expect(Country.create(:id => 2)).to be_persisted
     end
 
     it "should return false if the object has not been saved" do
-      Country.new(:id => 2).should_not be_persisted
+      expect(Country.new(:id => 2)).not_to be_persisted
     end
   end
 
@@ -1116,19 +1116,19 @@ describe ActiveHash, "Base" do
     end
 
     it "should return true with the same class and id" do
-      Country.new(:id => 23).eql?(Country.new(:id => 23)).should be_truthy
+      expect(Country.new(:id => 23).eql?(Country.new(:id => 23))).to be_truthy
     end
 
     it "should return false with the same class and different ids" do
-      Country.new(:id => 24).eql?(Country.new(:id => 23)).should be_falsey
+      expect(Country.new(:id => 24).eql?(Country.new(:id => 23))).to be_falsey
     end
 
     it "should return false with the different classes and the same id" do
-      Country.new(:id => 23).eql?(Region.new(:id => 23)).should be_falsey
+      expect(Country.new(:id => 23).eql?(Region.new(:id => 23))).to be_falsey
     end
 
     it "returns false when id is nil" do
-      Country.new.eql?(Country.new).should be_falsey
+      expect(Country.new.eql?(Country.new)).to be_falsey
     end
   end
 
@@ -1139,37 +1139,37 @@ describe ActiveHash, "Base" do
     end
 
     it "should return true with the same class and id" do
-      Country.new(:id => 23).should == Country.new(:id => 23)
+      expect(Country.new(:id => 23)).to eq(Country.new(:id => 23))
     end
 
     it "should return false with the same class and different ids" do
-      Country.new(:id => 24).should_not == Country.new(:id => 23)
+      expect(Country.new(:id => 24)).not_to eq(Country.new(:id => 23))
     end
 
     it "should return false with the different classes and the same id" do
-      Country.new(:id => 23).should_not == Region.new(:id => 23)
+      expect(Country.new(:id => 23)).not_to eq(Region.new(:id => 23))
     end
 
     it "returns false when id is nil" do
-      Country.new.should_not == Country.new
+      expect(Country.new).not_to eq(Country.new)
     end
   end
 
   describe "#hash" do
     it "returns id for hash" do
-      Country.new(:id => 45).hash.should == 45.hash
-      Country.new.hash.should == nil.hash
+      expect(Country.new(:id => 45).hash).to eq(45.hash)
+      expect(Country.new.hash).to eq(nil.hash)
     end
 
     it "is hashable" do
-      {Country.new(:id => 4) => "bar"}.should == {Country.new(:id => 4) => "bar"}
-      {Country.new(:id => 3) => "bar"}.should_not == {Country.new(:id => 4) => "bar"}
+      expect({Country.new(:id => 4) => "bar"}).to eq({Country.new(:id => 4) => "bar"})
+      expect({Country.new(:id => 3) => "bar"}).not_to eq({Country.new(:id => 4) => "bar"})
     end
   end
 
   describe "#readonly?" do
     it "returns true" do
-      Country.new.should be_readonly
+      expect(Country.new).to be_readonly
     end
   end
 
@@ -1182,10 +1182,10 @@ describe ActiveHash, "Base" do
       ]
 
       [:field1, :field2, :field3].each do |field|
-        Country.should respond_to("find_by_#{field}")
-        Country.should respond_to("find_all_by_#{field}")
-        Country.new.should respond_to(field)
-        Country.new.should respond_to("#{field}?")
+        expect(Country).to respond_to("find_by_#{field}")
+        expect(Country).to respond_to("find_all_by_#{field}")
+        expect(Country.new).to respond_to(field)
+        expect(Country.new).to respond_to("#{field}?")
       end
     end
 
@@ -1210,20 +1210,20 @@ describe ActiveHash, "Base" do
         end
       end
 
-      Country.find_by_name("foo").should == "find_by_name defined manually"
-      Country.find_all_by_name("foo").should == "find_all_by_name defined manually"
-      Country.new.name.should == "name defined manually"
-      Country.new.name?.should == "name? defined manually"
+      expect(Country.find_by_name("foo")).to eq("find_by_name defined manually")
+      expect(Country.find_all_by_name("foo")).to eq("find_all_by_name defined manually")
+      expect(Country.new.name).to eq("name defined manually")
+      expect(Country.new.name?).to eq("name? defined manually")
 
       Country.data = [
         {:name => "foo"}
       ]
 
       Country.all
-      Country.find_by_name("foo").should == "find_by_name defined manually"
-      Country.find_all_by_name("foo").should == "find_all_by_name defined manually"
-      Country.new.name.should == "name defined manually"
-      Country.new.name?.should == "name? defined manually"
+      expect(Country.find_by_name("foo")).to eq("find_by_name defined manually")
+      expect(Country.find_all_by_name("foo")).to eq("find_all_by_name defined manually")
+      expect(Country.new.name).to eq("name defined manually")
+      expect(Country.new.name?).to eq("name? defined manually")
     end
   end
 
@@ -1252,13 +1252,13 @@ describe ActiveHash, "Base" do
     it "should be possible to use it as a parent" do
       book = Book.new
       book.country = Country.first
-      book.country.should == Country.first
+      expect(book.country).to eq(Country.first)
     end
 
     it "should be possible to use it as a polymorphic parent" do
       book = Book.new
       book.subject = Country.first
-      book.subject.should == Country.first
+      expect(book.subject).to eq(Country.first)
     end
 
   end
@@ -1269,7 +1269,7 @@ describe ActiveHash, "Base" do
         {:id => 1, :name => "foo"}
       ]
 
-      Country.first.cache_key.should == 'countries/1'
+      expect(Country.first.cache_key).to eq('countries/1')
     end
 
     it 'should use the record\'s updated_at if present' do
@@ -1279,11 +1279,11 @@ describe ActiveHash, "Base" do
         {:id => 1, :name => "foo", :updated_at => timestamp}
       ]
 
-      Country.first.cache_key.should == "countries/1-#{timestamp.to_s(:number)}"
+      expect(Country.first.cache_key).to eq("countries/1-#{timestamp.to_s(:number)}")
     end
 
     it 'should use "new" instead of the id for a new record' do
-      Country.new(:id => 1).cache_key.should == 'countries/new'
+      expect(Country.new(:id => 1).cache_key).to eq('countries/new')
     end
   end
 
@@ -1294,33 +1294,33 @@ describe ActiveHash, "Base" do
     end
 
     it "adds the new object to the data collection" do
-      Country.all.should be_empty
+      expect(Country.all).to be_empty
       country = Country.new :id => 1, :name => "foo"
-      country.save.should be_truthy
-      Country.all.should == [country]
+      expect(country.save).to be_truthy
+      expect(Country.all).to eq([country])
     end
 
     it "adds the new object to the data collection" do
-      Country.all.should be_empty
+      expect(Country.all).to be_empty
       country = Country.new :id => 1, :name => "foo"
-      country.save!.should be_truthy
-      Country.all.should == [country]
+      expect(country.save!).to be_truthy
+      expect(Country.all).to eq([country])
     end
 
     it "marks the class as dirty" do
-      Country.dirty.should be_falsey
+      expect(Country.dirty).to be_falsey
       Country.new(:id => 1, :name => "foo").save
-      Country.dirty.should be_truthy
+      expect(Country.dirty).to be_truthy
     end
 
     it "it is a no-op if the object has already been added to the collection" do
-      Country.all.should be_empty
+      expect(Country.all).to be_empty
       country = Country.new :id => 1, :name => "foo"
       country.save
       country.name = "bar"
       country.save
       country.save!
-      Country.all.should == [country]
+      expect(Country.all).to eq([country])
     end
 
   end
@@ -1332,57 +1332,57 @@ describe ActiveHash, "Base" do
     end
 
     it "works with no args" do
-      Country.all.should be_empty
+      expect(Country.all).to be_empty
       country = Country.create
-      country.id.should == 1
+      expect(country.id).to eq(1)
     end
 
     it "adds the new object to the data collection" do
-      Country.all.should be_empty
+      expect(Country.all).to be_empty
       country = Country.create :id => 1, :name => "foo"
-      country.id.should == 1
-      country.name.should == "foo"
-      Country.all.should == [country]
+      expect(country.id).to eq(1)
+      expect(country.name).to eq("foo")
+      expect(Country.all).to eq([country])
     end
 
     it "adds an auto-incrementing id if the id is nil" do
       country1 = Country.new :name => "foo"
       country1.save
-      country1.id.should == 1
+      expect(country1.id).to eq(1)
 
       country2 = Country.new :name => "bar"
       country2.save
-      country2.id.should == 2
+      expect(country2.id).to eq(2)
     end
 
     it "does not add auto-incrementing id if the id is present" do
       country1 = Country.new :id => 456, :name => "foo"
       country1.save
-      country1.id.should == 456
+      expect(country1.id).to eq(456)
     end
 
     it "does not blow up with strings" do
       country1 = Country.new :id => "foo", :name => "foo"
       country1.save
-      country1.id.should == "foo"
+      expect(country1.id).to eq("foo")
 
       country2 = Country.new :name => "foo"
       country2.save
-      country2.id.should be_nil
+      expect(country2.id).to be_nil
     end
 
     it "adds the new object to the data collection" do
-      Country.all.should be_empty
+      expect(Country.all).to be_empty
       country = Country.create! :id => 1, :name => "foo"
-      country.id.should == 1
-      country.name.should == "foo"
-      Country.all.should == [country]
+      expect(country.id).to eq(1)
+      expect(country.name).to eq("foo")
+      expect(Country.all).to eq([country])
     end
 
     it "marks the class as dirty" do
-      Country.dirty.should be_falsey
+      expect(Country.dirty).to be_falsey
       Country.create! :id => 1, :name => "foo"
-      Country.dirty.should be_truthy
+      expect(Country.dirty).to be_truthy
     end
 
   end
@@ -1390,7 +1390,7 @@ describe ActiveHash, "Base" do
   describe "#valid?" do
 
     it "should return true" do
-      Country.new.should be_valid
+      expect(Country.new).to be_valid
     end
 
   end
@@ -1404,11 +1404,11 @@ describe ActiveHash, "Base" do
     end
 
     it "returns false when the object is already part of the collection" do
-      Country.new(:id => 1).should_not be_new_record
+      expect(Country.new(:id => 1)).not_to be_new_record
     end
 
     it "returns true when the object is not part of the collection" do
-      Country.new(:id => 2).should be_new_record
+      expect(Country.new(:id => 2)).to be_new_record
     end
 
   end
@@ -1417,26 +1417,26 @@ describe ActiveHash, "Base" do
 
     it "execute the block given to it" do
       foo = Object.new
-      foo.should_receive(:bar)
+      expect(foo).to receive(:bar)
       Country.transaction do
         foo.bar
       end
     end
 
     it "swallows ActiveRecord::Rollback errors", :unless => SKIP_ACTIVE_RECORD do
-      proc do
+      expect do
         Country.transaction do
           raise ActiveRecord::Rollback
         end
-      end.should_not raise_error
+      end.not_to raise_error
     end
 
     it "passes other errors through" do
-      proc do
+      expect do
         Country.transaction do
           raise "hell"
         end
-      end.should raise_error("hell")
+      end.to raise_error("hell")
     end
 
   end
@@ -1446,15 +1446,15 @@ describe ActiveHash, "Base" do
     it "clears out all record" do
       country1 = Country.create
       country2 = Country.create
-      Country.all.should == [country1, country2]
+      expect(Country.all).to eq([country1, country2])
       Country.delete_all
-      Country.all.should be_empty
+      expect(Country.all).to be_empty
     end
 
     it "marks the class as dirty" do
-      Country.dirty.should be_falsey
+      expect(Country.dirty).to be_falsey
       Country.delete_all
-      Country.dirty.should be_truthy
+      expect(Country.dirty).to be_truthy
     end
 
   end
