@@ -683,6 +683,14 @@ describe ActiveHash, "Base" do
       it "finds the record with the specified id as a string" do
         Country.find_by_id("2").id.should == 2
       end
+
+      it "finds the record with a chained filter" do
+        Country.where(name: "Canada").find_by_id("2").id.should == 2
+      end
+
+      it "filters ecord with a chained filter" do
+        Country.where(name: "Canada").find_by_id("1").should be_nil
+      end
     end
 
     context "with string ids" do

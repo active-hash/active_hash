@@ -58,6 +58,8 @@ module ActiveHash
     end
 
     def find_by_id(id)
+      return where(id: id).first if query_hash.present?
+
       index = klass.send(:record_index)[id.to_s] # TODO: Make index in Base publicly readable instead of using send?
       index and records[index]
     end
