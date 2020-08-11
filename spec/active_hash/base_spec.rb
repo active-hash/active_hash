@@ -299,6 +299,10 @@ describe ActiveHash, "Base" do
       expect(Country.where(:name => %w(US Canada)).map(&:name)).to match_array(%w(US Canada))
     end
 
+    it "filters records by a RegEx" do
+      expect(Country.where(:language => /Eng/).map(&:name)).to match_array(%w(US Canada))
+    end
+
     it "filters records for multiple symbol values" do
       expect(Country.where(:name => [:US, :Canada]).map(&:name)).to match_array(%w(US Canada))
     end
