@@ -133,7 +133,7 @@ module ActiveHash
         if match.kind_of?(Array)
           match.any? { |v| normalize(v) == normalize(record[col]) }
         else
-          normalize(record[col]) == normalize(match)
+          normalize(match) === normalize(record[col])
         end
       end
     end
