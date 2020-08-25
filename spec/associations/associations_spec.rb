@@ -32,7 +32,7 @@ describe ActiveHash::Base, "associations" do
           @excluded_author = Author.create :city_id => 2
         end
 
-        it "find the correct records" do
+        it "finds the correct records" do
           City.has_many :authors
           city = City.create :id => 1
           city.authors.should == [@included_author_1, @included_author_2]
