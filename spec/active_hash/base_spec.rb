@@ -1193,41 +1193,57 @@ describe ActiveHash, "Base" do
       end
     end
 
-    it "doesn't override methods already defined" do
-      Country.class_eval do
-        class << self
-          def find_by_name(name)
-            "find_by_name defined manually"
+    context "when Country already defined name methods" do
+      before do
+        Country.class_eval do
+          class << self
+            def find_by_name(name)
+              "find_by_name defined manually"
+            end
+
+            def find_all_by_name(name)
+              "find_all_by_name defined manually"
+            end
           end
 
-          def find_all_by_name(name)
-            "find_all_by_name defined manually"
+          def name
+            "name defined manually"
           end
-        end
 
-        def name
-          "name defined manually"
-        end
-
-        def name?
-          "name? defined manually"
+          def name?
+            "name? defined manually"
+          end
         end
       end
 
-      Country.find_by_name("foo").should == "find_by_name defined manually"
-      Country.find_all_by_name("foo").should == "find_all_by_name defined manually"
-      Country.new.name.should == "name defined manually"
-      Country.new.name?.should == "name? defined manually"
+      it "doesn't override methods already defined" do
+        Country.find_by_name("foo").should == "find_by_name defined manually"
+        Country.find_all_by_name("foo").should == "find_all_by_name defined manually"
+        Country.new.name.should == "name defined manually"
+        Country.new.name?.should == "name? defined manually"
 
-      Country.data = [
-        {:name => "foo"}
-      ]
+        Country.data = [
+          {:name => "foo"}
+        ]
 
-      Country.all
-      Country.find_by_name("foo").should == "find_by_name defined manually"
-      Country.find_all_by_name("foo").should == "find_all_by_name defined manually"
-      Country.new.name.should == "name defined manually"
-      Country.new.name?.should == "name? defined manually"
+        Country.all
+        Country.find_by_name("foo").should == "find_by_name defined manually"
+        Country.find_all_by_name("foo").should == "find_all_by_name defined manually"
+        Country.new.name.should == "name defined manually"
+        Country.new.name?.should == "name? defined manually"
+      end
+
+      it "allow override methods already defined in super class" do
+        class Japan < Country
+          field :name
+          add name: "bar"
+        end
+        Japan.first.name.should == "bar"
+        Japan.find_by_name("bar").should be_a(Japan)
+        Japan.find_all_by_name("bar").should be_a(Array) 
+        Japan.first.name.should == "bar"
+        Japan.first.name?.should be_truthy
+      end
     end
   end
 
