@@ -36,7 +36,7 @@ module ActiveHash
     end
 
     def find_by!(options)
-      find_by(options) || (raise RecordNotFound.new("Couldn't find #{klass.name}"))
+      find_by(options) || (raise RecordNotFound.new("Couldn't find #{klass.name}", klass))
     end
 
     def find(id = nil, *args, &block)
@@ -48,11 +48,11 @@ module ActiveHash
         when Array
           id.map { |i| find(i) }
         when nil
-          raise RecordNotFound.new("Couldn't find #{klass.name} without an ID") unless block_given?
+          raise RecordNotFound.new("Couldn't find #{klass.name} without an ID", klass) unless block_given?
           records.find(&block) # delegate to Enumerable#find if a block is given
         else
           find_by_id(id) || begin
-            raise RecordNotFound.new("Couldn't find #{klass.name} with ID=#{id}")
+            raise RecordNotFound.new("Couldn't find #{klass.name} with ID=#{id}", klass, id)
           end
       end
     end

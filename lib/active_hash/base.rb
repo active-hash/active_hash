@@ -1,6 +1,13 @@
 module ActiveHash
 
   class RecordNotFound < StandardError
+    attr_reader :model, :id
+
+    def initialize(message = nil, model = nil, id = nil)
+      @model = model
+      @id = id
+      super(message)
+    end
   end
 
   class ReservedFieldError < StandardError

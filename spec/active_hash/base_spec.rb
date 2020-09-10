@@ -497,7 +497,10 @@ describe ActiveHash, "Base" do
       it { expect{ subject }.to raise_error ActiveHash::RecordNotFound }
       it "raises 'RecordNotFound' when passed a wrong id" do
         expect { Country.find_by!(id: 2) }.
-          to raise_error ActiveHash::RecordNotFound
+          to raise_error { |error|
+            expect(error).to be_a ActiveHash::RecordNotFound
+            expect(error.model).to eq Country
+          }
       end
 
       it "raises 'RecordNotFound' when passed wrong id and options" do
@@ -600,7 +603,12 @@ describe ActiveHash, "Base" do
       it "raises ActiveHash::RecordNotFound when id not found" do
         proc do
           Country.find(0)
-        end.should raise_error(ActiveHash::RecordNotFound, /Couldn't find Country with ID=0/)
+        end.should raise_error { |error|
+          expect(error).to be_a ActiveHash::RecordNotFound
+          expect(error.message).to match(/Couldn't find Country with ID=0/)
+          expect(error.model).to eq Country
+          expect(error.id).to eq 0
+        }
       end
     end
 
