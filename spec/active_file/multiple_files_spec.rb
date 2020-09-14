@@ -23,8 +23,8 @@ describe ActiveFile::MultipleFiles do
     after { Object.send :remove_const, :Bar }
 
     it "sets the filenames on a per-subclass basis" do
-      Country.filenames.should == ["country-file"]
-      Bar.filenames.should == ["bar-file"]
+      expect(Country.filenames).to eq(["country-file"])
+      expect(Bar.filenames).to eq(["bar-file"])
     end
   end
 
@@ -40,14 +40,14 @@ describe ActiveFile::MultipleFiles do
     after { Object.send :remove_const, :Bar }
 
     it "sets the filenames on a per-subclass basis" do
-      Country.filenames.should == ["country-file"]
-      Bar.filenames.should == ["bar-file", "baz-file"]
+      expect(Country.filenames).to eq(["country-file"])
+      expect(Bar.filenames).to eq(["bar-file", "baz-file"])
     end
   end
 
   describe ".multiple_files?" do
     it "is true" do
-      Country.multiple_files?.should be_truthy
+      expect(Country.multiple_files?).to be_truthy
     end
 
     context "on a per class basis" do
@@ -58,8 +58,8 @@ describe ActiveFile::MultipleFiles do
       after { Object.send :remove_const, :Bar }
 
       it "is true for classes with filenames" do
-        Country.multiple_files?.should be_truthy
-        Bar.multiple_files?.should be_falsey
+        expect(Country.multiple_files?).to be_truthy
+        expect(Bar.multiple_files?).to be_falsey
       end
     end
   end
@@ -70,7 +70,7 @@ describe ActiveFile::MultipleFiles do
         def self.extension() "foo" end
       end
 
-      Country.full_paths.should == ["#{Dir.pwd}/countries.foo"]
+      expect(Country.full_paths).to eq(["#{Dir.pwd}/countries.foo"])
     end
 
     context "given multiple files do" do
@@ -80,7 +80,7 @@ describe ActiveFile::MultipleFiles do
           self.filenames = ["fizz", "bazz"]
         end
 
-        Country.full_paths.should == ["#{Dir.pwd}/fizz.foo", "#{Dir.pwd}/bazz.foo"]
+        expect(Country.full_paths).to eq(["#{Dir.pwd}/fizz.foo", "#{Dir.pwd}/bazz.foo"])
       end
     end
   end

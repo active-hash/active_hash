@@ -35,13 +35,13 @@ describe ActiveHash::Base, "associations" do
         it "find the correct records" do
           City.has_many :authors
           city = City.create :id => 1
-          city.authors.should == [@included_author_1, @included_author_2]
+          expect(city.authors).to eq([@included_author_1, @included_author_2])
         end
 
         it "uses the correct class name when passed" do
           City.has_many :writers, :class_name => "Author"
           city = City.create :id => 1
-          city.writers.should == [@included_author_1, @included_author_2]
+          expect(city.writers).to eq([@included_author_1, @included_author_2])
         end
       end
 
@@ -57,7 +57,7 @@ describe ActiveHash::Base, "associations" do
 
         it "finds the correct records" do
           city = City.create :id => 1, :author_identifier => 10
-          city.authors.should == [@author_2, @author_3]
+          expect(city.authors).to eq([@author_2, @author_3])
         end
       end
 
@@ -73,7 +73,7 @@ describe ActiveHash::Base, "associations" do
 
         it "finds the correct records" do
           city = City.create :id => 10
-          city.authors.should == [@author_1, @author_2]
+          expect(city.authors).to eq([@author_1, @author_2])
         end
       end
     end
@@ -87,13 +87,13 @@ describe ActiveHash::Base, "associations" do
         Author.belongs_to :city
         city = City.create
         author = Author.create :city_id => city.id
-        author.city.should == city
+        expect(author.city).to eq(city)
       end
 
       it "returns nil when the record does not exist" do
         Author.belongs_to :city
         author = Author.create :city_id => 123
-        author.city.should be_nil
+        expect(author.city).to be_nil
       end
     end
 
@@ -106,23 +106,23 @@ describe ActiveHash::Base, "associations" do
       it "sets the underlying id of the parent" do
         author = Author.new
         author.city = @city
-        author.city_id.should == @city.id
+        expect(author.city_id).to eq(@city.id)
       end
 
       it "works from hash assignment" do
         author = Author.new :city => @city
-        author.city_id.should == @city.id
-        author.city.should == @city
+        expect(author.city_id).to eq(@city.id)
+        expect(author.city).to eq(@city)
       end
 
       it "works with nil" do
         author = Author.new :city => @city
-        author.city_id.should == @city.id
-        author.city.should == @city
+        expect(author.city_id).to eq(@city.id)
+        expect(author.city).to eq(@city)
 
         author.city = nil
-        author.city_id.should be_nil
-        author.city.should be_nil
+        expect(author.city_id).to be_nil
+        expect(author.city).to be_nil
       end
     end
 
@@ -135,7 +135,7 @@ describe ActiveHash::Base, "associations" do
       it "works" do
         author = Author.new
         author.residence = @city
-        author.city_id.should == @city.id
+        expect(author.city_id).to eq(@city.id)
       end
     end
 
@@ -149,7 +149,7 @@ describe ActiveHash::Base, "associations" do
       it "works" do
         author = Author.new
         author.city = @city
-        author.city_id.should == @city.long_identifier
+        expect(author.city_id).to eq(@city.long_identifier)
       end
     end
   end
@@ -164,19 +164,19 @@ describe ActiveHash::Base, "associations" do
       it "find the correct records" do
         city = City.create :id => 1
         author = Author.create :city_id => 1
-        city.author.should == author
+        expect(city.author).to eq(author)
       end
 
       it "returns nil when there are no records" do
         city = City.create :id => 1
-        city.author.should be_nil
+        expect(city.author).to be_nil
       end
     end
   end
 
   describe "#marked_for_destruction?" do
     it "should return false" do
-      City.new.marked_for_destruction?.should == false
+      expect(City.new.marked_for_destruction?).to eq(false)
     end
   end
 

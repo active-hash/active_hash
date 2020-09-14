@@ -25,20 +25,20 @@ describe ActiveYaml::Base do
 
   describe ".load_path" do
     it 'can execute embedded ruby' do
-       User.first.email.should =~ /^user[0-9]*@email.com$/
-       User.first.password.should == 'secret'
+       expect(User.first.email).to match(/^user[0-9]*@email.com$/)
+       expect(User.first.password).to eq('secret')
     end
 
     it 'can load empty yaml' do
-      Empty.first.should be_nil
+      expect(Empty.first).to be_nil
     end
   end
 
   describe ".all" do
     context "before the file is loaded" do
       it "reads from the file" do
-        State.all.should_not be_empty
-        State.count.should > 0
+        expect(State.all).not_to be_empty
+        expect(State.count).to be > 0
       end
     end
   end
@@ -46,8 +46,8 @@ describe ActiveYaml::Base do
   describe ".where" do
     context "before the file is loaded" do
       it "reads from the file and filters by where statement" do
-        State.where(:name => 'Oregon').should_not be_empty
-        State.count.should > 0
+        expect(State.where(:name => 'Oregon')).not_to be_empty
+        expect(State.count).to be > 0
       end
     end
   end
@@ -56,15 +56,15 @@ describe ActiveYaml::Base do
     context "when called before .all" do
       it "causes all to not load data" do
         State.delete_all
-        State.all.should be_empty
+        expect(State.all).to be_empty
       end
     end
 
     context "when called after .all" do
       it "clears out the data" do
-        State.all.should_not be_empty
+        expect(State.all).not_to be_empty
         State.delete_all
-        State.all.should be_empty
+        expect(State.all).to be_empty
       end
     end
   end
@@ -72,12 +72,12 @@ describe ActiveYaml::Base do
   describe ".raw_data" do
 
     it "returns the raw hash data loaded from yaml hash-formatted files" do
-      City.raw_data.should be_kind_of(Hash)
-      City.raw_data.keys.should include("albany", "portland")
+      expect(City.raw_data).to be_kind_of(Hash)
+      expect(City.raw_data.keys).to include("albany", "portland")
     end
 
     it "returns the raw array data loaded from yaml array-formatted files" do
-      ArrayRow.raw_data.should be_kind_of(Array)
+      expect(ArrayRow.raw_data).to be_kind_of(Array)
     end
 
   end
@@ -86,17 +86,17 @@ describe ActiveYaml::Base do
 
     describe "with array data" do
       it "returns an array of hashes" do
-        ArrayRow.load_file.should be_kind_of(Array)
-        ArrayRow.load_file.should include({"name" => "Row 1", "id" => 1})
+        expect(ArrayRow.load_file).to be_kind_of(Array)
+        expect(ArrayRow.load_file).to include({"name" => "Row 1", "id" => 1})
       end
     end
 
     describe "with hash data" do
       it "returns an array of hashes" do
-        City.load_file.should be_kind_of(Array)
-        City.load_file.should include({"state" => :new_york, "name" => "Albany", "id" => 1})
+        expect(City.load_file).to be_kind_of(Array)
+        expect(City.load_file).to include({"state" => :new_york, "name" => "Albany", "id" => 1})
         City.reload
-        City.all.should include(City.new(:id => 1))
+        expect(City.all).to include(City.new(:id => 1))
       end
     end
 
@@ -111,11 +111,11 @@ describe ActiveYaml::Base do
     end
 
     it 'returns a single city based on #find' do
-      City.find(1).name.should == 'Albany'
+      expect(City.find(1).name).to eq('Albany')
     end
 
     it 'returns a single city based on find_by_id' do
-      City.find_by_id(1).name.should == 'Albany'
+      expect(City.find_by_id(1).name).to eq('Albany')
     end
 
   end
@@ -123,11 +123,11 @@ describe ActiveYaml::Base do
   describe 'meta programmed finders and properties for fields that exist in the YAML' do
 
     it 'should have a finder method for each property' do
-      City.find_by_state('Oregon').should_not be_nil
+      expect(City.find_by_state('Oregon')).not_to be_nil
     end
 
     it 'should have a find all method for each property' do
-      City.find_all_by_state('Oregon').should_not be_nil
+      expect(City.find_all_by_state('Oregon')).not_to be_nil
     end
 
   end
@@ -144,10 +144,10 @@ describe ActiveYaml::Base do
 
       it "loads data from both files" do
         # countries.yml
-        Country.find_by_name("Canada").should_not be_nil
+        expect(Country.find_by_name("Canada")).not_to be_nil
 
         # commonwealths.yml
-        Country.find_by_name("Puerto Rico").should_not be_nil
+        expect(Country.find_by_name("Puerto Rico")).not_to be_nil
       end
     end
 
@@ -165,10 +165,10 @@ describe ActiveYaml::Base do
 
       it "loads data from both files" do
         # states.yml
-        MultiState.find_by_name("Oregon").should_not be_nil
+        expect(MultiState.find_by_name("Oregon")).not_to be_nil
 
         # provinces.yml
-        MultiState.find_by_name("British Colombia").should_not be_nil
+        expect(MultiState.find_by_name("British Colombia")).not_to be_nil
       end
     end
 

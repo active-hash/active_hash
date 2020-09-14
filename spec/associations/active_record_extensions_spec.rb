@@ -72,12 +72,12 @@ unless SKIP_ACTIVE_RECORD
 
           it "find the correct records" do
             author = Author.create :id => 1
-            author.books.should == [@book_1, @book_2]
+            expect(author.books).to eq([@book_1, @book_2])
           end
 
           it "return a scope so that we can apply further scopes" do
             author = Author.create :id => 1
-            author.books.published.should == [@book_1]
+            expect(author.books.published).to eq([@book_1])
           end
         end
 
@@ -92,12 +92,12 @@ unless SKIP_ACTIVE_RECORD
 
           it "should find the correct records" do
             author = Author.create :id => 1, :book_identifier => 2
-            author.books.should == [@book_2, @book_3]
+            expect(author.books).to eq([@book_2, @book_3])
           end
 
           it "return a scope so that we can apply further scopes" do
             author = Author.create :id => 1, :book_identifier => 2
-            author.books.published.should == [@book_3]
+            expect(author.books.published).to eq([@book_3])
           end
         end
 
@@ -111,19 +111,19 @@ unless SKIP_ACTIVE_RECORD
 
           it "should find the correct records" do
             author = Author.create :id => 1
-            author.books.should == [@book_1, @book_2]
+            expect(author.books).to eq([@book_1, @book_2])
           end
 
           it "return a scope so that we can apply further scopes" do
             author = Author.create :id => 1
-            author.books.published.should == [@book_1]
+            expect(author.books.published).to eq([@book_1])
           end
         end
 
         it "only uses 1 query" do
           Author.has_many :books
           author = Author.create :id => 1
-          Book.should_receive(:find_by_sql)
+          expect(Book).to receive(:find_by_sql)
           author.books.to_a
         end
       end
@@ -140,11 +140,11 @@ unless SKIP_ACTIVE_RECORD
             school = School.new
             country = Country.create!
             school.country = country
-            school.country.should == country
-            school.country_id.should == country.id
+            expect(school.country).to eq(country)
+            expect(school.country_id).to eq(country.id)
             school.save!
             school.reload
-            school.reload.country_id.should == country.id
+            expect(school.reload.country_id).to eq(country.id)
           end
         end
 
@@ -153,9 +153,9 @@ unless SKIP_ACTIVE_RECORD
           school = School.new
           country = Country.create!
           school.locateable = country
-          school.locateable.should == country
+          expect(school.locateable).to eq(country)
           school.save!
-          school.reload.locateable_id.should == country.id
+          expect(school.reload.locateable_id).to eq(country.id)
         end
 
         it "sets up an ActiveRecord association for non-ActiveHash objects" do
@@ -163,18 +163,18 @@ unless SKIP_ACTIVE_RECORD
           school = School.new
           country = Country.create!
           school.country = country
-          school.country.should == country
-          school.country_id.should == country.id
+          expect(school.country).to eq(country)
+          expect(school.country_id).to eq(country.id)
           school.save!
           school.reload
-          school.reload.country_id.should == country.id
+          expect(school.reload.country_id).to eq(country.id)
         end
 
         it "calls through to belongs_to_active_hash if it's an ActiveHash object" do
           School.belongs_to :city
           city = City.create
           school = School.create :city_id => city.id
-          school.city.should == city
+          expect(school.city).to eq(city)
         end
 
         it "returns nil when the belongs_to association class can't be autoloaded" do
@@ -190,13 +190,13 @@ unless SKIP_ACTIVE_RECORD
             School.belongs_to_active_hash :city
             city = City.create
             school = School.create :city_id => city.id
-            school.city.should == city
+            expect(school.city).to eq(city)
           end
 
           it "returns nil when the record does not exist" do
             School.belongs_to_active_hash :city
             school = School.create! :city_id => nil
-            school.city.should be_nil
+            expect(school.city).to be_nil
           end
         end
 
@@ -205,7 +205,7 @@ unless SKIP_ACTIVE_RECORD
             School.belongs_to_active_hash :city
             city = City.create
             school = School.create :city => city
-            school.city.should == city
+            expect(school.city).to eq(city)
           end
 
           it "is assignable by name attribute" do
@@ -213,8 +213,8 @@ unless SKIP_ACTIVE_RECORD
             City.data = [{:id => 1, :name => 'gothan'}]
             city = City.find_by_name 'gothan'
             school = School.create :city_name => 'gothan'
-            school.city.should == city
-            school.city_name.should == 'gothan'
+            expect(school.city).to eq(city)
+            expect(school.city_name).to eq('gothan')
           end
 
           it "have custom shortcut" do
@@ -222,36 +222,36 @@ unless SKIP_ACTIVE_RECORD
             City.data = [{:id => 1, :friendly_name => 'Gothan City'}]
             city = City.find_by_friendly_name 'Gothan City'
             school = School.create :city_friendly_name => 'Gothan City'
-            school.city.should == city
-            school.city_friendly_name.should == 'Gothan City'
+            expect(school.city).to eq(city)
+            expect(school.city_friendly_name).to eq('Gothan City')
           end
 
           it "returns nil when the record does not exist" do
             School.belongs_to_active_hash :city
             school = School.create! :city => nil
-            school.city.should be_nil
+            expect(school.city).to be_nil
           end
         end
 
         it "finds active record metadata for this association" do
           School.belongs_to_active_hash :city
           association = School.reflect_on_association(:city)
-          association.should_not be_nil
-          association.klass.name.should == City.name
+          expect(association).not_to be_nil
+          expect(association.klass.name).to eq(City.name)
         end
 
         it "handles classes ending with an 's'" do
           School.belongs_to_active_hash :school_status
           association = School.reflect_on_association(:school_status)
-          association.should_not be_nil
-          association.klass.name.should == SchoolStatus.name
+          expect(association).not_to be_nil
+          expect(association.klass.name).to eq(SchoolStatus.name)
         end
 
         it "handles custom association names" do
           School.belongs_to_active_hash :status, :class_name => 'SchoolStatus'
           association = School.reflect_on_association(:status)
-          association.should_not be_nil
-          association.klass.name.should == SchoolStatus.name
+          expect(association).not_to be_nil
+          expect(association.klass.name).to eq(SchoolStatus.name)
         end
       end
     end
@@ -263,13 +263,13 @@ unless SKIP_ACTIVE_RECORD
           City.belongs_to :country
           country = Country.create
           city = City.create :country_id => country.id
-          city.country.should == country
+          expect(city.country).to eq(country)
         end
 
         it "returns nil when the record does not exist" do
           City.belongs_to :country
           city = City.create :country_id => 123
-          city.country.should be_nil
+          expect(city.country).to be_nil
         end
       end
 
@@ -284,12 +284,12 @@ unless SKIP_ACTIVE_RECORD
         it "find the correct records" do
           book = Book.create! :author_id => 1, :published => true
           author = Author.create :id => 1
-          author.book.should == book
+          expect(author.book).to eq(book)
         end
 
         it "returns nil when there is no record" do
           author = Author.create :id => 1
-          author.book.should be_nil
+          expect(author.book).to be_nil
         end
       end
     end

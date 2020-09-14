@@ -12,7 +12,7 @@ describe ActiveFile::Base do
 
   describe ".multiple_files?" do
     it "is false" do
-      Country.multiple_files?.should be_falsey
+      expect(Country.multiple_files?).to be_falsey
     end
   end
 
@@ -27,8 +27,8 @@ describe ActiveFile::Base do
     after { Object.send :remove_const, :Bar }
 
     it "sets the filename on a per-subclass basis" do
-      Country.filename.should == "foo-izzle"
-      Bar.filename.should == "bar-izzle"
+      expect(Country.filename).to eq("foo-izzle")
+      expect(Bar.filename).to eq("bar-izzle")
     end
   end
 
@@ -43,8 +43,8 @@ describe ActiveFile::Base do
     after { Object.send :remove_const, :Bar }
 
     it "sets the filename on a per-subclass basis" do
-      Country.filename.should == "foo-izzle"
-      Bar.filename.should == "bar-izzle"
+      expect(Country.filename).to eq("foo-izzle")
+      expect(Bar.filename).to eq("bar-izzle")
     end
   end
 
@@ -59,8 +59,8 @@ describe ActiveFile::Base do
     after { Object.send :remove_const, :Bar }
 
     it "sets the root_path on a per-subclass basis" do
-      Country.root_path.should == "foo-izzle"
-      Bar.root_path.should == "bar-izzle"
+      expect(Country.root_path).to eq("foo-izzle")
+      expect(Bar.root_path).to eq("bar-izzle")
     end
   end
 
@@ -75,8 +75,8 @@ describe ActiveFile::Base do
     after { Object.send :remove_const, :Bar }
 
     it "sets the root_path on a per-subclass basis" do
-      Country.root_path.should == "foo-izzle"
-      Bar.root_path.should == "bar-izzle"
+      expect(Country.root_path).to eq("foo-izzle")
+      expect(Bar.root_path).to eq("bar-izzle")
     end
   end
 
@@ -86,7 +86,7 @@ describe ActiveFile::Base do
         def self.extension() "foo" end
       end
 
-      Country.full_path.should == "#{Dir.pwd}/countries.foo"
+      expect(Country.full_path).to eq("#{Dir.pwd}/countries.foo")
     end
   end
 
@@ -107,9 +107,9 @@ describe ActiveFile::Base do
             raise "should not have been called"
           end
         end
-        Country.dirty.should be_falsey
+        expect(Country.dirty).to be_falsey
         Country.reload
-        Country.dirty.should be_falsey
+        expect(Country.dirty).to be_falsey
       end
     end
 
@@ -120,20 +120,20 @@ describe ActiveFile::Base do
             {"new_york"=>{"name"=>"New York", "id"=>2}}.values
           end
         end
-        Country.dirty.should be_falsey
-        Country.find_by_id(2).should be_nil
+        expect(Country.dirty).to be_falsey
+        expect(Country.find_by_id(2)).to be_nil
         Country.reload(true)
-        Country.dirty.should be_falsey
-        Country.find(2).name.should == "New York"
+        expect(Country.dirty).to be_falsey
+        expect(Country.find(2).name).to eq("New York")
       end
     end
 
     context "when the data has been modified" do
       it "reloads the data" do
         Country.create!
-        Country.dirty.should be_truthy
+        expect(Country.dirty).to be_truthy
         Country.reload
-        Country.dirty.should be_falsey
+        expect(Country.dirty).to be_falsey
       end
     end
   end
