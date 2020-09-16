@@ -3,10 +3,7 @@ module ActiveHash
 
     module ActiveRecordExtensions
 
-      def belongs_to(*args)
-        our_args = args.dup
-        options = our_args.extract_options!
-        name = our_args.shift
+      def belongs_to(name, scope = nil, **options)
         options = {:class_name => name.to_s.camelize }.merge(options)
         klass =
           begin
