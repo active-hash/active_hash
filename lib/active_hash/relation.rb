@@ -72,6 +72,10 @@ module ActiveHash
       column_names.map { |column_name| all.map(&column_name.to_sym) }.inject(&:zip)
     end
 
+    def ids
+      pluck(:id)
+    end
+
     def pick(*column_names)
       pluck(*column_names).first
     end

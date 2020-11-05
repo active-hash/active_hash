@@ -537,6 +537,19 @@ describe ActiveHash, "Base" do
     end
   end
 
+  describe '.ids' do
+    before do
+      Country.data = [
+        {:id => 1, :name => "US"},
+        {:id => 2, :name => "Canada"}
+      ]
+    end
+
+    it "returns an Array of id attributes" do
+      expect(Country.ids).to match_array([1,2])
+    end
+  end
+
   describe ".pick" do
     before do
       Country.data = [
