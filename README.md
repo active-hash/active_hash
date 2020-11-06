@@ -14,7 +14,7 @@ ActiveHash also ships with:
 
   * ActiveFile: a base class that you can use to create file data sources
   * ActiveYaml: a base class that will turn YAML into a hash and load the data into an ActiveHash object
-
+F
 ## !!! Important notice !!!
 We have changed returned value to chainable by v3.0.0. It's not just an `Array` instance anymore.
 If it breaks your application, please report us on [issues](https://github.com/zilkey/active_hash/issues), and use v2.x.x as following..
@@ -420,7 +420,7 @@ Soda.first.price # => 1.0
 
 ### Using ERB ruby in YAML
 
-Embedded ruby can bu used in ActiveYaml using erb brackets `<% %>` and `<%= %>` to set the result of a ruby operation as a value in the yaml file.
+Embedded ruby can be used in ActiveYaml using erb brackets `<% %>` and `<%= %>` to set the result of a ruby operation as a value in the yaml file.
 
 ```
 - id: 1
