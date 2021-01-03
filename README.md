@@ -492,7 +492,7 @@ class Country < ActiveFile::Base
 
   class << self
     def extension
-      ".super_secret"
+      "super_secret"
     end
 
     def load_file
