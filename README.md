@@ -349,7 +349,7 @@ end
 The above example will look for the file "/u/data/sample.yml".
 
 Since ActiveYaml just creates a hash from the YAML file, you will have all fields specified in YAML auto-defined for you.  You can format your YAML as an array, or as a hash:
-```
+```yaml
 # array style
 - id: 1
   name: US
@@ -382,7 +382,7 @@ end
 
 Aliases can be used in ActiveYaml using either array or hash style by including `ActiveYaml::Aliases`.
 With that module included, keys beginning with a '/' character can be safely added, and will be ignored, allowing you to add aliases anywhere in your code:
-```
+```yaml
 # Array Style
 - /aliases:
   soda_flavor: &soda_flavor
@@ -408,7 +408,8 @@ coke:
   name: Coke
   flavor: *soda_flavor
   price: *soda_price
-
+```
+```ruby
 class Soda < ActiveYaml::Base
   include ActiveYaml::Aliases
 end
@@ -422,7 +423,7 @@ Soda.first.price # => 1.0
 
 Embedded ruby can be used in ActiveYaml using erb brackets `<% %>` and `<%= %>` to set the result of a ruby operation as a value in the yaml file.
 
-```
+```yaml
 - id: 1
   email: <%= "user#{rand(100)}@email.com" %>
   password: <%= ENV['USER_PASSWORD'] %>
