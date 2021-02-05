@@ -38,4 +38,16 @@ RSpec.describe ActiveHash::Relation do
       expect(array.second.id).to eq(2)
     end
   end
+
+  describe "#count" do
+    it "aliases length method" do
+      expect(subject.count).to eq(subject.length)
+    end
+  end
+
+  describe "#size" do
+    it "aliases length method" do
+      expect(subject.size).to eq(subject.length)
+    end
+  end
 end

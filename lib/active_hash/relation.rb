@@ -7,6 +7,9 @@ module ActiveHash
     delegate :empty?, :length, :first, :second, :third, :last, to: :records
     delegate :sample, to: :records
 
+    alias_method :count, :length
+    alias_method :size, :length
+
     def initialize(klass, all_records, query_hash = nil)
       self.klass = klass
       self.all_records = all_records
@@ -62,10 +65,6 @@ module ActiveHash
 
       index = klass.send(:record_index)[id.to_s] # TODO: Make index in Base publicly readable instead of using send?
       index and records[index]
-    end
-
-    def count
-      length
     end
 
     def pluck(*column_names)
