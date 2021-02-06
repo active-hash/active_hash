@@ -180,7 +180,7 @@ unless SKIP_ACTIVE_RECORD
         it "doesn't raise any exception when the belongs_to association class can't be autoloaded" do
           # Simulate autoloader
           allow_any_instance_of(String).to receive(:constantize).and_raise(LoadError, "Unable to autoload constant NonExistent")
-          expect { School.belongs_to :city, {class_name: 'NonExistent'} }.not_to raise_error
+          expect { School.belongs_to :city, class_name: 'NonExistent' }.not_to raise_error
         end
       end
 
