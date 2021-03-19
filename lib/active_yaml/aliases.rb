@@ -5,6 +5,8 @@ module ActiveYaml
       base.extend(ClassMethods)
     end
 
+    ALIAS_KEY_REGEXP = /^\//i
+
     module ClassMethods
 
       def insert(record)
@@ -15,11 +17,11 @@ module ActiveYaml
         d = super
         if d.is_a?(Array)
           d.reject do |h|
-            h.keys.any? { |k| k.match(/^\//i) }
+            h.keys.any? { |k| k.match(ALIAS_KEY_REGEXP) }
           end
         else
           d.reject do |k, v|
-            v.kind_of? Hash and k.match(/^\//i)
+            v.kind_of? Hash and k.match(ALIAS_KEY_REGEXP)
           end
         end
       end
@@ -27,7 +29,7 @@ module ActiveYaml
     end
 
     def initialize(attributes={})
-      super unless attributes.keys.index { |k| k.to_s.match(/^\//i) }
+      super unless attributes.keys.index { |k| k.to_s.match(ALIAS_KEY_REGEXP) }
     end
   end
 
