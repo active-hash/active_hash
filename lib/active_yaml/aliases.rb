@@ -12,8 +12,15 @@ module ActiveYaml
       end
 
       def raw_data
-        super.reject do |k, v|
-          v.kind_of? Hash and k.match(/^\//i)
+        d = super
+        if d.is_a?(Array)
+          d.reject do |h|
+            h.keys.any? { |k| k.match(/^\//i) }
+          end
+        else
+          d.reject do |k, v|
+            v.kind_of? Hash and k.match(/^\//i)
+          end
         end
       end
 
