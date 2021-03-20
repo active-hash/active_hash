@@ -27,10 +27,6 @@ module ActiveYaml
       end
 
     end
-
-    def initialize(attributes={})
-      super unless attributes.keys.index { |k| k.to_s.match(ALIAS_KEY_REGEXP) }
-    end
   end
 
 end
