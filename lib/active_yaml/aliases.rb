@@ -15,7 +15,7 @@ module ActiveYaml
 
       def raw_data
         d = super
-        if d.is_a?(Array)
+        if d.kind_of?(Array)
           d.reject do |h|
             h.keys.any? { |k| k.match(ALIAS_KEY_REGEXP) }
           end
