@@ -5,7 +5,7 @@ module ActiveYaml
       base.extend(ClassMethods)
     end
 
-    ALIAS_KEY_REGEXP = /^\//i
+    ALIAS_KEY_REGEXP = /^\//i.freeze
 
     module ClassMethods
 
