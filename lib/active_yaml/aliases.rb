@@ -21,7 +21,7 @@ module ActiveYaml
           end
         else
           d.reject do |k, v|
-            v.kind_of? Hash and k.match(ALIAS_KEY_REGEXP)
+            v.kind_of?(Hash) && k.match(ALIAS_KEY_REGEXP)
           end
         end
       end
