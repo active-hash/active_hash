@@ -34,9 +34,14 @@ describe ActiveYaml::Aliases do
     end
 
     describe 'keys starting with "/"' do
-      it 'excludes them' do
+      it 'excludes them from records' do
         models_including_aliases = model.all.select { |p| p.attributes.keys.include? :'/aliases' }
         expect(models_including_aliases).to be_empty
+      end
+
+      it 'excludes them from fields' do
+        model.all
+        expect(model.field_names).to match_array [:name, :flavor, :price]
       end
     end
   end
@@ -56,9 +61,14 @@ describe ActiveYaml::Aliases do
     end
 
     describe 'keys starting with "/"' do
-      it 'excludes them' do
+      it 'excludes them from records' do
         models_including_aliases = model.all.select { |p| p.attributes.keys.include? :'/aliases' }
         expect(models_including_aliases).to be_empty
+      end
+
+      it 'excludes them from fields' do
+        model.all
+        expect(model.field_names).to match_array [:name, :flavor, :price, :slogan]
       end
     end
   end
