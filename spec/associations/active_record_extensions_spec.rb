@@ -177,10 +177,10 @@ unless SKIP_ACTIVE_RECORD
           expect(school.city).to eq(city)
         end
 
-        it "returns nil when the belongs_to association class can't be autoloaded" do
+        it "doesn't raise any exception when the belongs_to association class can't be autoloaded" do
           # Simulate autoloader
           allow_any_instance_of(String).to receive(:constantize).and_raise(LoadError, "Unable to autoload constant NonExistent")
-          School.belongs_to :city, {class_name: 'NonExistent'}
+          expect { School.belongs_to :city, {class_name: 'NonExistent'} }.not_to raise_error
         end
       end
 
