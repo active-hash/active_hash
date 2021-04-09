@@ -15,10 +15,4 @@ platform :ruby do
   gem 'sqlite3'
 end
 
-platforms :rbx do
-  gem 'racc'
-  gem 'rubysl', '~> 2.0'
-  gem 'psych'
-end
-
 gemspec :path => '../'
