@@ -2,6 +2,7 @@ module ActiveFile
 
   class Base < ActiveHash::Base
     extend ActiveFile::MultipleFiles
+    @@instance_lock = Mutex.new
 
     class_attribute :filename, :root_path, :data_loaded, instance_reader: false, instance_writer: false
 
@@ -13,10 +14,12 @@ module ActiveFile
       end
 
       def reload(force = false)
-        return if !self.dirty && !force && self.data_loaded
-        self.data_loaded = true
-        self.data = load_file
-        mark_clean
+        @@instance_lock.synchronize do
+          return if !self.dirty && !force && self.data_loaded
+          self.data = load_file
+          mark_clean
+          self.data_loaded = true
+        end
       end
 
       def set_filename(name)
@@ -53,6 +56,10 @@ module ActiveFile
         end
       end
 
+      def all_in_process
+        return super if data_loaded
+        @records || []
+      end
     end
   end
 

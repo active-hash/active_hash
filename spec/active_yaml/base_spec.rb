@@ -32,6 +32,12 @@ describe ActiveYaml::Base do
     it 'can load empty yaml' do
       expect(Empty.first).to be_nil
     end
+
+    it 'is thread-safe' do
+      (1..5).map do
+        Thread.new { expect(City.count).to eq(2) }
+      end.each(&:join)
+    end
   end
 
   describe ".all" do
