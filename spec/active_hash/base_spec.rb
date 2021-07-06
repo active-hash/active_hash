@@ -1386,7 +1386,7 @@ describe ActiveHash, "Base" do
 
       country2 = Country.new :name => "foo"
       country2.save
-      expect(country2.id).to be_nil
+      expect(country2.id).to eq(1)
     end
 
     it "adds the new object to the data collection" do
