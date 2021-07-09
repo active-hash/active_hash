@@ -52,7 +52,7 @@ module ActiveHash
           records.find(&block) # delegate to Enumerable#find if a block is given
         else
           find_by_id(id) || begin
-            raise RecordNotFound.new("Couldn't find #{klass.name} with ID=#{id}", klass.name, "id", id)
+            raise RecordNotFound.new("Couldn't find #{klass.name} with ID=#{id.inspect}", klass.name, "id", id)
           end
       end
     end
@@ -60,7 +60,7 @@ module ActiveHash
     def find_by_id(id)
       return where(id: id).first if query_hash.present?
 
-      index = klass.send(:record_index)[id.to_s] # TODO: Make index in Base publicly readable instead of using send?
+      index = klass.send(:record_index)[id] # TODO: Make index in Base publicly readable instead of using send?
       index and records[index]
     end
 

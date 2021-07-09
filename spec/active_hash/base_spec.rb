@@ -282,7 +282,7 @@ describe ActiveHash, "Base" do
     end
 
     it "returns multiple records for multiple ids" do
-      expect(Country.where(:id => %w(1 2)).map(&:id)).to match_array([1,2])
+      expect(Country.where(:id => [1,2]).map(&:id)).to match_array([1,2])
     end
 
     it "returns multiple records for range argument" do
@@ -415,7 +415,8 @@ describe ActiveHash, "Base" do
       Country.data = [
         {:id => 1, :name => "US", :language => 'English'},
         {:id => 2, :name => "Canada", :language => 'English'},
-        {:id => 3, :name => "Mexico", :language => 'Spanish'}
+        {:id => 3, :name => "Mexico", :language => 'Spanish'},
+        {:id => '4', :name => "France", :language => 'French'}
       ]
     end
 
@@ -454,9 +455,9 @@ describe ActiveHash, "Base" do
       expect(record.name).to eq('US')
     end
 
-    it "finds the record with the specified id as a string" do
-      record = Country.find_by(:id => '1')
-      expect(record.name).to eq('US')
+    it "finds the record with the specified id" do
+      record = Country.find_by(:id => '4')
+      expect(record.name).to eq('France')
     end
 
     it "returns the record that matches options" do
@@ -473,6 +474,7 @@ describe ActiveHash, "Base" do
 
     it "returns nil when passed a wrong id" do
       expect(Country.find_by(:id => 4)).to be_nil
+      expect(Country.find_by(:id => '1')).to be_nil
     end
   end
 
@@ -584,22 +586,20 @@ describe ActiveHash, "Base" do
     before do
       Country.data = [
         {:id => 1, :name => "US"},
-        {:id => 2, :name => "Canada"}
+        {:id => 2, :name => "Canada"},
+        {:id => "3", :name => "France"}
       ]
     end
 
     context "with an id" do
       it "finds the record with the specified id" do
         expect(Country.find(2).id).to eq(2)
-      end
-
-      it "finds the record with the specified id as a string" do
-        expect(Country.find("2").id).to eq(2)
+        expect(Country.find("3").id).to eq("3")
       end
 
       it "raises ActiveHash::RecordNotFound when id not found" do
-        expect { 
-          Country.find(0) 
+        expect {
+          Country.find(0)
         }.to raise_error(an_instance_of(ActiveHash::RecordNotFound)
           .and having_attributes(
             message: "Couldn't find Country with ID=0",
@@ -610,9 +610,17 @@ describe ActiveHash, "Base" do
       end
     end
 
+    context "with an id not present" do
+      it "raises ActiveHash::RecordNotFound when id not found" do
+        expect do
+          Country.find("2")
+        end.to raise_error(ActiveHash::RecordNotFound, /Couldn't find Country with ID="2"/)
+      end
+    end
+
     context "with :all" do
       it "returns all records" do
-        expect(Country.find(:all)).to eq([Country.new(:id => 1), Country.new(:id => 2)])
+        expect(Country.find(:all)).to eq([Country.new(:id => 1), Country.new(:id => 2), Country.new(:id => "3")])
       end
     end
 
@@ -633,7 +641,7 @@ describe ActiveHash, "Base" do
     context "with 2 arguments" do
       it "returns the record with the given id and ignores the conditions" do
         expect(Country.find(1, :conditions => "foo=bar")).to eq(Country.new(:id => 1))
-        expect(Country.find(:all, :conditions => "foo=bar").length).to eq(2)
+        expect(Country.find(:all, :conditions => "foo=bar").length).to eq(3)
       end
     end
 
@@ -681,24 +689,22 @@ describe ActiveHash, "Base" do
     before do
       Country.data = [
         {:id => 1, :name => "US"},
-        {:id => 2, :name => "Canada"}
+        {:id => 2, :name => "Canada"},
+        {:id => "3", :name => "France"}
       ]
     end
 
     context "with an id" do
       it "finds the record with the specified id" do
         expect(Country.find_by_id(2).id).to eq(2)
-      end
-
-      it "finds the record with the specified id as a string" do
-        expect(Country.find_by_id("2").id).to eq(2)
+        expect(Country.find_by_id("3").id).to eq("3")
       end
 
       it "finds the record with a chained filter" do
-        Country.where(name: "Canada").find_by_id("2").id.should == 2
+        Country.where(name: "Canada").find_by_id(2).id.should == 2
       end
 
-      it "filters ecord with a chained filter" do
+      it "filters record with a chained filter" do
         Country.where(name: "Canada").find_by_id("1").should be_nil
       end
     end
@@ -725,6 +731,7 @@ describe ActiveHash, "Base" do
     context "with an id not present" do
       it "returns nil" do
         expect(Country.find_by_id(4567)).to be_nil
+        expect(Country.find_by_id("2")).to be_nil
       end
     end
   end

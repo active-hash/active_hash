@@ -71,7 +71,7 @@ module ActiveHash
       include ActiveModel::Conversion
     else
       def to_param
-        id.present? ? id.to_s : nil
+        id.present? ? id : nil
       end
     end
 
@@ -130,7 +130,7 @@ module ActiveHash
 
       def exists?(record)
         if record.id.present?
-          record_index[record.id.to_s].present?
+          record_index[record.id].present?
         end
       end
 
@@ -140,7 +140,7 @@ module ActiveHash
         validate_unique_id(record) if dirty
         mark_dirty
 
-        add_to_record_index({ record.id.to_s => @records.length })
+        add_to_record_index({ record.id => @records.length })
         @records << record
       end
 
@@ -172,7 +172,7 @@ module ActiveHash
       private :add_to_record_index
 
       def validate_unique_id(record)
-        raise IdError.new("Duplicate ID found for record #{record.attributes.inspect}") if record_index.has_key?(record.id.to_s)
+        raise IdError.new("Duplicate ID found for record #{record.attributes.inspect}") if record_index.has_key?(record.id)
       end
 
       private :validate_unique_id
