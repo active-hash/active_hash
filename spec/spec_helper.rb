@@ -14,3 +14,7 @@ require 'active_record' unless SKIP_ACTIVE_RECORD
 Dir["spec/support/**/*.rb"].each { |f|
   require File.expand_path(f)
 }
+
+RSpec.configure do |config|
+  config.filter_run_when_matching :focus
+end
