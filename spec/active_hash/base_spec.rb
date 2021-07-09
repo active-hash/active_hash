@@ -1389,6 +1389,37 @@ describe ActiveHash, "Base" do
       expect(country2.id).to eq(1)
     end
 
+
+    it "does not blow up with negative integer" do
+      country1 = Country.new :id => -5, :name => "foo"
+      country1.save
+      expect(country1.id).to eq(-5)
+
+      country2 = Country.new :name => "foo"
+      country2.save
+      expect(country2.id).to eq(1)
+    end
+
+    it "does not blow up with float" do
+      country1 = Country.new :id => 0.1, :name => "foo"
+      country1.save
+      expect(country1.id).to eq(0.1)
+
+      country2 = Country.new :name => "foo"
+      country2.save
+      expect(country2.id).to eq(2)
+    end
+
+    it "does not blow up with negative float" do
+      country1 = Country.new :id => -0.1, :name => "foo"
+      country1.save
+      expect(country1.id).to eq(-0.1)
+
+      country2 = Country.new :name => "foo"
+      country2.save
+      expect(country2.id).to eq(1)
+    end
+
     it "adds the new object to the data collection" do
       expect(Country.all).to be_empty
       country = Country.create! :id => 1, :name => "foo"
