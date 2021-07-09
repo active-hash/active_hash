@@ -1441,6 +1441,14 @@ describe ActiveHash, "Base" do
       expect(Country.dirty).to be_truthy
     end
 
+    it 'raises an error if object with the same id exists' do
+      Country.data = [
+        {:id => 1, :name => "foo"}
+      ]
+
+      expect { Country.create({:id => 1}) }.to raise_error(ActiveHash::IdError, 'Duplicate ID found for record {:id=>1}')
+    end
+
   end
 
   describe "#valid?" do

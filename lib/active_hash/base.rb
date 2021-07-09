@@ -179,6 +179,7 @@ module ActiveHash
 
       def create(attributes = {})
         record = new(attributes)
+        validate_unique_id(record)
         record.save
         mark_dirty
         record
@@ -188,6 +189,7 @@ module ActiveHash
 
       def create!(attributes = {})
         record = new(attributes)
+        validate_unique_id(record)
         record.save!
         record
       end
