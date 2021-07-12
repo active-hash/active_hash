@@ -136,7 +136,7 @@ module ActiveHash
 
       def insert(record)
         @records ||= []
-        record[:id] ||= next_id
+        set_id(record)
         validate_unique_id(record) if dirty
         mark_dirty
 
@@ -144,12 +144,12 @@ module ActiveHash
         @records << record
       end
 
-      def next_id
-        max_record = all.max { |a, b| a.id <=> b.id }
-        if max_record.nil?
-          1
-        elsif max_record.id.is_a?(Numeric)
-          max_record.id.succ
+      def set_id(record)
+        # sets record[:id] to @max_id+1 if it doesn't exist
+        if record[:id] && record[:id].is_a?(Numeric)
+          @max_id = [@max_id || 0, record[:id].ceil].max
+        else
+          record[:id] ||= (@max_id = @max_id.to_i.succ)
         end
       end
 
