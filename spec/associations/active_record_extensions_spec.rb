@@ -75,6 +75,11 @@ unless SKIP_ACTIVE_RECORD
             expect(author.books).to eq([@book_1, @book_2])
           end
 
+          it "should find the correct record ids" do
+            author = Author.create :id => 1
+            expect(author.book_ids).to eq([@book_1.id, @book_2.id])
+          end
+
           it "return a scope so that we can apply further scopes" do
             author = Author.create :id => 1
             expect(author.books.published).to eq([@book_1])
@@ -95,6 +100,11 @@ unless SKIP_ACTIVE_RECORD
             expect(author.books).to eq([@book_2, @book_3])
           end
 
+          it "should find the correct record ids" do
+            author = Author.create :id => 1, :book_identifier => 2
+            expect(author.book_ids).to eq([@book_2.id, @book_3.id])
+          end
+
           it "return a scope so that we can apply further scopes" do
             author = Author.create :id => 1, :book_identifier => 2
             expect(author.books.published).to eq([@book_3])
@@ -112,6 +122,11 @@ unless SKIP_ACTIVE_RECORD
           it "should find the correct records" do
             author = Author.create :id => 1
             expect(author.books).to eq([@book_1, @book_2])
+          end
+
+          it "should find the correct record ids" do
+            author = Author.create :id => 1
+            expect(author.book_ids).to eq([@book_1.id, @book_2.id])
           end
 
           it "return a scope so that we can apply further scopes" do

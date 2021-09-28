@@ -90,7 +90,6 @@ module ActiveHash
 
     module Methods
       def has_many(association_id, options = {})
-
         define_method(association_id) do
           options = {
             :class_name => association_id.to_s.classify,
@@ -109,6 +108,9 @@ module ActiveHash
           else
             klass.where(foreign_key => primary_key_value)
           end
+        end
+        define_method("#{association_id.to_s.underscore.singularize}_ids") do
+          public_send(association_id).map(&:id)
         end
       end
 
