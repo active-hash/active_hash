@@ -94,9 +94,21 @@ describe ActiveYaml::Base do
     describe "with hash data" do
       it "returns an array of hashes" do
         expect(City.load_file).to be_kind_of(Array)
-        expect(City.load_file).to include({"state" => :new_york, "name" => "Albany", "id" => 1})
+        expect(City.load_file).to include({"state" => :new_york, "name" => "Albany", "id" => 1, "key" => "albany"})
         City.reload
         expect(City.all).to include(City.new(:id => 1))
+      end
+
+      it "automatically adds the key attribute" do
+        expect(City.load_file.first.keys).to include("key")
+      end
+
+      it "doesn't overwrite the key attribute when specifically listed in the yml file" do
+        expect(City.load_file.last["key"]).to eql("livable")
+      end
+
+      it "uses the root key of the hash if no key attribute is specified" do
+        expect(City.load_file.first["key"]).to eql("albany")
       end
     end
 

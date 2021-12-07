@@ -6,3 +6,8 @@ portland:
   id: 2
   state: Oregon
   name: Portland
+melbourne:
+  id: 3
+  state: Vic
+  name: Melbourne
+  key: livable
