@@ -38,10 +38,9 @@ module ActiveHash
           ids = @scope.pluck(:id) - Array.wrap(options.delete(:id) || options.delete("id"))
           candidates = ids.map { |id| @scope.find_by_id(id) }.compact
         end
-        return candidates if options.blank?
 
         filtered_records = (candidates || @records || []).reject do |record|
-          match_options?(record, options)
+          options.present? && match_options?(record, options)
         end
 
         ActiveHash::Relation.new(@scope.klass, filtered_records, {})
