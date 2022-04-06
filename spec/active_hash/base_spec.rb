@@ -388,7 +388,7 @@ describe ActiveHash, "Base" do
     end
 
     it "returns a chainable relation even if id is given" do
-      Country.where.not(id: 1).class.should == ActiveHash::Relation
+      expect(Country.where.not(id: 1).class).to eq(ActiveHash::Relation)
     end
 
     it "returns all records when id is nil" do
@@ -712,11 +712,11 @@ describe ActiveHash, "Base" do
       end
 
       it "finds the record with a chained filter" do
-        Country.where(name: "Canada").find_by_id("2").id.should == 2
+        expect(Country.where(name: "Canada").find_by_id("2").id).to eq(2)
       end
 
       it "filters ecord with a chained filter" do
-        Country.where(name: "Canada").find_by_id("1").should be_nil
+        expect(Country.where(name: "Canada").find_by_id("1")).to be_nil
       end
     end
 
