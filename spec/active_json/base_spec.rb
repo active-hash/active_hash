@@ -99,6 +99,10 @@ describe ActiveJSON::Base do
       expect(City.find(1).name).to eq('Albany')
     end
 
+    it 'returns a single city based on #find with a block' do
+      expect(City.find { |c| c.id == 1 }.name).to eq('Albany')
+    end
+
     it 'returns a single city based on find_by_id' do
       expect(City.find_by_id(1).name).to eq('Albany')
     end
