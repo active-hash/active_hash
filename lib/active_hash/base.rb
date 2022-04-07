@@ -38,10 +38,9 @@ module ActiveHash
           ids = @scope.pluck(:id) - Array.wrap(options.delete(:id) || options.delete("id"))
           candidates = ids.map { |id| @scope.find_by_id(id) }.compact
         end
-        return candidates if options.blank?
 
         filtered_records = (candidates || @records || []).reject do |record|
-          match_options?(record, options)
+          options.present? && match_options?(record, options)
         end
 
         ActiveHash::Relation.new(@scope.klass, filtered_records, {})
@@ -196,7 +195,7 @@ module ActiveHash
         ActiveHash::Relation.new(self, @records || [], options[:conditions] || {})
       end
 
-      delegate :where, :find, :find_by, :find_by!, :find_by_id, :count, :pluck, :pick, :first, :last, :order, to: :all
+      delegate :where, :find, :find_by, :find_by!, :find_by_id, :count, :pluck, :ids, :pick, :first, :last, :order, to: :all
 
       def transaction
         yield

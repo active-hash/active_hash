@@ -17,7 +17,7 @@ ActiveHash also ships with:
 F
 ## !!! Important notice !!!
 We have changed returned value to chainable by v3.0.0. It's not just an `Array` instance anymore.
-If it breaks your application, please report us on [issues](https://github.com/zilkey/active_hash/issues), and use v2.x.x as following..
+If it breaks your application, please report us on [issues](https://github.com/active-hash/active_hash/issues), and use v2.x.x as following..
 
 ```ruby
 gem 'active_hash', '~> 2.3.0'

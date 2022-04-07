@@ -387,6 +387,10 @@ describe ActiveHash, "Base" do
       expect(record.last.name).to eq('Mexico')
     end
 
+    it "returns a chainable relation even if id is given" do
+      Country.where.not(id: 1).class.should == ActiveHash::Relation
+    end
+
     it "returns all records when id is nil" do
       expect(Country.where.not(:id => nil)).to eq Country.all
     end
@@ -534,6 +538,19 @@ describe ActiveHash, "Base" do
 
     it "returns an Array of attribute values" do
       expect(Country.pluck(:id)).to match_array([1,2])
+    end
+  end
+
+  describe '.ids' do
+    before do
+      Country.data = [
+        {:id => 1, :name => "US"},
+        {:id => 2, :name => "Canada"}
+      ]
+    end
+
+    it "returns an Array of id attributes" do
+      expect(Country.ids).to match_array([1,2])
     end
   end
 

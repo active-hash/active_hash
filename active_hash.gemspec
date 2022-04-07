@@ -33,7 +33,7 @@ Gem::Specification.new do |s|
   s.email = %q{jeff@zilkey.com}
   s.summary = %q{An ActiveRecord-like model that uses a hash or file as a datasource}
   s.description = %q{Includes the ability to specify data using hashes, yml files or JSON files}
-  s.homepage = %q{http://github.com/zilkey/active_hash}
+  s.homepage = %q{http://github.com/active-hash/active_hash}
   s.license = "MIT"
 
   s.files = [

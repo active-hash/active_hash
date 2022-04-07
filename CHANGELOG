@@ -1,41 +1,41 @@
 2020-01-15 (v3.1.0)
-  - Add ActiveHash::Base.order method inspired by ActiveRecord [#177](https://github.com/zilkey/active_hash/pull/177)
-  - Add #to_ary to ActiveHash::Relation [#182](https://github.com/zilkey/active_hash/pull/182)
-  - Allow #find to behave like Enumerable#find if id is nil and a block is given [#183](https://github.com/zilkey/active_hash/pull/183)
-  - Delegate :sample to `records` [#189](https://github.com/zilkey/active_hash/pull/189)
+  - Add ActiveHash::Base.order method inspired by ActiveRecord [#177](https://github.com/active-hash/active_hash/pull/177)
+  - Add #to_ary to ActiveHash::Relation [#182](https://github.com/active-hash/active_hash/pull/182)
+  - Allow #find to behave like Enumerable#find if id is nil and a block is given [#183](https://github.com/active-hash/active_hash/pull/183)
+  - Delegate :sample to `records` [#189](https://github.com/active-hash/active_hash/pull/189)
 
 2019-09-28 (v3.0.0)
-  - Make #where chainable [#178](https://github.com/zilkey/active_hash/pull/178)
+  - Make #where chainable [#178](https://github.com/active-hash/active_hash/pull/178)
 
 2019-09-28 (v2.3.0)
-  - Add ::scope method (inspired by ActiveRecord) [#173](https://github.com/zilkey/active_hash/pull/173)
-  - Let `.find(nil)` raise ActiveHash::RecordNotFound (inspired by ActiveRecord) [#174](https://github.com/zilkey/active_hash/pull/174)
-  - `where` clause now works with range argument [#175](https://github.com/zilkey/active_hash/pull/175)
+  - Add ::scope method (inspired by ActiveRecord) [#173](https://github.com/active-hash/active_hash/pull/173)
+  - Let `.find(nil)` raise ActiveHash::RecordNotFound (inspired by ActiveRecord) [#174](https://github.com/active-hash/active_hash/pull/174)
+  - `where` clause now works with range argument [#175](https://github.com/active-hash/active_hash/pull/175)
 
 2019-03-06 (v2.2.1)
-  - Allow empty YAML [#171](https://github.com/zilkey/active_hash/pull/171) Thanks, @ppworks
+  - Allow empty YAML [#171](https://github.com/active-hash/active_hash/pull/171) Thanks, @ppworks
 
 2018-11-22 (v2.2.0)
-  - Support pluck method [#164](https://github.com/zilkey/active_hash/pull/164) Thanks, @ihatov08
-  - Support where.not method [#167](https://github.com/zilkey/active_hash/pull/167) Thanks, @DialBird
+  - Support pluck method [#164](https://github.com/active-hash/active_hash/pull/164) Thanks, @ihatov08
+  - Support where.not method [#167](https://github.com/active-hash/active_hash/pull/167) Thanks, @DialBird
 
 2018-04-05 (v2.1.0)
-  - Allow to use ERB (embedded ruby) in yml files [#160](https://github.com/zilkey/active_hash/pull/160) Thanks, @UgoMare
-  - Add `ActiveHash::Base.polymorphic_name` [#162](https://github.com/zilkey/active_hash/pull/162)
-  - Fix to be able to use enum accessor constant with same name as top-level constant[#161](https://github.com/zilkey/active_hash/pull/161) Thanks, @yujideveloper
+  - Allow to use ERB (embedded ruby) in yml files [#160](https://github.com/active-hash/active_hash/pull/160) Thanks, @UgoMare
+  - Add `ActiveHash::Base.polymorphic_name` [#162](https://github.com/active-hash/active_hash/pull/162)
+  - Fix to be able to use enum accessor constant with same name as top-level constant[#161](https://github.com/active-hash/active_hash/pull/161) Thanks, @yujideveloper
 
 2018-02-27 (v2.0.0)
-  - Drop old Ruby and Rails support [#157](https://github.com/zilkey/active_hash/pull/157)
-  - Don't generate instance accessors for class attributes [#136](https://github.com/zilkey/active_hash/pull/136) Thanks, @rainhead
+  - Drop old Ruby and Rails support [#157](https://github.com/active-hash/active_hash/pull/157)
+  - Don't generate instance accessors for class attributes [#136](https://github.com/active-hash/active_hash/pull/136) Thanks, @rainhead
 
 2017-06-14 (v1.5.3)
-  - Support symbol values in where and find_by [#156](https://github.com/zilkey/active_hash/pull/156) Thanks, @south37
+  - Support symbol values in where and find_by [#156](https://github.com/active-hash/active_hash/pull/156) Thanks, @south37
 
 2017-06-14 (v1.5.2)
-  - Fix find_by when passed an invalid id [#152](https://github.com/zilkey/active_hash/pull/152) Thanks, @davidstosik
+  - Fix find_by when passed an invalid id [#152](https://github.com/active-hash/active_hash/pull/152) Thanks, @davidstosik
 
 2017-04-20 (v1.5.1)
-  - Fix a bug on `.where` [#147](https://github.com/zilkey/active_hash/pull/147)
+  - Fix a bug on `.where` [#147](https://github.com/active-hash/active_hash/pull/147)
 
 2017-03-24 (v1.5.0)
   - add support for `.find_by!`(@syguer)
@@ -123,7 +123,7 @@
 
 2011-01-22
   - improved method_missing errors for dynamic finders
-  - prevent users from trying to overwrite :attributes (https://github.com/zilkey/active_hash/issues/#issue/33)
+  - prevent users from trying to overwrite :attributes (https://github.com/active-hash/active_hash/issues/#issue/33)
 
 2010-12-08
   - ruby 1.9.2 compatibility
