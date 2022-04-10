@@ -23,7 +23,7 @@ describe ActiveJSON::Base do
        expect(State.first.name).to match(/^New York/)
     end
 
-    it 'can load empty yaml' do
+    it 'can load empty JSON' do
       expect(Empty.first).to be_nil
     end
   end
@@ -43,6 +43,12 @@ describe ActiveJSON::Base do
         expect(State.where(:name => 'Oregon')).not_to be_empty
         expect(State.count).to be > 0
       end
+    end
+  end
+
+  describe ".create" do
+    it "does not fail when the loaded JSON was empty" do
+      Empty.create()
     end
   end
 

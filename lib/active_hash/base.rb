@@ -115,9 +115,7 @@ module ActiveHash
       end
 
       def data=(array_of_hashes)
-        mark_dirty
-        @records = nil
-        reset_record_index
+        delete_all
         self._data = array_of_hashes
         if array_of_hashes
           auto_assign_fields(array_of_hashes)
@@ -134,13 +132,12 @@ module ActiveHash
       end
 
       def insert(record)
-        @records ||= []
         record[:id] ||= next_id
         validate_unique_id(record) if dirty
         mark_dirty
 
-        add_to_record_index({ record.id.to_s => @records.length })
-        @records << record
+        add_to_record_index({ record.id.to_s => records.length })
+        records << record
       end
 
       def next_id
@@ -151,6 +148,12 @@ module ActiveHash
           max_record.id.succ
         end
       end
+
+      def records
+        @records ||= []
+      end
+
+      private :records
 
       def record_index
         @record_index ||= {}
@@ -192,7 +195,7 @@ module ActiveHash
       end
 
       def all(options = {})
-        ActiveHash::Relation.new(self, @records || [], options[:conditions] || {})
+        ActiveHash::Relation.new(self, records, options[:conditions] || {})
       end
 
       delegate :where, :find, :find_by, :find_by!, :find_by_id, :count, :pluck, :ids, :pick, :first, :last, :order, to: :all
@@ -210,7 +213,7 @@ module ActiveHash
       def delete_all
         mark_dirty
         reset_record_index
-        @records = []
+        records.clear
       end
 
       def fields(*args)
