@@ -105,6 +105,11 @@ module ActiveHash
       records.dup
     end
 
+    def method_missing(method_name, *args)
+      return super unless self.klass.scopes.key?(method_name)
+
+      instance_exec(*args, &self.klass.scopes[method_name])
+    end
 
     attr_reader :query_hash, :klass, :all_records, :records_dirty
 
