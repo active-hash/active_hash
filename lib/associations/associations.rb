@@ -116,7 +116,8 @@ module ActiveHash
         define_method(association_id) do
           options = {
             :class_name => association_id.to_s.classify,
-            :foreign_key => self.class.to_s.foreign_key
+            :foreign_key => self.class.to_s.foreign_key,
+            :primary_key => self.class.primary_key
           }.merge(options)
 
           scope = options[:class_name].constantize
@@ -124,7 +125,7 @@ module ActiveHash
           if scope.respond_to?(:scoped) && options[:conditions]
             scope = scope.scoped(:conditions => options[:conditions])
           end
-          scope.send("find_by_#{options[:foreign_key]}", id)
+          scope.send("find_by_#{options[:foreign_key]}", send(options[:primary_key]))
         end
       end
 

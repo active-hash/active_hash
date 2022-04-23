@@ -156,20 +156,67 @@ describe ActiveHash::Base, "associations" do
 
   describe "#has_one" do
     context "with ActiveHash children" do
-      before do
-        City.has_one :author
-        Author.field :city_id
+      context "with default options" do
+        before do
+          Author.field :city_id
+          City.has_one :author
+        end
+
+        it "find the correct records" do
+          author = Author.create :city_id => 1
+          city = City.create :id => 1
+          expect(city.author).to eq(author)
+        end
+
+        it "returns nil when there are no records" do
+          Author.create :city_id => 10
+          city = City.create :id => 1
+          expect(city.author).to be_nil
+        end
       end
 
-      it "find the correct records" do
-        city = City.create :id => 1
-        author = Author.create :city_id => 1
-        expect(city.author).to eq(author)
+      context "with a primary_key option" do
+        before do
+          Author.field :city_id
+          City.field :author_identifier
+          City.has_one :author, :primary_key => :author_identifier
+        end
+
+        it "find the correct records" do
+          Author.create :city_id => 1
+          author = Author.create :city_id => 10
+          city = City.create :id => 1, :author_identifier => 10
+          expect(city.author).to eq(author)
+        end
+
+        it "returns nil when there are no records" do
+          Author.create :city_id => 1
+          city = City.create :id => 1, :author_identifier => 10
+          expect(city.author).to be_nil
+        end
       end
 
-      it "returns nil when there are no records" do
-        city = City.create :id => 1
-        expect(city.author).to be_nil
+      context "with a foreign_key option" do
+        before do
+          Author.field :city_id
+          Author.field :city_identifier
+          City.has_one :author, :foreign_key => :city_identifier
+        end
+
+        it "find the correct records" do
+          Author.create :city_id => 1, :city_identifier => 1
+          author = Author.create :city_id => 1, :city_identifier => 10
+          Author.create :city_id => 10, :city_identifier => 5
+          city = City.create :id => 10
+          expect(city.author).to eq(author)
+        end
+
+        it "returns nil when there are no records" do
+          Author.create :city_id => 1, :city_identifier => 1
+          Author.create :city_id => 10, :city_identifier => 5
+          city = City.create :id => 10
+          expect(city.author).to be_nil
+        end
       end
     end
   end
