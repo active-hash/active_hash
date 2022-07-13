@@ -1,7 +1,6 @@
 require "bundler/setup"
 require "pry"
 require 'rspec'
-require 'rspec/autorun'
 require 'yaml'
 
 SKIP_ACTIVE_RECORD = ENV['SKIP_ACTIVE_RECORD']
