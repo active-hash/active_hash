@@ -615,8 +615,8 @@ describe ActiveHash, "Base" do
       end
 
       it "raises ActiveHash::RecordNotFound when id not found" do
-        expect { 
-          Country.find(0) 
+        expect {
+          Country.find(0)
         }.to raise_error(an_instance_of(ActiveHash::RecordNotFound)
           .and having_attributes(
             message: "Couldn't find Country with ID=0",
@@ -1500,11 +1500,14 @@ describe ActiveHash, "Base" do
         Country.field :name
         Country.field :language
         Country.data = [
-          {:id => 1, :name => "US", :language => 'English'},
-          {:id => 2, :name => "Canada", :language => 'English'},
-          {:id => 3, :name => "Mexico", :language => 'Spanish'}
+          {:id => 1, :name => "US", continent: 'North America', :language => 'English'},
+          {:id => 2, :name => "Canada" , continent: 'North America', :language => 'English'},
+          {:id => 3, :name => "Mexico" , continent: 'North America', :language => 'Spanish'},
+          {:id => 4, :name => "Brazil" , continent: 'South America', :language => 'Portuguese'}
         ]
         Country.scope :english_language, -> { where(language: 'English') }
+        Country.scope :portuguese_language, -> { where(language: 'Portuguese') }
+        Country.scope :south_america, -> { where(continent: 'South America') }
       end
 
       it 'should define a scope method' do
@@ -1520,6 +1523,12 @@ describe ActiveHash, "Base" do
         expect(Country.english_language.first.id).to eq 1
         expect(Country.english_language.second.id).to eq 2
       end
+
+      it 'should be chainable' do
+        expect(Country.south_america.portuguese_language).to(
+          eq(Country.where(continent: 'South America').where(language: 'Portuguese'))
+        )
+      end
     end
 
     context 'for query with argument' do
@@ -1527,10 +1536,12 @@ describe ActiveHash, "Base" do
         Country.field :name
         Country.field :language
         Country.data = [
-          {:id => 1, :name => "US", :language => 'English'},
-          {:id => 2, :name => "Canada", :language => 'English'},
-          {:id => 3, :name => "Mexico", :language => 'Spanish'}
+          {:id => 1, :name => "US", continent: 'North America', :language => 'English'},
+          {:id => 2, :name => "Canada", continent: 'North America', :language => 'English'},
+          {:id => 3, :name => "Mexico", continent: 'North America', :language => 'Spanish'},
+          {:id => 4, :name => "Brazil" , continent: 'South America', :language => 'Portuguese'}
         ]
+        Country.scope :with_continent, ->(continent) { where(continent: continent) }
         Country.scope :with_language, ->(language) { where(language: language) }
       end
 
@@ -1546,6 +1557,12 @@ describe ActiveHash, "Base" do
         expect(Country.with_language('English').count).to eq 2
         expect(Country.with_language('English').first.id).to eq 1
         expect(Country.with_language('English').second.id).to eq 2
+      end
+
+      it 'should be chainable' do
+        expect(Country.with_continent('South America').with_language('Portuguese')).to(
+          eq(Country.where(continent: 'South America').where(language: 'Portuguese'))
+        )
       end
     end
 
