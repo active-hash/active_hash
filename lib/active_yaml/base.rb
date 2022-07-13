@@ -9,7 +9,7 @@ module ActiveYaml
         if (data = raw_data).is_a?(Array)
           data
         elsif data.respond_to?(:values)
-          data.values
+          data.map{ |key, value| {"key" => key}.merge(value) }
         end
       end
 

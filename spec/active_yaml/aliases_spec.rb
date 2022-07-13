@@ -68,7 +68,7 @@ describe ActiveYaml::Aliases do
 
       it 'excludes them from fields' do
         model.all
-        expect(model.field_names).to match_array [:name, :flavor, :price, :slogan]
+        expect(model.field_names).to match_array [:name, :flavor, :price, :slogan, :key]
       end
     end
   end

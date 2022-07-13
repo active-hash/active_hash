@@ -369,6 +369,35 @@ mexico:
   id: 3
   name: Mexico
 ```
+
+### Automatic Key Attribute
+
+When using the hash format for your YAML file, ActiveYaml will automatically add a `key` attribute with the name of the object.  You can overwrite this by setting the key attribute in the YAML file.
+For example:
+```
+au:
+  id: 1
+  name: Australia
+```
+
+When you access the object you can do `Country.find(1).key => 'au'`. Or `Country.find_by_key('au')`
+
+If you want a different key on only some objects you can mix and match:
+
+```
+au:
+  id: 1
+  key: aus
+  name: Australia
+nz:
+  id: 2
+  name: New Zealand
+```
+
+`Country.find(1).key => 'aus'`
+
+`Country.find(2).key => 'nz'`
+
 ### Multiple files per model
 
 You can use multiple files to store your data. You will have to choose between hash or array style as you cannot use both for one model.

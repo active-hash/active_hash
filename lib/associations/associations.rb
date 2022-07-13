@@ -16,7 +16,7 @@ module ActiveHash
         if klass && klass < ActiveHash::Base
           belongs_to_active_hash(name, options)
         else
-          super
+          super(name, **options)
         end
       end
 
