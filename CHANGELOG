@@ -1,3 +1,20 @@
+2022-07-14 (v3.1.1)
+  - Make scopes chainable [#248](https://github.com/active-hash/active_hash/pull/248) @andreynering
+  - Set default key attributes [#251](https://github.com/active-hash/active_hash/pull/251/commits/68a0a121d110ac83f4bbf0024f027714fd24debf) @adampal
+  - Migrate from Travis to GitHub Actions for CI @kbrock
+  - Add primary_key support for has_one [#218](https://github.com/active-hash/active_hash/pull/218) @yujideveloper
+  - Return a chainable relation when using .not [#205](https://github.com/active-hash/active_hash/pull/205) @pfeiffer
+  - Correct fields with YAML aliases in array style [#226](https://github.com/active-hash/active_hash/pull/226) @stomk
+  - Add ActiveHash::Relation#size method for compatibily [#227](https://github.com/active-hash/active_hash/pull/227) @sluceno
+  - Implement ActiveRecord::RecordNotFound interface [#207](https://github.com/active-hash/active_hash/pull/207) @ChrisBr
+  - Fix find_by_id with filter chain [#210](https://github.com/active-hash/active_hash/pull/210) @ChrisBr
+  - Suppress Ruby 2.7 kwargs warnings [#206](https://github.com/active-hash/active_hash/pull/206) @yhirano55
+  - Call reload if @records is not defined [#208](https://github.com/active-hash/active_hash/pull/208) @jonmagic
+  - Switch to rspec3 (and update the Gemfile) [#209](https://github.com/active-hash/active_hash/pull/209) @djberg96
+  - Implement filter by RegEx [#211](https://github.com/active-hash/active_hash/pull/211) @ChrisBr
+  - Supports .pick method [#195](https://github.com/active-hash/active_hash/pull/195/files) @yhirano55
+  - Lots of other small performance improvements, documentation and testing. Thanks to everyone who contributed!
+
 2020-01-15 (v3.1.0)
   - Add ActiveHash::Base.order method inspired by ActiveRecord [#177](https://github.com/active-hash/active_hash/pull/177)
   - Add #to_ary to ActiveHash::Relation [#182](https://github.com/active-hash/active_hash/pull/182)
