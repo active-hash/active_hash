@@ -35,7 +35,7 @@ describe ActiveYaml::Base do
 
     it 'is thread-safe' do
       (1..5).map do
-        Thread.new { expect(City.count).to eq(2) }
+        Thread.new { expect(City.count).to eq(3) }
       end.each(&:join)
     end
   end
