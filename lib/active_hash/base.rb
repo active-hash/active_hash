@@ -144,13 +144,18 @@ module ActiveHash
       end
 
       def next_id
-        max_record = all.max { |a, b| a.id <=> b.id }
+        max_record = all_in_process.max { |a, b| a.id <=> b.id }
         if max_record.nil?
           1
         elsif max_record.id.is_a?(Numeric)
           max_record.id.succ
         end
       end
+
+      def all_in_process
+        all
+      end
+      private :all_in_process
 
       def record_index
         @record_index ||= {}
