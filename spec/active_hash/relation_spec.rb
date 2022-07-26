@@ -50,4 +50,20 @@ RSpec.describe ActiveHash::Relation do
       expect(array.size).to eq(2)
     end
   end
+
+  describe '#find' do
+    it 'returns a correct record' do
+      expect(subject.find(1).attributes).to eq(model_class.data.select{|e| e[:id] == 1}.first)
+    end
+
+    context 'when data ordered' do
+      before do
+        model_class.order(id: "DESC") 
+      end
+
+      it 'returns a correct record' do
+        expect(subject.find(1).attributes).to eq(model_class.data.select{|e| e[:id] == 1}.first)
+      end
+    end
+  end
 end
