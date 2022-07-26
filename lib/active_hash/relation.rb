@@ -96,9 +96,7 @@ module ActiveHash
       processed_args = preprocess_order_args(options)
       candidates = relation.dup
 
-      order_by_args!(candidates, processed_args)
-
-      candidates
+      order_by_args(candidates, processed_args)
     end
 
     def to_ary
@@ -179,7 +177,9 @@ module ActiveHash
       ary.map! { |e| e.split(/\W+/) }.reverse!
     end
 
-    def order_by_args!(candidates, args)
+    def order_by_args(candidates, args)
+      ordered_candidates = []
+
       args.each do |arg|
         field, dir = if arg.is_a?(Hash)
                        arg.to_a.flatten.map(&:to_sym)
@@ -189,7 +189,7 @@ module ActiveHash
                        arg.to_sym
                      end
 
-        candidates.sort! do |a, b|
+        ordered_candidates = candidates.sort do |a, b|
           if dir.present? && dir.to_sym.upcase.equal?(:DESC)
             b[field] <=> a[field]
           else
@@ -197,6 +197,7 @@ module ActiveHash
           end
         end
       end
+      ordered_candidates
     end
   end
 end
