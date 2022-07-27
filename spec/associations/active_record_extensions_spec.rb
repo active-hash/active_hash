@@ -151,15 +151,17 @@ unless SKIP_ACTIVE_RECORD
 
         if ActiveRecord::VERSION::MAJOR > 3
           it "doesn't interfere with AR's procs in belongs_to methods" do
-            School.belongs_to :country, lambda { where() }
+            School.belongs_to :country, lambda { select(:id) }
             school = School.new
-            country = Country.create!
+            country = Country.create!(id: 1, name: 'Japan')
             school.country = country
             expect(school.country).to eq(country)
             expect(school.country_id).to eq(country.id)
+            expect(school.country.attributes).to eq({ 'id' => 1, 'name' => 'Japan' })
             school.save!
             school.reload
-            expect(school.reload.country_id).to eq(country.id)
+            expect(school.country_id).to eq(country.id)
+            expect(school.country.attributes).to eq({ 'id' => 1 })
           end
         end
 
