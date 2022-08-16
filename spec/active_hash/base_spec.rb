@@ -1314,7 +1314,11 @@ describe ActiveHash, "Base" do
         {:id => 1, :name => "foo", :updated_at => timestamp}
       ]
 
-      expect(Country.first.cache_key).to eq("countries/1-#{timestamp.to_s(:number)}")
+      if ActiveSupport::VERSION::MAJOR < 7
+        expect(Country.first.cache_key).to eq("countries/1-#{timestamp.to_s(:number)}")
+      else
+        expect(Country.first.cache_key).to eq("countries/1-#{timestamp.to_fs(:number)}")
+      end
     end
 
     it 'should use "new" instead of the id for a new record' do
