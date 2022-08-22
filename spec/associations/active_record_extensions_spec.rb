@@ -146,28 +146,24 @@ unless SKIP_ACTIVE_RECORD
     end
 
     describe ActiveHash::Associations::ActiveRecordExtensions do
-
       describe "#belongs_to" do
+        it "doesn't interfere with AR's procs in belongs_to methods" do
+          School.belongs_to :country, lambda { where(name: 'Japan') }
+          school = School.new
+          country = Country.create!(id: 1, name: 'Japan')
+          school.country = country
+          expect(school.country).to eq(country)
+          expect(school.country_id).to eq(country.id)
+          expect(school.country).to eq(country)
+          school.save!
+          school.reload
+          expect(school.country_id).to eq(country.id)
+          expect(school.country).to eq(country)
 
-        if ActiveRecord::VERSION::MAJOR > 3
-          it "doesn't interfere with AR's procs in belongs_to methods" do
-            School.belongs_to :country, lambda { where(name: 'Japan') }
-            school = School.new
-            country = Country.create!(id: 1, name: 'Japan')
-            school.country = country
-            expect(school.country).to eq(country)
-            expect(school.country_id).to eq(country.id)
-            expect(school.country).to eq(country)
-            school.save!
-            school.reload
-            expect(school.country_id).to eq(country.id)
-            expect(school.country).to eq(country)
-
-            country.update!(name: 'JAPAN')
-            school.reload
-            expect(school.country_id).to eq(country.id)
-            expect(school.country).to eq(nil)
-          end
+          country.update!(name: 'JAPAN')
+          school.reload
+          expect(school.country_id).to eq(country.id)
+          expect(school.country).to eq(nil)
         end
 
         it "doesn't interfere w/ ActiveRecord's polymorphism" do

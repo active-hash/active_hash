@@ -487,7 +487,11 @@ module ActiveHash
         when new_record?
           "#{self.class.cache_key}/new"
         when timestamp = self[:updated_at]
-          "#{self.class.cache_key}/#{id}-#{timestamp.to_s(:number)}"
+          if ActiveSupport::VERSION::MAJOR < 7
+            "#{self.class.cache_key}/#{id}-#{timestamp.to_s(:number)}"
+          else
+            "#{self.class.cache_key}/#{id}-#{timestamp.to_fs(:number)}"
+          end
         else
           "#{self.class.cache_key}/#{id}"
       end
