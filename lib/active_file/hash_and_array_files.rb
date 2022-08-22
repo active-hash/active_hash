@@ -13,7 +13,7 @@ module ActiveFile
       loaded_files = full_paths.collect { |path| load_path(path) }
 
       if loaded_files.all?{ |file_data| file_data.is_a?(Array) }
-        loaded_files.sum
+        loaded_files.sum([])
       elsif loaded_files.all?{ |file_data| file_data.is_a?(Hash) }
         loaded_files.inject({}) { |hash, file_data| hash.merge(file_data) }
       else
