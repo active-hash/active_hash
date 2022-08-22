@@ -149,18 +149,16 @@ unless SKIP_ACTIVE_RECORD
 
       describe "#belongs_to" do
 
-        if ActiveRecord::VERSION::MAJOR > 3
-          it "doesn't interfere with AR's procs in belongs_to methods" do
-            School.belongs_to :country, lambda { where() }
-            school = School.new
-            country = Country.create!
-            school.country = country
-            expect(school.country).to eq(country)
-            expect(school.country_id).to eq(country.id)
-            school.save!
-            school.reload
-            expect(school.reload.country_id).to eq(country.id)
-          end
+        it "doesn't interfere with AR's procs in belongs_to methods" do
+          School.belongs_to :country, lambda { where() }
+          school = School.new
+          country = Country.create!
+          school.country = country
+          expect(school.country).to eq(country)
+          expect(school.country_id).to eq(country.id)
+          school.save!
+          school.reload
+          expect(school.reload.country_id).to eq(country.id)
         end
 
         it "doesn't interfere w/ ActiveRecord's polymorphism" do
