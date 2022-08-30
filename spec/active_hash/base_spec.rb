@@ -992,6 +992,17 @@ describe ActiveHash, "Base" do
       expect(countries.first).to eq Country.find_by(name: "Canada")
       expect(countries.second).to eq Country.find_by(name: "US")
     end
+
+    it "doesn't change the order of original records" do
+      countries = Country.order(id: :desc)
+      expect(countries.first).to eq Country.find_by(name: "Mexico")
+      expect(countries.second).to eq Country.find_by(name: "Canada")
+      expect(countries.third).to eq Country.find_by(name: "US")
+      
+      expect(Country.all.first).to eq Country.find_by(name: "US")
+      expect(Country.all.second).to eq Country.find_by(name: "Canada")
+      expect(Country.all.third).to eq Country.find_by(name: "Mexico")
+    end
   end
 
   describe "#method_missing" do
