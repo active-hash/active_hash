@@ -127,9 +127,17 @@ module ActiveHash
         end
       end
 
-      def exists?(record)
-        if record.id.present?
-          record_index[record.id.to_s].present?
+      def exists?(args = nil)
+        if args.respond_to?(:id)
+          record_index[args.id.to_s].present?
+        elsif args === false
+          false
+        elsif args.nil?
+          all.count.positive?
+        elsif args.class == Hash
+          all.where(args).count.positive?
+        else
+          all.where(id: args.to_i).count.positive?
         end
       end
 

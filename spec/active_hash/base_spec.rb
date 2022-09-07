@@ -994,6 +994,96 @@ describe ActiveHash, "Base" do
     end
   end
 
+  describe ".exists?" do
+    before do
+      Country.field :name
+      Country.field :language
+      Country.field :code
+      Country.data = [
+        { id: 1, name: "US",     language: "English", code: 1 },
+        { id: 2, name: "Canada", language: "English", code: 1 },
+        { id: 3, name: "Mexico", language: "Spanish", code: 52 }
+      ]
+    end
+
+    context "when data are exists and no arguments is passed" do
+      it "return true" do
+        expect(Country.exists?).to be_truthy
+      end
+    end
+
+    context "when no data are exists and no arguments is passed" do
+      before do
+        Country.field :name
+        Country.field :language
+        Country.field :code
+        Country.data = []
+      end
+
+      it "return false" do
+        expect(Country.exists?).to be_falsy
+      end
+    end
+
+    context "when false is passed" do
+      it "return false" do
+        expect(Country.exists?(false)).to be_falsy
+      end
+    end
+
+    describe "with matches" do
+      context 'for a record argument' do
+        it "return true" do
+          expect(Country.exists?(Country.new({ id: 1, name: "US", language: "English", code: 1 }))).to be_truthy
+        end
+      end
+
+      context "for an integer argument" do
+        it "return true" do
+          expect(Country.exists?(1)).to be_truthy
+        end
+      end
+
+      context "for a string argument" do
+        it "return true" do
+          expect(Country.exists?("1")).to be_truthy
+        end
+      end
+
+      context "for a hash argument" do
+        it "return true" do
+          expect(Country.exists?(name: "US", language: "English")).to be_truthy
+        end
+      end
+    end
+
+    describe "without matches" do
+      context 'for a record argument' do
+        it "return false" do
+          expect(Country.exists?(Country.new({ id: 4, name: "Franch", language: "French", code: 16 }))).to be_falsy
+        end
+      end
+
+      context "for an integer argument" do
+        it "return false" do
+          expect(Country.exists?(4)).to be_falsy
+        end
+      end
+
+      context "for a string argument" do
+        it "return false" do
+          expect(Country.exists?("4")).to be_falsy
+        end
+      end
+
+      context "for a hash argument" do
+        it "return false" do
+          expect(Country.exists?(name: "US", language: "Spanish")).to be_falsy
+        end
+      end
+    end
+  end
+
   describe "#method_missing" do
     it "doesn't blow up if you call a missing dynamic finder when fields haven't been set" do
       expect do
