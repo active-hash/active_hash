@@ -130,11 +130,11 @@ module ActiveHash
       def exists?(args = nil)
         if args.respond_to?(:id)
           record_index[args.id.to_s].present?
-        elsif args === false
+        elsif args == false
           false
         elsif args.nil?
           all.present?
-        elsif args.class == Hash
+        elsif args.is_a?(Hash)
           all.where(args).present?
         else
           all.where(id: args.to_i).present?
