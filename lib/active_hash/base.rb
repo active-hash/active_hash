@@ -133,11 +133,11 @@ module ActiveHash
         elsif args === false
           false
         elsif args.nil?
-          all.count.positive?
+          all.present?
         elsif args.class == Hash
-          all.where(args).count.positive?
+          all.where(args).present?
         else
-          all.where(id: args.to_i).count.positive?
+          all.where(id: args.to_i).present?
         end
       end
 
