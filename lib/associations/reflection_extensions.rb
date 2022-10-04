@@ -13,11 +13,9 @@ module ActiveHash
           def compute_class(name)
             super
           rescue ArgumentError => e
-            if e.message =~ /Please provide the :class_name option on the association/ && klass < ActiveHash::Base
-              active_record.send(:compute_type, name)
-            else
-              raise
-            end
+            raise unless e.message =~ /Please provide the :class_name option on the association/ && klass < ActiveHash::Base
+
+            active_record.send(:compute_type, name)
           end
         end
       end
