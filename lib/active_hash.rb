@@ -13,6 +13,8 @@ end
 
 require 'active_hash/base'
 require 'active_hash/relation'
+require 'active_hash/condition'
+require 'active_hash/conditions'
 require 'active_file/multiple_files'
 require 'active_file/hash_and_array_files'
 require 'active_file/base'

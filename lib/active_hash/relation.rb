@@ -7,24 +7,80 @@ module ActiveHash
     delegate :empty?, :length, :first, :second, :third, :last, to: :records
     delegate :sample, to: :records
 
-    def initialize(klass, all_records, query_hash = nil)
+    attr_reader :conditions, :order_values, :klass, :all_records
+
+    def initialize(klass, all_records, conditions = nil, order_values = nil)
       self.klass = klass
       self.all_records = all_records
-      self.query_hash = query_hash
-      self.records_dirty = false
+      self.conditions = Conditions.wrap(conditions || [])
+      self.order_values = order_values || []
+    end
+
+    def where(conditions_hash = :chain)
+      return WhereChain.new(self) if conditions_hash == :chain
+
+      spawn.where!(conditions_hash)
+    end
+
+    class WhereChain
+      attr_reader :relation
+
+      def initialize(relation)
+        @relation = relation
+      end
+
+      def not(conditions_hash)
+        relation.conditions << Condition.new(conditions_hash).invert!
+        relation
+      end
+    end
+
+    def order(*options)
+      spawn.order!(*options)
+    end
+
+    def reorder(*options)
+      spawn.reorder!(*options)
+    end
+
+    def where!(conditions_hash, inverted = false)
+      self.conditions << Condition.new(conditions_hash)
       self
     end
 
-    def where(query_hash = :chain)
-      return ActiveHash::Base::WhereChain.new(self) if query_hash == :chain
+    def spawn
+      self.class.new(klass, all_records, conditions, order_values)
+    end
 
-      self.records_dirty = true unless query_hash.nil? || query_hash.keys.empty?
-      self.query_hash.merge!(query_hash || {})
+    def order!(*options)
+      check_if_method_has_arguments!(:order, options)
+      self.order_values += preprocess_order_args(options)
+      self
+    end
+
+    def reorder!(*options)
+      check_if_method_has_arguments!(:order, options)
+
+      self.order_values = preprocess_order_args(options)
+      @records = apply_order_values(records, order_values)
+
+      self
+    end
+
+    def records
+      @records ||= begin
+        filtered_records = apply_conditions(all_records, conditions)
+        ordered_records = apply_order_values(filtered_records, order_values) # rubocop:disable Lint/UselessAssignment
+      end
+    end
+
+    def reload
+      @records = nil # Reset records
       self
     end
 
     def all(options = {})
-      if options.has_key?(:conditions)
+      if options.key?(:conditions)
         where(options[:conditions])
       else
         where({})
@@ -58,10 +114,11 @@ module ActiveHash
     end
 
     def find_by_id(id)
-      return where(id: id).first if query_hash.present?
-
       index = klass.send(:record_index)[id.to_s] # TODO: Make index in Base publicly readable instead of using send?
-      index and records[index]
+      return unless index
+
+      record = all_records[index]
+      record if conditions.matches?(record)
     end
 
     def count
@@ -84,84 +141,30 @@ module ActiveHash
       pluck(*column_names).first
     end
 
-    def reload
-      @records = filter_all_records_by_query_hash
-    end
-
-    def order(*options)
-      check_if_method_has_arguments!(:order, options)
-      relation = where({})
-      return relation if options.blank?
-
-      processed_args = preprocess_order_args(options)
-      candidates = relation.dup
-
-      order_by_args!(candidates, processed_args)
-
-      candidates
-    end
-
     def to_ary
       records.dup
     end
 
     def method_missing(method_name, *args)
-      return super unless self.klass.scopes.key?(method_name)
+      return super unless klass.scopes.key?(method_name)
 
-      instance_exec(*args, &self.klass.scopes[method_name])
+      instance_exec(*args, &klass.scopes[method_name])
     end
 
-    attr_reader :query_hash, :klass, :all_records, :records_dirty
+    def respond_to_missing?(method_name, include_private = false)
+      klass.scopes.key?(method_name) || super
+    end
 
     private
 
-    attr_writer :query_hash, :klass, :all_records, :records_dirty
+    attr_writer :conditions, :order_values, :klass, :all_records
 
-    def records
-      if !defined?(@records) || @records.nil? || records_dirty
-        reload
-      else
-        @records
+    def apply_conditions(records, conditions)
+      return records if conditions.blank?
+
+      records.select do |record|
+        conditions.matches?(record)
       end
-    end
-
-    def filter_all_records_by_query_hash
-      self.records_dirty = false
-      return all_records if query_hash.blank?
-
-      # use index if searching by id
-      if query_hash.key?(:id) || query_hash.key?("id")
-        ids = (query_hash.delete(:id) || query_hash.delete("id"))
-        ids = range_to_array(ids) if ids.is_a?(Range)
-        candidates = Array.wrap(ids).map { |id| klass.find_by_id(id) }.compact
-      end
-
-      return candidates if query_hash.blank?
-
-      (candidates || all_records || []).select do |record|
-        match_options?(record, query_hash)
-      end
-    end
-
-    def match_options?(record, options)
-      options.all? do |col, match|
-        if match.kind_of?(Array)
-          match.any? { |v| normalize(v) == normalize(record[col]) }
-        else
-          normalize(match) === normalize(record[col])
-        end
-      end
-    end
-
-    def normalize(v)
-      v.respond_to?(:to_sym) ? v.to_sym : v
-    end
-
-    def range_to_array(range)
-      return range.to_a unless range.end.nil?
-
-      e = records.last[:id]
-      (range.begin..e).to_a
     end
 
     def check_if_method_has_arguments!(method_name, args)
@@ -179,7 +182,9 @@ module ActiveHash
       ary.map! { |e| e.split(/\W+/) }.reverse!
     end
 
-    def order_by_args!(candidates, args)
+    def apply_order_values(records, args)
+      ordered_records = records.dup
+
       args.each do |arg|
         field, dir = if arg.is_a?(Hash)
                        arg.to_a.flatten.map(&:to_sym)
@@ -189,7 +194,7 @@ module ActiveHash
                        arg.to_sym
                      end
 
-        candidates.sort! do |a, b|
+        ordered_records.sort! do |a, b|
           if dir.present? && dir.to_sym.upcase.equal?(:DESC)
             b[field] <=> a[field]
           else
@@ -197,6 +202,8 @@ module ActiveHash
           end
         end
       end
+
+      ordered_records
     end
   end
 end

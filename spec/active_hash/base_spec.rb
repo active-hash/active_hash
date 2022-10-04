@@ -205,6 +205,29 @@ describe ActiveHash, "Base" do
     end
   end
 
+  describe ".reload" do
+    before do
+      Country.field :name
+      Country.field :language
+      Country.data = [
+        {:id => 1, :name => "US", :language => 'English'},
+        {:id => 2, :name => "Canada", :language => 'English'},
+        {:id => 3, :name => "Mexico", :language => 'Spanish'}
+      ]
+    end
+
+    it "it reloads cached records" do
+      countries = Country.where(language: 'Spanish')
+      expect(countries.count).to eq(1)
+
+      Country.create(id: 4, name: 'Spain', language: 'Spanish')
+
+      expect(countries.count).to eq(1)
+      countries.reload
+      expect(countries.count).to eq(2)
+    end
+  end
+
   describe ".where" do
     before do
       Country.field :name
@@ -221,7 +244,7 @@ describe ActiveHash, "Base" do
     end
 
     it "returns WhereChain class if no conditions are provided" do
-      expect(Country.where.class).to eq(ActiveHash::Base::WhereChain)
+      expect(Country.where.class).to eq(ActiveHash::Relation::WhereChain)
     end
 
     it "returns all records when passed nil" do
@@ -988,9 +1011,42 @@ describe ActiveHash, "Base" do
 
     it "populates the data correctly in the order provided" do
       countries = Country.where(language: 'English').order(id: :desc)
+
       expect(countries.count).to eq 2
       expect(countries.first).to eq Country.find_by(name: "Canada")
       expect(countries.second).to eq Country.find_by(name: "US")
+    end
+
+    it "can be chained" do
+      countries = Country.order(language: :asc)
+      expect(countries.first).to eq Country.find_by(name: "US")
+
+      countries = countries.order(name: :asc)
+      expect(countries.first).to eq Country.find_by(name: "Canada")
+    end
+
+    it "doesn't change the order of original records" do
+      countries = Country.order(id: :desc)
+
+      expect(countries.first).to eq Country.find_by(name: "Mexico")
+      expect(countries.second).to eq Country.find_by(name: "Canada")
+      expect(countries.third).to eq Country.find_by(name: "US")
+
+      expect(countries.find(1)).to eq Country.find_by(name: "US")
+
+      expect(Country.all.first).to eq Country.find_by(name: "US")
+      expect(Country.all.second).to eq Country.find_by(name: "Canada")
+      expect(Country.all.third).to eq Country.find_by(name: "Mexico")
+    end
+  end
+
+  describe ".reorder" do
+    it "re-orders records" do
+      countries = Country.order(language: :asc)
+      expect(countries.first).to eq Country.find_by(name: "US")
+
+      countries = countries.reorder(id: :desc)
+      expect(countries.first).to eq Country.find_by(name: "Mexico")
     end
   end
 
