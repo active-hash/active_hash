@@ -10,7 +10,7 @@ module ActiveHash
     def initialize(klass, all_records, query_hash = nil)
       self.klass = klass
       self.all_records = all_records
-      self.query_hash = query_hash
+      self.query_hash = query_hash.deep_symbolize_keys
       self.records_dirty = false
       self
     end
@@ -130,8 +130,8 @@ module ActiveHash
       return all_records if query_hash.blank?
 
       # use index if searching by id
-      if query_hash.key?(:id) || query_hash.key?("id")
-        ids = (query_hash.delete(:id) || query_hash.delete("id"))
+      if query_hash.key?(:id)
+        ids = query_hash.delete(:id)
         ids = range_to_array(ids) if ids.is_a?(Range)
         candidates = Array.wrap(ids).map { |id| klass.find_by_id(id) }.compact
       end
