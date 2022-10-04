@@ -236,6 +236,14 @@ describe ActiveHash, "Base" do
       Country.where(:language => 'English').all? { |country| expect(country).to be_kind_of(Country) }
     end
 
+    it "doesn't affect the original" do
+      countries = Country.where(:language => 'English')
+
+      expect(countries.size).to eq 2
+      expect(countries.where(name: "US").size).to eq 1
+      expect(countries.size).to eq 2
+    end
+
     it "populates the data correctly" do
       records = Country.where(:language => 'English')
       expect(records.first.id).to eq(1)

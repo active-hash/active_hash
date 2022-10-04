@@ -11,16 +11,14 @@ module ActiveHash
       self.klass = klass
       self.all_records = all_records
       self.query_hash = query_hash
-      self.records_dirty = false
-      self
     end
 
     def where(query_hash = :chain)
-      return ActiveHash::Base::WhereChain.new(self) if query_hash == :chain
-
-      self.records_dirty = true unless query_hash.nil? || query_hash.keys.empty?
-      self.query_hash.merge!(query_hash || {})
-      self
+      if query_hash == :chain
+        ActiveHash::Base::WhereChain.new(self)
+      else
+        self.class.new(klass, all_records, self.query_hash.merge(query_hash || {}))
+      end
     end
 
     def all(options = {})
@@ -111,14 +109,14 @@ module ActiveHash
       instance_exec(*args, &self.klass.scopes[method_name])
     end
 
-    attr_reader :query_hash, :klass, :all_records, :records_dirty
+    attr_reader :query_hash, :klass, :all_records
 
     private
 
-    attr_writer :query_hash, :klass, :all_records, :records_dirty
+    attr_writer :query_hash, :klass, :all_records
 
     def records
-      if !defined?(@records) || @records.nil? || records_dirty
+      if !defined?(@records) || @records.nil?
         reload
       else
         @records
@@ -126,7 +124,6 @@ module ActiveHash
     end
 
     def filter_all_records_by_query_hash
-      self.records_dirty = false
       return all_records if query_hash.blank?
 
       # use index if searching by id
