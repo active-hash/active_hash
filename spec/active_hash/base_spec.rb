@@ -282,7 +282,7 @@ describe ActiveHash, "Base" do
     end
 
     it "returns multiple records for multiple ids" do
-      expect(Country.where(:id => %w(1 2)).map(&:id)).to match_array([1,2])
+      expect(Country.where(:id => %w(1 1 2)).map(&:id)).to match_array([1,2])
     end
 
     it "returns multiple records for range argument" do

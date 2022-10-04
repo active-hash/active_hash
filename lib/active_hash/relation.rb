@@ -133,7 +133,7 @@ module ActiveHash
       if query_hash.key?(:id)
         ids = query_hash.delete(:id)
         ids = range_to_array(ids) if ids.is_a?(Range)
-        candidates = Array.wrap(ids).map { |id| klass.find_by_id(id) }.compact
+        candidates = Array.wrap(ids).uniq.map { |id| klass.find_by_id(id) }.compact
       end
 
       return candidates if query_hash.blank?
