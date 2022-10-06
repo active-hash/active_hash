@@ -32,7 +32,7 @@ class ActiveHash::Relation::Condition
 
   def matches_value?(value, comparison)
     return comparison.any? { |v| matches_value?(value, v) } if comparison.is_a?(Array)
-    return comparison.include?(value) if comparison.is_a?(Range)
+    return comparison.cover?(value) if comparison.is_a?(Range)
     return comparison.match?(value) if comparison.is_a?(Regexp)
 
     normalize(value) == normalize(comparison)
