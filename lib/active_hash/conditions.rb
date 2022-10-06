@@ -1,7 +1,7 @@
 class ActiveHash::Relation::Conditions
   attr_reader :conditions
 
-  delegate_missing_to :conditions
+  delegate :<<, :map, to: :conditions
 
   def initialize(conditions = [])
     @conditions = conditions

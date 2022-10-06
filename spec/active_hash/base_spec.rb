@@ -341,6 +341,22 @@ describe ActiveHash, "Base" do
     end
   end
 
+  describe ".invert_where" do
+    before do
+      Country.field :name
+      Country.field :language
+      Country.data = [
+        {:id => 1, :name => "US", :language => 'English'},
+        {:id => 2, :name => "Canada", :language => 'English'},
+        {:id => 3, :name => "Mexico", :language => 'Spanish'}
+      ]
+    end
+
+    it "inverts all conditions" do
+      expect(Country.where(id: 1).where.not(id: 3).invert_where.map(&:name)).to match_array(%w(Mexico))
+    end
+  end
+
   describe ".where.not" do
     before do
       Country.field :name

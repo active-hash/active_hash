@@ -48,6 +48,15 @@ module ActiveHash
       self
     end
 
+    def invert_where
+      spawn.invert_where!
+    end
+
+    def invert_where!
+      conditions.map(&:invert!)
+      self
+    end
+
     def spawn
       self.class.new(klass, all_records, conditions, order_values)
     end
