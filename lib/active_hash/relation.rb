@@ -73,7 +73,16 @@ module ActiveHash
     end
 
     def pluck(*column_names)
-      column_names.map { |column_name| all.map(&column_name.to_sym) }.inject(&:zip)
+      symbolized_column_names = column_names.map(&:to_sym)
+
+      if symbolized_column_names.length == 1
+        column_name = symbolized_column_names.first
+        all.map { |record| record[column_name] }
+      else
+        all.map do |record|
+          symbolized_column_names.map { |column_name| record[column_name] }
+        end
+      end
     end
 
     def ids
