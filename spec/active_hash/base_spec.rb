@@ -527,17 +527,22 @@ describe ActiveHash, "Base" do
   describe ".pluck" do
     before do
       Country.data = [
-        {:id => 1, :name => "US"},
-        {:id => 2, :name => "Canada"}
+        {:id => 1, :name => "US", :language => "English"},
+        {:id => 2, :name => "Canada", :language => "English"},
+        {:id => 3, :name => "Mexico", :language => "Spanish"}
       ]
     end
 
-    it "returns an two dimensional Array of attributes values" do
-      expect(Country.pluck(:id, :name)).to match_array([[1,"US"], [2, "Canada"]])
+    it "returns an two dimensional Array of 3 attributes values" do
+      expect(Country.pluck(:id, :name, :language)).to match_array([[1, "US", "English"], [2, "Canada", "English"], [3, "Mexico", "Spanish"]])
+    end
+
+    it "returns an two dimensional Array of 2 attributes values" do
+      expect(Country.pluck(:id, :name)).to match_array([[1, "US"], [2, "Canada"], [3, "Mexico"]])
     end
 
     it "returns an Array of attribute values" do
-      expect(Country.pluck(:id)).to match_array([1,2])
+      expect(Country.pluck(:id)).to match_array([1, 2, 3])
     end
   end
 
