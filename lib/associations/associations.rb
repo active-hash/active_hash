@@ -4,16 +4,16 @@ module ActiveHash
     module ActiveRecordExtensions
 
       def belongs_to(name, scope = nil, **options)
-        options = {:class_name => name.to_s.camelize }.merge(options)
+        klass_name = options.key?(:class_name) ? options[:class_name] : name.to_s.camelize
         klass =
           begin
-            options[:class_name].constantize
-          rescue
-            nil
-          rescue LoadError
+            klass_name.constantize
+          rescue StandardError, LoadError
             nil
           end
+
         if klass && klass < ActiveHash::Base
+          options = { class_name: klass_name }.merge(options)
           belongs_to_active_hash(name, options)
         else
           super
