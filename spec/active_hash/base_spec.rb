@@ -1370,6 +1370,9 @@ describe ActiveHash, "Base" do
           t.integer :subject_id
           t.integer :country_id
         end
+
+        extend ActiveHash::Associations::ActiveRecordExtensions
+
         belongs_to :subject, :polymorphic => true
         belongs_to :country
       end
