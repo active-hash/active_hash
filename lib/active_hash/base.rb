@@ -43,7 +43,7 @@ module ActiveHash
           options.present? && match_options?(record, options)
         end
 
-        ActiveHash::Relation.new(@scope.klass, filtered_records, {})
+        ActiveHash::Relation.new(@scope.klass, filtered_records, [])
       end
 
       def match_options?(record, options)
@@ -205,7 +205,7 @@ module ActiveHash
       end
 
       def all(options = {})
-        ActiveHash::Relation.new(self, @records || [], options[:conditions] || {})
+        ActiveHash::Relation.new(self, @records || [], options[:conditions].to_a)
       end
 
       delegate :where, :find, :find_by, :find_by!, :find_by_id, :count, :pluck, :ids, :pick, :first, :last, :order, to: :all

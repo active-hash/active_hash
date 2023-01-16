@@ -307,14 +307,19 @@ describe ActiveHash, "Base" do
       expect(Country.where(:name => [:US, :Canada]).map(&:name)).to match_array(%w(US Canada))
     end
 
-    it 'is chainable' do
-      where_relation = Country.where(language: 'English')
+    it "is chainable" do
+      where_relation = Country.where(language: "English")
 
       expect(where_relation.length).to eq 2
       expect(where_relation.map(&:id)).to eq([1, 2])
-      chained_where_relation = where_relation.where(name: 'US')
+      chained_where_relation = where_relation.where(name: "US")
       expect(chained_where_relation.length).to eq 1
       expect(chained_where_relation.map(&:id)).to eq([1])
+    end
+
+    it "is chainable with same attribute" do
+      expect(Country.where(id: 1..2).where(id: 2..3).pluck(:id)).to match_array([2])
+      expect(Country.where(language: "English").where(language: "Spanish").length).to eq 0
     end
   end
 
@@ -409,6 +414,14 @@ describe ActiveHash, "Base" do
 
     it "filters records for multiple conditions" do
       expect(Country.where.not(:id => 1, :name => 'Mexico')).to match_array([Country.find(2)])
+    end
+
+    it "is chainable with where" do
+      expect(Country.where.not(name: "US").where(language: "English").pluck(:name)).to match_array(["Canada"])
+    end
+
+    it "is chainable with where for same attribute" do
+      expect(Country.where(id: 2..3).where(id: 1..3).where.not(id: 1..2).where.not(id: 1).pluck(:id)).to match_array([3])
     end
   end
 

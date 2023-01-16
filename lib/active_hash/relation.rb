@@ -7,10 +7,10 @@ module ActiveHash
     delegate :empty?, :length, :first, :second, :third, :last, to: :records
     delegate :sample, to: :records
 
-    def initialize(klass, all_records, query_hash = nil)
+    def initialize(klass, all_records, query_list = nil)
       self.klass = klass
       self.all_records = all_records
-      self.query_hash = query_hash
+      self.query_list = query_list
       self.records_dirty = false
       self
     end
@@ -18,8 +18,11 @@ module ActiveHash
     def where(query_hash = :chain)
       return ActiveHash::Base::WhereChain.new(self) if query_hash == :chain
 
-      self.records_dirty = true unless query_hash.nil? || query_hash.keys.empty?
-      self.query_hash.merge!(query_hash || {})
+      unless query_hash.blank?
+        self.records_dirty = true 
+        self.query_list.concat(query_hash.to_a)
+      end
+
       self
     end
 
@@ -58,10 +61,10 @@ module ActiveHash
     end
 
     def find_by_id(id)
-      return where(id: id).first if query_hash.present?
+      return where(id: id).first if query_list.present?
 
       index = klass.send(:record_index)[id.to_s] # TODO: Make index in Base publicly readable instead of using send?
-      index and records[index]
+      index and all_records[index]
     end
 
     def count
@@ -94,7 +97,7 @@ module ActiveHash
     end
 
     def reload
-      @records = filter_all_records_by_query_hash
+      @records = filter_all_records_by_query_list
     end
 
     def order(*options)
@@ -120,11 +123,11 @@ module ActiveHash
       instance_exec(*args, &self.klass.scopes[method_name])
     end
 
-    attr_reader :query_hash, :klass, :all_records, :records_dirty
+    attr_reader :query_list, :klass, :all_records, :records_dirty
 
     private
 
-    attr_writer :query_hash, :klass, :all_records, :records_dirty
+    attr_writer :query_list, :klass, :all_records, :records_dirty
 
     def records
       if !defined?(@records) || @records.nil? || records_dirty
@@ -134,21 +137,23 @@ module ActiveHash
       end
     end
 
-    def filter_all_records_by_query_hash
+    def filter_all_records_by_query_list
       self.records_dirty = false
-      return all_records if query_hash.blank?
+      return all_records if query_list.blank?
 
       # use index if searching by id
-      if query_hash.key?(:id) || query_hash.key?("id")
-        ids = (query_hash.delete(:id) || query_hash.delete("id"))
+      query_by_id_list = query_list.select { |option| option.first == :id || option.first == "id" }
+      candidates = query_by_id_list.reduce(nil) do |candidates, option|
+        ids = query_list.delete(option).last
         ids = range_to_array(ids) if ids.is_a?(Range)
-        candidates = Array.wrap(ids).map { |id| klass.find_by_id(id) }.compact
+        new_candidates = Array.wrap(ids).map { |id| klass.find_by_id(id) }.compact
+  
+        candidates.nil? ? new_candidates : candidates & new_candidates
       end
-
-      return candidates if query_hash.blank?
+      return candidates if query_list.blank?
 
       (candidates || all_records || []).select do |record|
-        match_options?(record, query_hash)
+        match_options?(record, query_list)
       end
     end
 
