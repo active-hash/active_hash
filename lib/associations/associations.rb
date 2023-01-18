@@ -49,13 +49,20 @@ module ActiveHash
         end
 
         if ActiveRecord::Reflection.respond_to?(:create)
-          reflection = ActiveRecord::Reflection.create(
-            :belongs_to,
-            association_id.to_sym,
-            nil,
-            options,
-            self
-          )
+          if defined?(ActiveHash::Reflection::BelongsToReflection)
+            reflection = ActiveHash::Reflection::BelongsToReflection.new(association_id.to_sym, nil, options, self)
+            if options[:through]
+              reflection = ActiveRecord::ThroughReflection.new(reflection)
+            end
+          else
+            reflection = ActiveRecord::Reflection.create(
+              :belongs_to,
+              association_id.to_sym,
+              nil,
+              options,
+              self
+            )
+          end
 
           ActiveRecord::Reflection.add_reflection(
             self,
@@ -85,6 +92,7 @@ module ActiveHash
     end
 
     def self.included(base)
+      require_relative "reflection_extensions"
       base.extend Methods
     end
 

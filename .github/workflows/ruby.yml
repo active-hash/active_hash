@@ -27,8 +27,7 @@ jobs:
         # | 6.1   |           |          |   2.5   |     |
         # | 7.0   |           |          |   2.7   |     |
         ruby: ['3.0', '3.1']
-        gemfile: ['gemfiles/rails_6.1.gemfile']
-          #   gemfile: 'gemfiles/rails_7.0.gemfile'
+        gemfile: ['gemfiles/rails_6.1.gemfile', 'gemfiles/rails_7.0.gemfile']
         include:
         - ruby: '2.4'
           gemfile: 'gemfiles/rails_5.0.gemfile'

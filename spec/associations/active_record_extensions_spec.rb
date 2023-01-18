@@ -138,7 +138,7 @@ unless SKIP_ACTIVE_RECORD
         it "only uses 1 query" do
           Author.has_many :books
           author = Author.create :id => 1
-          expect(Book).to receive(:find_by_sql)
+          expect(Book).to receive(:where).with(author_id: 1).once.and_call_original
           author.books.to_a
         end
       end
