@@ -1173,6 +1173,17 @@ describe ActiveHash, "Base" do
           country = Country.new
           expect(country.attributes[:name]).to eq("foobar")
         end
+
+        context "when the default value is false" do
+          before do
+            Country.field :active, :default => false
+          end
+    
+          it "returns the default value when not present" do
+            country = Country.new
+            expect(country.attributes[:active]).to eq(false)
+          end
+        end
       end
     end
   end
