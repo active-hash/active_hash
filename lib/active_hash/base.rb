@@ -237,7 +237,7 @@ module ActiveHash
         validate_field(field_name)
         field_names << field_name
 
-        add_default_value(field_name, options[:default]) if options[:default]
+        add_default_value(field_name, options[:default]) if options.key?(:default)
         define_getter_method(field_name, options[:default])
         define_setter_method(field_name)
         define_interrogator_method(field_name)
