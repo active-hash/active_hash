@@ -166,6 +166,13 @@ unless SKIP_ACTIVE_RECORD
           expect(school.country).to eq(nil)
         end
 
+        it "doesn't interfere with AR's belongs_to arguments" do
+          allow(ActiveRecord::Base).to receive(:belongs_to).with(:country, nil)
+          allow(ActiveRecord::Base).to receive(:belongs_to).with(:country, nil, {})
+
+          School.belongs_to :country
+        end
+
         it "doesn't interfere w/ ActiveRecord's polymorphism" do
           School.belongs_to :locateable, :polymorphic => true
           school = School.new
