@@ -21,49 +21,7 @@ module ActiveHash
   end
 
   class Base
-
     class_attribute :_data, :dirty, :default_attributes, :scopes
-
-    class WhereChain
-      def initialize(scope)
-        @scope = scope
-        @records = @scope.all
-      end
-
-      def not(options)
-        return @scope if options.blank?
-
-        # use index if searching by id
-        if options.key?(:id) || options.key?("id")
-          ids = @scope.pluck(:id) - Array.wrap(options.delete(:id) || options.delete("id"))
-          candidates = ids.map { |id| @scope.find_by_id(id) }.compact
-        end
-
-        filtered_records = (candidates || @records || []).reject do |record|
-          options.present? && match_options?(record, options)
-        end
-
-        ActiveHash::Relation.new(@scope.klass, filtered_records, {})
-      end
-
-      def match_options?(record, options)
-        options.all? do |col, match|
-          if match.kind_of?(Array)
-            match.any? { |v| normalize(v) == normalize(record[col]) }
-          else
-            normalize(record[col]) == normalize(match)
-          end
-        end
-      end
-
-      private :match_options?
-
-      def normalize(v)
-        v.respond_to?(:to_sym) ? v.to_sym : v
-      end
-
-      private :normalize
-    end
 
     if Object.const_defined?(:ActiveModel)
       extend ActiveModel::Naming
@@ -205,7 +163,9 @@ module ActiveHash
       end
 
       def all(options = {})
-        ActiveHash::Relation.new(self, @records || [], options[:conditions] || {})
+        relation = ActiveHash::Relation.new(self, @records || [])
+        relation = relation.where!(options[:conditions]) if options[:conditions]
+        relation
       end
 
       delegate :where, :find, :find_by, :find_by!, :find_by_id, :count, :pluck, :ids, :pick, :first, :last, :order, to: :all

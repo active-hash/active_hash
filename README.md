@@ -212,11 +212,11 @@ Country#name=       # => sets the name
 The ActiveHash::Base.all method functions like an in-memory data store. You can save your records as ActiveHash::Relation object by using standard ActiveRecord create and save methods:
 ```ruby
 Country.all
-=> #<ActiveHash::Relation:0x00007f861e043bb0 @klass=Country, @all_records=[], @query_hash={}, @records_dirty=false>
+=> #<ActiveHash::Relation:0x00007f861e043bb0 @klass=Country, @all_records=[], @conditions=[..], @records_dirty=false>
 Country.create
 => #<Country:0x00007f861b7abce8 @attributes={:id=>1}>
 Country.all
-=> #<ActiveHash::Relation:0x00007f861b7b3628 @klass=Country, @all_records=[#<Country:0x00007f861b7abce8 @attributes={:id=>1}>], @query_hash={}, @records_dirty=false>
+=> #<ActiveHash::Relation:0x00007f861b7b3628 @klass=Country, @all_records=[#<Country:0x00007f861b7abce8 @attributes={:id=>1}>], @conditions=[..], @records_dirty=false>
 country = Country.new
 => #<Country:0x00007f861e059938 @attributes={}>
 country.new_record?
@@ -226,7 +226,7 @@ country.save
 country.new_record?
 # => false
 Country.all
-=> #<ActiveHash::Relation:0x00007f861e0ca610 @klass=Country, @all_records=[#<Country:0x00007f861b7abce8 @attributes={:id=>1}>, #<Country:0x00007f861e059938 @attributes={:id=>2}>], @query_hash={}, @records_dirty=false>
+=> #<ActiveHash::Relation:0x00007f861e0ca610 @klass=Country, @all_records=[#<Country:0x00007f861b7abce8 @attributes={:id=>1}>, #<Country:0x00007f861e059938 @attributes={:id=>2}>], @conditions=[..], @records_dirty=false>
 ```
 Notice that when adding records to the collection, it will auto-increment the id for you by default.  If you use string ids, it will not auto-increment the id.  Available methods are:
 ```
