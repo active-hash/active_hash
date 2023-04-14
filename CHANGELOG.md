@@ -1,4 +1,7 @@
-2022-07-14 (v3.1.1)
+# active_hash Changelog
+
+## Version [3.1.1] - <sub><sup>2022-07-14</sup></sub>
+
   - Make scopes chainable [#248](https://github.com/active-hash/active_hash/pull/248) @andreynering
   - Set default key attributes [#251](https://github.com/active-hash/active_hash/pull/251/commits/68a0a121d110ac83f4bbf0024f027714fd24debf) @adampal
   - Migrate from Travis to GitHub Actions for CI @kbrock
@@ -15,89 +18,112 @@
   - Supports .pick method [#195](https://github.com/active-hash/active_hash/pull/195/files) @yhirano55
   - Lots of other small performance improvements, documentation and testing. Thanks to everyone who contributed!
 
-2020-01-15 (v3.1.0)
+## Version [3.1.0] - <sub><sup>2020-01-15</sup></sub>
+
   - Add ActiveHash::Base.order method inspired by ActiveRecord [#177](https://github.com/active-hash/active_hash/pull/177)
   - Add #to_ary to ActiveHash::Relation [#182](https://github.com/active-hash/active_hash/pull/182)
   - Allow #find to behave like Enumerable#find if id is nil and a block is given [#183](https://github.com/active-hash/active_hash/pull/183)
   - Delegate :sample to `records` [#189](https://github.com/active-hash/active_hash/pull/189)
 
-2019-09-28 (v3.0.0)
+## Version [3.0.0] - <sub><sup>2019-09-28</sup></sub>
+
   - Make #where chainable [#178](https://github.com/active-hash/active_hash/pull/178)
 
-2019-09-28 (v2.3.0)
+## Version [2.3.0] - <sub><sup>2019-09-28</sup></sub>
+
   - Add ::scope method (inspired by ActiveRecord) [#173](https://github.com/active-hash/active_hash/pull/173)
   - Let `.find(nil)` raise ActiveHash::RecordNotFound (inspired by ActiveRecord) [#174](https://github.com/active-hash/active_hash/pull/174)
   - `where` clause now works with range argument [#175](https://github.com/active-hash/active_hash/pull/175)
 
-2019-03-06 (v2.2.1)
+## Version [2.2.1] - <sub><sup>2019-03-06</sup></sub>
+
   - Allow empty YAML [#171](https://github.com/active-hash/active_hash/pull/171) Thanks, @ppworks
 
-2018-11-22 (v2.2.0)
+## Version [2.2.0] - <sub><sup>2018-11-22</sup></sub>
+
   - Support pluck method [#164](https://github.com/active-hash/active_hash/pull/164) Thanks, @ihatov08
   - Support where.not method [#167](https://github.com/active-hash/active_hash/pull/167) Thanks, @DialBird
 
-2018-04-05 (v2.1.0)
+## Version [2.1.0] - <sub><sup>2018-04-05</sup></sub>
+
   - Allow to use ERB (embedded ruby) in yml files [#160](https://github.com/active-hash/active_hash/pull/160) Thanks, @UgoMare
   - Add `ActiveHash::Base.polymorphic_name` [#162](https://github.com/active-hash/active_hash/pull/162)
   - Fix to be able to use enum accessor constant with same name as top-level constant[#161](https://github.com/active-hash/active_hash/pull/161) Thanks, @yujideveloper
 
-2018-02-27 (v2.0.0)
+## Version [2.0.0] - <sub><sup>2018-02-27</sup></sub>
+
   - Drop old Ruby and Rails support [#157](https://github.com/active-hash/active_hash/pull/157)
   - Don't generate instance accessors for class attributes [#136](https://github.com/active-hash/active_hash/pull/136) Thanks, @rainhead
 
-2017-06-14 (v1.5.3)
+## Version [1.5.3] - <sub><sup>2017-06-14</sup></sub>
+
   - Support symbol values in where and find_by [#156](https://github.com/active-hash/active_hash/pull/156) Thanks, @south37
 
-2017-06-14 (v1.5.2)
+## Version [1.5.2] - <sub><sup>2017-06-14</sup></sub>
+
   - Fix find_by when passed an invalid id [#152](https://github.com/active-hash/active_hash/pull/152) Thanks, @davidstosik
 
-2017-04-20 (v1.5.1)
+## Version [1.5.1] - <sub><sup>2017-04-20</sup></sub>
+
   - Fix a bug on `.where` [#147](https://github.com/active-hash/active_hash/pull/147)
 
-2017-03-24 (v1.5.0)
+## Version [1.5.0] - <sub><sup>2017-03-24</sup></sub>
+
   - add support for `.find_by!`(@syguer)
 
-2015-09-13 (v1.4.1)
+## Version [1.4.1] - <sub><sup>2015-09-13</sup></sub>
+
   - fix bug where `#attributes` didn't contain default values #107
   - add support for `.find_by` and `#_read_attribute`. Thanks, @andrewfader!
 
-2014-09-03 (v1.4.0)
+## Version [1.4.0] - <sub><sup>2014-09-03</sup></sub>
+
   - support Rails 4.2 (agraves, al2o3cr)
 
-2014-02-18 (v1.3.0)
+## Version [1.3.0] - <sub><sup>2014-02-18</sup></sub>
+
   - fix bug where including ActiveHash associations would make `belongs_to :imageable, polymorphic: true` blow up
   - fixed several bugs that prevented active hash from being used without active record / active model
   - add support for splitting up data sources into multiple files (rheaton)
   - add support for storing data in json files (rheaton)
 
-2013-11-29 (v1.2.3)
+## Version [1.2.3] - <sub><sup>2013-11-29</sup></sub>
+
   - fix bug where active hash would call `.all` on models when setting has_many (grosser)
 
-2013-11-05 (v1.2.2)
+## Version [1.2.2] - <sub><sup>2013-11-05</sup></sub>
+
   - fix bug in gemspec that made it impossible to use w/ Rails 4
 
-2013-10-24 (v1.2.1)
+## Version [1.2.1] - <sub><sup>2013-10-24</sup></sub>
+
   - fixed nasty bug in belongs_to that would prevent users from passing procs (thanks for the issue freebird0221)
   - fixed bug where passing in a separate class name to belongs_to_active_hash would raise an exception (mauriciopasquier)
 
-2013-10-01 (v1.2.0)
+## Version [1.2.0] - <sub><sup>2013-10-01</sup></sub>
+
   - belongs_to is back!
   - added support for primary key options for belongs_to (tomtaylor)
 
-2013-09-09 (v1.0.2)
+## Version [1.0.2] - <sub><sup>2013-09-09</sup></sub>
+
   - `where(nil)` returns all results, like ActiveRecord (kugaevsky)
 
-2013-07-15 (v1.0.1)
+## Version [1.0.1] - <sub><sup>2013-07-15</sup></sub>
+
   - Travis CI for ActiveHash + Ruby 2, 1.8.7, Rubinius and JRuby support (mattheworiordan)
   - no longer need to call .all before executing `find_by_*` or `where` methods (mattheworiordan)
 
-2013-06-24 (v1.0.0)
+## Version [1.0.0] - <sub><sup>2013-06-24</sup></sub>
+
   - save is a no-op on existing records, instead of raising an error (issue #63)
 
-2013-06-24 (v0.10.0)
+## Version [0.10.0] - <sub><sup>2013-06-24</sup></sub>
+
   - added ActiveYaml::Aliases module so you can DRY up your repetitive yaml (brett-richardson)
 
-2013-05-23 (v0.9.14)
+## Version [0.9.14] - <sub><sup>2013-05-23</sup></sub>
+
   - enum_accessor can now take multiple field names when generating the constant
   - temporarily disabled rails edge specs since there's an appraisal issue with minitest
 
@@ -119,10 +145,12 @@
 2012-01-19
   - Move specs to appraisal (flavorjones)
 
-2012-01-18 (v0.9.8)
+## Version [0.9.8] - <sub><sup>2012-01-18</sup></sub>
+
   - Make ActiveHash.find with array raise an exception when record cannot be found (mocoso)
 
-2011-09-18 (v0.9.7)
+## Version [0.9.7] - <sub><sup>2011-09-18</sup></sub>
+
   - Fixing the setting of a belongs_to_active_hash association by association (not id).
 
 2011-08-31
@@ -240,3 +268,32 @@
   - Added ActiveFile.reload_active_file= so you can cause ActiveFile to reload
   - Setting data to nil correctly causes .all to return an empty array
   - Added reload(force) method, so that you can force a reload from files in ActiveFile, useful for tests
+
+[HEAD]: https://github.com/active-hash/active_hash/compare/v4.3.0...HEAD
+[4.3.0]: https://github.com/active-hash/active_hash/compare/v3.1.1...v4.3.0
+[3.1.1]: https://github.com/active-hash/active_hash/compare/v3.1.0...v3.1.1
+[3.1.0]: https://github.com/active-hash/active_hash/compare/v3.0.0...v3.1.0
+[3.0.0]: https://github.com/active-hash/active_hash/compare/v2.3.0...v3.0.0
+[2.3.0]: https://github.com/active-hash/active_hash/compare/v2.2.1...v2.3.0
+[2.2.1]: https://github.com/active-hash/active_hash/compare/v2.2.0...v2.2.1
+[2.2.0]: https://github.com/active-hash/active_hash/compare/v2.1.0...v2.2.0
+[2.1.0]: https://github.com/active-hash/active_hash/compare/v2.0.0...v2.1.0
+[2.0.0]: https://github.com/active-hash/active_hash/compare/v1.5.3...v2.0.0
+[1.5.3]: https://github.com/active-hash/active_hash/compare/v1.5.2...v1.5.3
+[1.5.2]: https://github.com/active-hash/active_hash/compare/v1.5.1...v1.5.2
+[1.5.1]: https://github.com/active-hash/active_hash/compare/v1.5.0...v1.5.1
+[1.5.0]: https://github.com/active-hash/active_hash/compare/v1.4.1...v1.5.0
+[1.4.1]: https://github.com/active-hash/active_hash/compare/v1.4.0...v1.4.1
+[1.4.0]: https://github.com/active-hash/active_hash/compare/v1.3.0...v1.4.0
+[1.3.0]: https://github.com/active-hash/active_hash/compare/v1.2.3...v1.3.0
+[1.2.3]: https://github.com/active-hash/active_hash/compare/v1.2.2...v1.2.3
+[1.2.2]: https://github.com/active-hash/active_hash/compare/v1.2.1...v1.2.2
+[1.2.1]: https://github.com/active-hash/active_hash/compare/v1.2.0...v1.2.1
+[1.2.0]: https://github.com/active-hash/active_hash/compare/v1.0.2...v1.2.0
+[1.0.2]: https://github.com/active-hash/active_hash/compare/v1.0.1...v1.0.2
+[1.0.1]: https://github.com/active-hash/active_hash/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/active-hash/active_hash/compare/v0.10.0...v1.0.0
+[0.10.0]: https://github.com/active-hash/active_hash/compare/v0.9.14...v0.10.0
+[0.9.14]: https://github.com/active-hash/active_hash/compare/v0.9.8...v0.9.14
+[0.9.8]: https://github.com/active-hash/active_hash/compare/v0.9.7...v0.9.8
+[0.9.7]: https://github.com/active-hash/active_hash/compare/v0.9.6...v0.9.7
