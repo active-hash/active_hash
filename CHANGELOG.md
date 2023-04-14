@@ -1,5 +1,27 @@
 # active_hash Changelog
 
+## Version [3.2.0] - <sub><sup>2022-07-14</sup></sub>
+
+- Add Ruby 3.2 to the CI matrix [#275](https://github.com/active-hash/active_hash/pull/275) @petergoldstein
+- Handle default value of `false` [#274](https://github.com/active-hash/active_hash/pull/274) @ihollander
+- Run CI only one time per commit [#273](https://github.com/active-hash/active_hash/pull/273) @flavorjones
+- Rails 7 support [#272](https://github.com/active-hash/active_hash/pull/272) @flavorjones
+- Avoid interfere with AR's belongs_to arguments. [#270](https://github.com/active-hash/active_hash/pull/270) @koyo-miyamura
+- Fix broken #pluck method with 3+ attrs specified [#269](https://github.com/active-hash/active_hash/pull/269) @h6ah4i
+- Fix relations for Rails 7 support, and not modifying conditions [#268](https://github.com/active-hash/active_hash/pull/268) @pfeiffer
+- docs: Remove the string 'F' [#264](https://github.com/active-hash/active_hash/pull/264) @tbotaq
+- Show example using regex in where query [#263](https://github.com/active-hash/active_hash/pull/263) @scottharvey
+- Improve performance of exists? [#262](https://github.com/active-hash/active_hash/pull/262) @ise-tang
+- Remove redundant ActiveRecord version check [#260](https://github.com/active-hash/active_hash/pull/260) @yujideveloper
+- Fix deprecation warnings [#259](https://github.com/active-hash/active_hash/pull/259) @yujideveloper
+- Fix rspec config when SKIP_ACTIVE_RECORD enabled [#258](https://github.com/active-hash/active_hash/pull/258) @yujideveloper
+- isolate tests with temporary classes [#256](https://github.com/active-hash/active_hash/pull/256) @machisuke
+- Avoid ActiveRecordExtensions affects AR's belongs_to method. [#255](https://github.com/active-hash/active_hash/pull/255) @machisuke
+- add option to disable erb parsing [#202](https://github.com/active-hash/active_hash/pull/202) @reedlaw
+- add collection singular ids for associations [#237](https://github.com/active-hash/active_hash/pull/237) @1160054
+- Fix the thread-safe spec for the updated cities fixture  @adampal
+- Add thread-safety to ActiveFile [#229](https://github.com/active-hash/active_hash/pull/229) @dmitriy-kiriyenko
+
 ## Version [3.1.1] - <sub><sup>2022-07-14</sup></sub>
 
   - Make scopes chainable [#248](https://github.com/active-hash/active_hash/pull/248) @andreynering
@@ -271,7 +293,8 @@
   - Added reload(force) method, so that you can force a reload from files in ActiveFile, useful for tests
 
 [HEAD]: https://github.com/active-hash/active_hash/compare/v4.3.0...HEAD
-[4.3.0]: https://github.com/active-hash/active_hash/compare/v3.1.1...v4.3.0
+[4.3.0]: https://github.com/active-hash/active_hash/compare/v3.2.0...v4.3.0
+[4.2.0]: https://github.com/active-hash/active_hash/compare/v3.1.1...v4.2.0
 [3.1.1]: https://github.com/active-hash/active_hash/compare/v3.1.0...v3.1.1
 [3.1.0]: https://github.com/active-hash/active_hash/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/active-hash/active_hash/compare/v2.3.0...v3.0.0
