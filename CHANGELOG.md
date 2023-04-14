@@ -73,23 +73,23 @@
 
 ## Version [1.4.1] - <sub><sup>2015-09-13</sup></sub>
 
-  - fix bug where `#attributes` didn't contain default values #107
-  - add support for `.find_by` and `#_read_attribute`. Thanks, @andrewfader!
+  - fix bug where `#attributes` didn't contain default values [#107](https://github.com/active-hash/active_hash/pull/107)
+  - add support for `.find_by` and `#_read_attribute`. Thanks, @andrewfader
 
 ## Version [1.4.0] - <sub><sup>2014-09-03</sup></sub>
 
-  - support Rails 4.2 (agraves, al2o3cr)
+  - support Rails 4.2 @agraves, @al2o3cr
 
 ## Version [1.3.0] - <sub><sup>2014-02-18</sup></sub>
 
   - fix bug where including ActiveHash associations would make `belongs_to :imageable, polymorphic: true` blow up
   - fixed several bugs that prevented active hash from being used without active record / active model
-  - add support for splitting up data sources into multiple files (rheaton)
-  - add support for storing data in json files (rheaton)
+  - add support for splitting up data sources into multiple files @rheaton
+  - add support for storing data in json files @rheaton
 
 ## Version [1.2.3] - <sub><sup>2013-11-29</sup></sub>
 
-  - fix bug where active hash would call `.all` on models when setting has_many (grosser)
+  - fix bug where active hash would call `.all` on models when setting has_many @grosser
 
 ## Version [1.2.2] - <sub><sup>2013-11-05</sup></sub>
 
@@ -97,22 +97,22 @@
 
 ## Version [1.2.1] - <sub><sup>2013-10-24</sup></sub>
 
-  - fixed nasty bug in belongs_to that would prevent users from passing procs (thanks for the issue freebird0221)
-  - fixed bug where passing in a separate class name to belongs_to_active_hash would raise an exception (mauriciopasquier)
+  - fixed nasty bug in belongs_to that would prevent users from passing procs @freebird0221
+  - fixed bug where passing in a separate class name to belongs_to_active_hash would raise an exception @mauriciopasquier
 
 ## Version [1.2.0] - <sub><sup>2013-10-01</sup></sub>
 
   - belongs_to is back!
-  - added support for primary key options for belongs_to (tomtaylor)
+  - added support for primary key options for belongs_to @tomtaylor
 
 ## Version [1.0.2] - <sub><sup>2013-09-09</sup></sub>
 
-  - `where(nil)` returns all results, like ActiveRecord (kugaevsky)
+  - `where(nil)` returns all results, like ActiveRecord @kugaevsky
 
 ## Version [1.0.1] - <sub><sup>2013-07-15</sup></sub>
 
-  - Travis CI for ActiveHash + Ruby 2, 1.8.7, Rubinius and JRuby support (mattheworiordan)
-  - no longer need to call .all before executing `find_by_*` or `where` methods (mattheworiordan)
+  - Travis CI for ActiveHash + Ruby 2, 1.8.7, Rubinius and JRuby support @mattheworiordan
+  - no longer need to call .all before executing `find_by_*` or `where` methods @mattheworiordan
 
 ## Version [1.0.0] - <sub><sup>2013-06-24</sup></sub>
 
@@ -120,131 +120,132 @@
 
 ## Version [0.10.0] - <sub><sup>2013-06-24</sup></sub>
 
-  - added ActiveYaml::Aliases module so you can DRY up your repetitive yaml (brett-richardson)
+  - added ActiveYaml::Aliases module so you can DRY up your repetitive yaml @brett-richardson
 
 ## Version [0.9.14] - <sub><sup>2013-05-23</sup></sub>
 
   - enum_accessor can now take multiple field names when generating the constant
   - temporarily disabled rails edge specs since there's an appraisal issue with minitest
 
-2013-01-22
-  - Fix find_by_id and find method returning nil unless .all called in ActiveYaml (mattheworiordan)
+## Version [0.9.13] <sub><sup>2013-01-22</sup></sub>
+  - Fix find_by_id and find method returning nil unless .all called in ActiveYaml @mattheworiordan
 
-2012-07-25
-  - Make find_by_id lookups faster by indexing records by id (desmondmonster)
+## Version [0.9.12] <sub><sup>2012-07-25</sup></sub>
+  - Make find_by_id lookups faster by indexing records by id @desmondmonster
 
-2012-07-16
-  - Validate IDs are unique by caching them in a set (desmondmonster)
+## Version [0.9.11] <sub><sup>2012-07-16</sup></sub>
+  - Validate IDs are unique by caching them in a set @desmondmonster
 
-2012-04-14
-  - Support for has_one associations (kbrock)
+## Version [0.9.10] <sub><sup>2012-04-14</sup></sub>
+  - Support for has_one associations @kbrock
 
-2012-04-05
-  - Allow gems like simple_form to read metadata about belongs_to associations that point to active hash objects (kbrock)
+## Version [0.9.9] <sub><sup>2012-04-05</sup></sub>
 
-2012-01-19
-  - Move specs to appraisal (flavorjones)
+  - Allow gems like simple_form to read metadata about belongs_to associations that point to active hash objects @kbrock
+  - Move specs to appraisal @flavorjones
 
 ## Version [0.9.8] - <sub><sup>2012-01-18</sup></sub>
 
-  - Make ActiveHash.find with array raise an exception when record cannot be found (mocoso)
+  - Make ActiveHash.find with array raise an exception when record cannot be found @mocoso
 
 ## Version [0.9.7] - <sub><sup>2011-09-18</sup></sub>
 
-  - Fixing the setting of a belongs_to_active_hash association by association (not id).
+  - Fixing the setting of a `belongs_to_active_hash` association by association (not id).
 
-2011-08-31
-  - added a module which adds a .belongs_to_active_hash method to ActiveRecord, since it was broken for Rails 3.1 (thanks to felixclack for pointing this issue out)
+## Version [0.9.6] - <sub><sup>2011-08-31</sup></sub>
+  - added a module which adds a .belongs_to_active_hash method to ActiveRecord, since it was broken for Rails 3.1 @felixclack
 
-2011-06-07
+## Version [0.9.5] - <sub><sup>2011-06-07</sup></sub>
   - fixed bug where .find would not work if you defined your ids as strings
 
-2011-06-05
-  - fixed deprecation warnings for class_inheritable_accessor (thanks scudco!)
-  - added basic compatibility with the `where` method from Arel (thanks rgarver!)
+## Version [0.9.4] - <sub><sup>2011-06-05</sup></sub>
+  - fixed deprecation warnings for class_inheritable_accessor @scudco
+  - added basic compatibility with the `where` method from Arel @rgarver
 
-2011-04-19
-  - better dependency management and compatibility with ActiveSupport 2.x (thanks vandrijevik!)
+## Version [0.9.3] - <sub><sup>2011-04-19</sup></sub>
+  - better dependency management and compatibility with ActiveSupport 2.x @vandrijevik
 
-2011-01-22
+## Version [0.9.2] - <sub><sup>2011-01-22</sup></sub>
   - improved method_missing errors for dynamic finders
-  - prevent users from trying to overwrite :attributes (https://github.com/active-hash/active_hash/issues/#issue/33)
+  - prevent users from trying to overwrite :attributes [#33](https://github.com/active-hash/active_hash/issues/33)
 
-2010-12-08
+## Version [0.9.1] <sub><sup>2010-12-08</sup></sub>
   - ruby 1.9.2 compatibility
 
-2010-12-06
+## Version [0.9.0] <sub><sup>2010-12-06</sup></sub>
   - added dependency on ActiveModel
   - add persisted? method to ActiveHash::Base
-  - ActiveHash::Base#save takes *args to be compatible with ActiveModel
+  - ActiveHash::Base#save takes \*args to be compatible with ActiveModel
   - ActiveHash::Base#to_param returns nil if the object hasn't been saved
 
-2010-11-09
-  - Use Ruby's definition of "word character" (numbers, underscores) when forming ActiveHash::Enum constants (tstuart)
+## Version [0.8.7] <sub><sup>2010-11-09</sup></sub>
+  - Use Ruby's definition of "word character" (numbers, underscores) when forming ActiveHash::Enum constants @tstuart
 
-2010-11-07
-  - Get ActiveHash::Associations to return a scope for has_many active record relationships (mocoso)
+## Version [0.8.6] <sub><sup>2010-11-07</sup></sub>
+  - Get ActiveHash::Associations to return a scope for has_many active record relationships @mocoso
 
-2010-10-20
+## Version [0.8.5] <sub><sup>2010-10-20</sup></sub>
   - Allow find_by_* methods to accept an options hash, so rails associations don't blow up
 
-2010-10-07
+## Version [0.8.4] <sub><sup>2010-10-07</sup></sub>
   - Add conditions to ActiveHash#all (Ryan Garver)
   - Add #cache_key to ActiveHash::Base (Tom Stuart)
   - Add banged dynamic finder support to ActiveHash::Base (Tom Stuart)
 
-2010-09-16
+## Version [0.8.3] <sub><sup>2010-09-16</sup></sub>
   - Enum format now uses underscores instead of removing all characters
   - Removed test dependency on acts_as_fu
 
-2010-05-26
+## Version [0.8.2] <sub><sup>2010-05-26</sup></sub>
   - Silence metaclass deprecation warnings in active support 2.3.8
 
-2010-05-04
+## Version [0.8.1] <sub><sup>2010-05-04</sup></sub>
   - When calling ActiveFile::Base.reload do not actually perform the reload if nothing has been modified unless you call reload(true) to force (Michael Schubert)
 
-2010-04-25
+## Version [0.8.0] <sub><sup>2010-04-25</sup></sub>
   - When ActiveRecord model belongs_to an ActiveHash and the associated id is nil, returns nil instead of raising RecordNotFound (Jeremy Weiskotten)
   - Merged Nakajima's "add" alias for "create" - gotta save those ASCII characters :)
 
-2010-03-01
+## Version [0.7.9] <sub><sup>2010-03-01</sup></sub>
   - Removed "extend"-related deprecations - they didn't play well with rails class loading
 
-2010-01-18
+## Version [0.7.8] <sub><sup>2010-01-18</sup></sub>
   - Added stub for #destroyed? method, since Rails associations now depend on it
 
-2009-12-19
-  - Added ActiveHash::Enum (John Pignata)
+## Version [0.7.7] <sub><sup>2009-12-19</sup></sub>
   - Deprecated include ActiveHash::Associations in favor of extend ActiveHash::Associations
+
+## Version [0.7.6] <sub><sup>2009-12-19</sup></sub>
+  - Added ActiveHash::Enum (John Pignata)
   - Fixed bug where you can't set nil to an association
   - Calling #belongs_to now creates the underlying field if it's not already there (belongs_to :city will create the :city_id field)
 
-2009-12-10
+## Version [0.7.5] <sub><sup>2009-12-10</sup></sub>
   - Fixed a bug where belongs_to associations would raise an error instead of returning nil when the parent object didn't exist.
   - Added #[] and #[]= accessors for more ActiveRecord-esque-ness. (Pat Nakajima & Dave Yeu)
 
-2009-12-01
+## Version [0.7.4] <sub><sup>2009-12-01</sup></sub>
   - Add marked_for_destruction? to be compatible with nested attributes (Brandon Keene)
   - Added second parameter to respond_to? and cleaned up specs (Brian Takita)
   - Find with an id that does not exist now raises a RecordNotFound exception to mimic ActiveRecord (Pat Nakajima)
 
-2009-10-22
+## Version [0.7.3] <sub><sup>2009-10-22</sup></sub>
   - added setters to ActiveHash::Base for all fields
   - instantiating an ActiveHash object with a hash calls the setter methods on the object
   - boolean default values now work
 
-2009-10-21
+## Version [0.7.2] <sub><sup>2009-10-21</sup></sub>
   - Removed auto-reloading of files based on mtime - maybe it will come back later
   - Made ActiveFile::Base.all a bit more sane
 
-2009-10-13
-  - added ActiveHash::Base.has_many, which works with ActiveRecord or ActiveHash classes (thanks to baldwindavid)
-  - added ActiveHash::Base.belongs_to, which works with ActiveRecord or ActiveHash classes (thanks to baldwindavid)
+## Version 0.7.1 <sub><sup>2009-10-13</sup></sub>
+  - added ActiveHash::Base.has_many, which works with ActiveRecord or ActiveHash classes @baldwindavid
+  - added ActiveHash::Base.belongs_to, which works with ActiveRecord or ActiveHash classes @baldwindavid
   - added .delete_all method that clears the in-memory array
   - added support for Hash-style yaml (think, Rails fixtures)
-  - added setter for parent object on belongs_to ( city = City.new; city.state = State.first; city.state_id == State.first.id )
+  - added setter for parent object on belongs_to ( `city = City.new; city.state = State.first; city.state_id == State.first.id` )
 
-2009-10-12
+## Version [0.7.0] <sub><sup>2009-10-12</sup></sub>
   - auto-assign fields after calling data= instead of after calling .all
   - remove require 'rubygems', so folks with non-gem setups can still use AH
   - added more specific activesupport dependency to ensure that metaclass is available
@@ -255,15 +256,15 @@
   - new_record? returns false if the record is part of the collection
   - ActiveHash now works with Fixjour!
 
-2009-08-19
+## Version [0.6.1] <sub><sup>2009-08-19</sup></sub>
   - Added custom finders for multiple fields, such as .find_all_by_name_and_age
 
-2009-07-23
+## Version 0.5.0 <sub><sup>2009-07-23</sup></sub>
   - Added support for auto-defining methods based on hash keys in ActiveHash::Base
   - Changed the :field and :fields API so that they don't overwrite existing methods (useful when ActiveHash auto-defines methods)
   - Fixed a bug where ActiveFile incorrectly set the root_path to be the path in the gem directory, not the current working directory
 
-2009-07-24
+## Version 0.4.0 <sub><sup>2009-07-24</sup></sub>
   - ActiveFile no longer reloads files by default
   - Added ActiveFile.reload_active_file= so you can cause ActiveFile to reload
   - Setting data to nil correctly causes .all to return an empty array
@@ -294,6 +295,36 @@
 [1.0.1]: https://github.com/active-hash/active_hash/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/active-hash/active_hash/compare/v0.10.0...v1.0.0
 [0.10.0]: https://github.com/active-hash/active_hash/compare/v0.9.14...v0.10.0
-[0.9.14]: https://github.com/active-hash/active_hash/compare/v0.9.8...v0.9.14
+[0.9.14]: https://github.com/active-hash/active_hash/compare/v0.9.13...v0.9.14
+[0.9.13]: https://github.com/active-hash/active_hash/compare/v0.9.12...v0.9.13
+[0.9.12]: https://github.com/active-hash/active_hash/compare/v0.9.11...v0.9.12
+[0.9.11]: https://github.com/active-hash/active_hash/compare/v0.9.10...v0.9.11
+[0.9.10]: https://github.com/active-hash/active_hash/compare/v0.9.9...v0.9.10
+[0.9.9]: https://github.com/active-hash/active_hash/compare/v0.9.8...v0.9.9
 [0.9.8]: https://github.com/active-hash/active_hash/compare/v0.9.7...v0.9.8
 [0.9.7]: https://github.com/active-hash/active_hash/compare/v0.9.6...v0.9.7
+[0.9.6]: https://github.com/active-hash/active_hash/compare/v0.9.5...v0.9.6
+[0.9.5]: https://github.com/active-hash/active_hash/compare/v0.9.4...v0.9.5
+[0.9.4]: https://github.com/active-hash/active_hash/compare/v0.9.3...v0.9.4
+[0.9.3]: https://github.com/active-hash/active_hash/compare/v0.9.2...v0.9.3
+[0.9.2]: https://github.com/active-hash/active_hash/compare/v0.9.1...v0.9.2
+[0.9.1]: https://github.com/active-hash/active_hash/compare/v0.9.0...v0.9.1
+[0.9.0]: https://github.com/active-hash/active_hash/compare/v0.8.7...v0.9.0
+[0.8.7]: https://github.com/active-hash/active_hash/compare/v0.8.6...v0.8.7
+[0.8.6]: https://github.com/active-hash/active_hash/compare/v0.8.5...v0.8.6
+[0.8.5]: https://github.com/active-hash/active_hash/compare/v0.8.4...v0.8.5
+[0.8.4]: https://github.com/active-hash/active_hash/compare/v0.8.3...v0.8.4
+[0.8.3]: https://github.com/active-hash/active_hash/compare/v0.8.2...v0.8.3
+[0.8.2]: https://github.com/active-hash/active_hash/compare/v0.8.1...v0.8.2
+[0.8.1]: https://github.com/active-hash/active_hash/compare/v0.8.0...v0.8.1
+[0.8.0]: https://github.com/active-hash/active_hash/compare/v0.7.9...v0.8.0
+[0.7.9]: https://github.com/active-hash/active_hash/compare/v0.7.8...v0.7.9
+[0.7.8]: https://github.com/active-hash/active_hash/compare/v0.7.7...v0.7.8
+[0.7.7]: https://github.com/active-hash/active_hash/compare/v0.7.6...v0.7.7
+[0.7.6]: https://github.com/active-hash/active_hash/compare/v0.7.5...v0.7.6
+[0.7.5]: https://github.com/active-hash/active_hash/compare/v0.7.4...v0.7.5
+[0.7.4]: https://github.com/active-hash/active_hash/compare/v0.7.3...v0.7.4
+[0.7.3]: https://github.com/active-hash/active_hash/compare/v0.7.2...v0.7.3
+[0.7.2]: https://github.com/active-hash/active_hash/compare/v0.7.0...v0.7.2
+[0.7.0]: https://github.com/active-hash/active_hash/compare/v0.6.1...v0.7.0
+[0.6.1]: https://github.com/active-hash/active_hash/compare/v0.6.0...v0.6.1
