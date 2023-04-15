@@ -3,7 +3,6 @@ source "http://rubygems.org/"
 gemspec
 
 gem 'rspec', '~> 3.9'
-gem 'wwtd'
 gem 'rake'
 gem 'test-unit'
 gem 'json'

@@ -624,10 +624,6 @@ To make users' lives easier, please maintain support for:
   * Ruby 2.4
   * ActiveRecord/ActiveSupport from 5.0 through edge
 
-To that end, run specs against all rubies before committing:
-
-    wwtd
-
 Once appraisal passes in all supported rubies, follow these steps to release a new version of active_hash:
 
   * update the changelog with a brief summary of the changes that are included in the release

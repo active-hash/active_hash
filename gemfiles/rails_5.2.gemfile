@@ -2,7 +2,6 @@ source 'http://rubygems.org/'
 
 gem 'activerecord', '~> 5.2.0'
 gem 'rspec', '~> 3.9'
-gem 'wwtd'
 gem 'rake', '~> 10.0'
 gem 'json'
 gem 'test-unit'
