@@ -36,8 +36,15 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/active-hash/active_hash}
   s.license = "MIT"
 
+  s.metadata = {
+    "homepage_uri" => s.homepage,
+    "changelog_uri" => "https://github.com/active-hash/active_hash/blob/master/CHANGELOG.md",
+    "source_code_uri" => s.homepage,
+    "bug_tracker_uri" => "https://github.com/active-hash/active_hash/issues",
+  }
+
   s.files = [
-    "CHANGELOG",
+    "CHANGELOG.md",
     "LICENSE",
     "README.md",
     "active_hash.gemspec",
