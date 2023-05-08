@@ -21,7 +21,7 @@ module ActiveHash
   end
 
   class Base
-    class_attribute :_data, :dirty, :default_attributes, :scopes
+    class_attribute :_data, :dirty, :default_attributes
 
     if Object.const_defined?(:ActiveModel)
       extend ActiveModel::Naming
@@ -33,6 +33,9 @@ module ActiveHash
     end
 
     class << self
+      def scopes
+        @scopes ||= {}
+      end
 
       def cache_key
         if Object.const_defined?(:ActiveModel)
@@ -372,7 +375,6 @@ module ActiveHash
       def scope(name, body)
         raise ArgumentError, 'body needs to be callable' unless body.respond_to?(:call)
 
-        self.scopes ||= {}
         self.scopes[name] = body
 
         the_meta_class.instance_eval do
