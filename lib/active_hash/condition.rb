@@ -19,7 +19,7 @@ class ActiveHash::Relation::Condition
       expectation_method = inverted ? :any? : :all?
 
       constraints.send(expectation_method) do |attribute, expected|
-        value = record.public_send(attribute)
+        value = record.read_attribute(attribute)
 
         matches_value?(value, expected)
       end
