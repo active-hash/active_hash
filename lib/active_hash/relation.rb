@@ -170,7 +170,7 @@ module ActiveHash
     end
 
     def respond_to_missing?(method_name, include_private = false)
-      klass.scopes.key?(method_name) || super
+      klass.scopes&.key?(method_name) || super
     end
 
     private
