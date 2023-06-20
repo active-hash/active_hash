@@ -50,4 +50,25 @@ RSpec.describe ActiveHash::Relation do
       expect(array.size).to eq(2)
     end
   end
+
+  describe "colliding methods https://github.com/active-hash/active_hash/issues/280" do
+    it "should handle attributes named after existing methods" do
+      klass = Class.new(ActiveHash::Base) do
+        self.data = [
+          {
+            id: 1,
+            name: "Aaa",
+            display: true,
+          },
+          {
+            id: 2,
+            name: "Bbb",
+            display: false,
+          },
+        ]
+      end
+
+      expect(klass.where(display: true).length).to eq(1)
+    end
+  end
 end
