@@ -5,7 +5,7 @@
 - Fix relation matching when attribute name collides with a method. [#281](https://github.com/active-hash/active_hash/pull/281) @flavorjones
 
 
-## Version [3.2.0] - <sub><sup>2022-07-14</sup></sub>
+## Version [3.2.0] - <sub><sup>2023-05-06</sup></sub>
 
 - Add Ruby 3.2 to the CI matrix [#275](https://github.com/active-hash/active_hash/pull/275) @petergoldstein
 - Handle default value of `false` [#274](https://github.com/active-hash/active_hash/pull/274) @ihollander
