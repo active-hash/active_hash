@@ -3,6 +3,10 @@ module ActiveHash
 
     module ActiveRecordExtensions
 
+      def self.extended(base)
+        require_relative 'reflection_extensions'
+      end
+
       def belongs_to(name, scope = nil, **options)
         klass_name = options.key?(:class_name) ? options[:class_name] : name.to_s.camelize
         klass =
@@ -92,7 +96,6 @@ module ActiveHash
     end
 
     def self.included(base)
-      require_relative "reflection_extensions"
       base.extend Methods
     end
 
