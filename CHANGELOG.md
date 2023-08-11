@@ -3,6 +3,7 @@
 ## next - unreleased
 
 - Fix relation matching when attribute name collides with a method. [#281](https://github.com/active-hash/active_hash/pull/281) @flavorjones
+- Fix association reflection in applications that don't use ActiveHash::Associations. [#286](https://github.com/active-hash/active_hash/pull/286) @iberianpig
 
 
 ## Version [3.2.0] - <sub><sup>2023-05-06</sup></sub>
