@@ -22,6 +22,10 @@ module ActiveHash
       spawn.where!(conditions_hash)
     end
 
+    def pretty_print(pp)
+      pp.pp(entries.to_ary)
+    end
+
     class WhereChain
       attr_reader :relation
 

@@ -71,4 +71,16 @@ RSpec.describe ActiveHash::Relation do
       expect(klass.where(display: true).length).to eq(1)
     end
   end
+
+  describe "#pretty_print" do
+    it "prints the records" do
+      out = StringIO.new
+      PP.pp(subject, out)
+
+      expect(out.string.scan(/\bid\b/).length).to eq(2)
+      expect(out.string).to match(/\bCanada\b/)
+      expect(out.string).to match(/\bUS\b/)
+      expect(out.string).to_not match(/ActiveHash::Relation/)
+    end
+  end
 end
