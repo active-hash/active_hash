@@ -1,6 +1,6 @@
 # active_hash Changelog
 
-## next - unreleased
+## Version [3.2.1] - <sub><sup>2023-08-31</sup></sub>
 
 ### Added
 
