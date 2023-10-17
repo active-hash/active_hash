@@ -349,6 +349,11 @@ module ActiveHash
         base_class.name
       end
 
+      # Needed for ActiveRecord since rails/rails#47664
+      def composite_primary_key?
+        false
+      end
+
       def reload
         reset_record_index
         self.data = _data
