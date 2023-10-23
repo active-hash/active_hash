@@ -284,6 +284,13 @@ describe ActiveHash, "Base" do
       expect(record.first.name).to eq('US')
     end
 
+    it "filters records when passed a hash with string keys" do
+      record = Country.where('name' => 'US')
+      expect(record.count).to eq(1)
+      expect(record.first.id).to eq(1)
+      expect(record.first.name).to eq('US')
+    end
+
     it "raises an error if ids aren't unique" do
       expect do
         Country.data = [
