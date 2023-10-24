@@ -411,7 +411,7 @@ module ActiveHash
     end
 
     def _read_attribute(key)
-      attributes[key]
+      attributes[key.to_sym]
     end
     alias_method :read_attribute, :_read_attribute
 

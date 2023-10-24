@@ -1201,10 +1201,22 @@ describe ActiveHash, "Base" do
       expect(country._read_attribute(:foo)).to eq(:bar)
     end
 
+    it "works when string key passed to _read_attribute" do
+      Country.field :foo
+      country = Country.new(:foo => :bar)
+      expect(country._read_attribute('foo')).to eq(:bar)
+    end
+
     it "works with read_attribute" do
       Country.field :foo
       country = Country.new(:foo => :bar)
       expect(country.read_attribute(:foo)).to eq(:bar)
+    end
+
+    it "works when string key passed to read_attribute" do
+      Country.field :foo
+      country = Country.new(:foo => :bar)
+      expect(country.read_attribute('foo')).to eq(:bar)
     end
 
     it "works with #[]=" do
