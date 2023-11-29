@@ -39,6 +39,6 @@ class ActiveHash::Relation::Condition
   end
 
   def normalize(value)
-    value.respond_to?(:to_s) ? value.to_s : value
+    value.respond_to?(:to_s) ? value&.to_s : value
   end
 end

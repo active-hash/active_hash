@@ -465,7 +465,8 @@ describe ActiveHash, "Base" do
       Country.data = [
         {:id => 1, :name => "US", :language => 'English'},
         {:id => 2, :name => "Canada", :language => 'English'},
-        {:id => 3, :name => "Mexico", :language => 'Spanish'}
+        {:id => 3, :name => "Mexico", :language => 'Spanish'},
+        {:id => 5, :name => "Any", :language => nil}
       ]
     end
 
@@ -523,6 +524,14 @@ describe ActiveHash, "Base" do
 
     it "returns nil when passed a wrong id" do
       expect(Country.find_by(:id => 4)).to be_nil
+    end
+
+    it "finds record by nil value" do
+      expect(Country.find_by(:language => nil).id).to eq(5)
+    end
+
+    it "doesn't finds nil records when searching for ''" do
+      expect(Country.find_by(:language => '')).to be_nil
     end
   end
 
