@@ -55,9 +55,6 @@ module ActiveHash
         if ActiveRecord::Reflection.respond_to?(:create)
           if defined?(ActiveHash::Reflection::BelongsToReflection)
             reflection = ActiveHash::Reflection::BelongsToReflection.new(association_id.to_sym, nil, options, self)
-            if options[:through]
-              reflection = ActiveRecord::ThroughReflection.new(reflection)
-            end
           else
             reflection = ActiveRecord::Reflection.create(
               :belongs_to,
