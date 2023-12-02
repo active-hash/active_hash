@@ -2,9 +2,33 @@ module ActiveHash
   module Associations
 
     module ActiveRecordExtensions
-
       def self.extended(base)
         require_relative 'reflection_extensions'
+      end
+
+      def has_many(association_id, **options)
+        if options[:through]
+          klass_name = association_id.to_s.classify
+          klass =
+            begin
+              klass_name.constantize
+            rescue StandardError, LoadError
+              nil
+            end
+
+          if klass && klass < ActiveHash::Base
+            define_method(association_id) do
+              join_models = send(options[:through])
+              join_models.flat_map do |join_model|
+                join_model.send(association_id.to_s.singularize)
+              end.uniq
+            end
+
+            return
+          end
+        end
+
+        super
       end
 
       def belongs_to(name, scope = nil, **options)
@@ -117,6 +141,7 @@ module ActiveHash
             klass.where(foreign_key => primary_key_value)
           end
         end
+
         define_method("#{association_id.to_s.underscore.singularize}_ids") do
           public_send(association_id).map(&:id)
         end
@@ -140,7 +165,6 @@ module ActiveHash
       end
 
       def belongs_to(association_id, options = {})
-
         options = {
           :class_name => association_id.to_s.classify,
           :foreign_key => association_id.to_s.foreign_key,
@@ -156,7 +180,6 @@ module ActiveHash
         define_method("#{association_id}=") do |new_value|
           attributes[options[:foreign_key].to_sym] = new_value ? new_value.send(options[:primary_key]) : nil
         end
-
       end
     end
 

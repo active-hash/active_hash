@@ -48,6 +48,7 @@ unless SKIP_ACTIVE_RECORD
           t.integer :locateable_id
           t.integer :city_id
         end
+
         extend ActiveHash::Associations::ActiveRecordExtensions
       end
 
@@ -56,6 +57,45 @@ unless SKIP_ACTIVE_RECORD
       end
 
       define_ephemeral_class(:SchoolStatus, ActiveHash::Base)
+    end
+
+    def define_doctor_classes
+      define_ephemeral_class(:Physician, ActiveHash::Base) do
+        include ActiveHash::Associations
+
+        has_many :appointments
+        has_many :patients, through: :appointments
+
+        self.data = [
+          {:id => 1, :name => "ikeda"},
+          {:id => 2, :name => "sato"}
+        ]
+      end
+
+      define_ephemeral_class(:Appointment, ActiveRecord::Base) do
+        establish_connection :adapter => "sqlite3", :database => ":memory:"
+        connection.create_table :appointments, force: true do |t|
+          t.references :physician
+          t.references :patient
+        end
+
+        extend ActiveHash::Associations::ActiveRecordExtensions
+
+        belongs_to :physician
+        belongs_to :patient
+      end
+
+      define_ephemeral_class(:Patient, ActiveRecord::Base) do
+        establish_connection :adapter => "sqlite3", :database => ":memory:"
+        connection.create_table :patients, force: true do |t|
+        end
+
+        extend ActiveHash::Associations::ActiveRecordExtensions
+
+        has_many :appointments
+        has_many :physicians, through: :appointments
+      end
+
     end
 
     before do
@@ -150,6 +190,23 @@ unless SKIP_ACTIVE_RECORD
           author = Author.create :id => 1
           expect(Book).to receive(:where).with(author_id: 1).once.and_call_original
           author.books.to_a
+        end
+      end
+
+      describe ":through" do
+        before { define_doctor_classes }
+
+        it "finds ActiveHash records through the join model" do
+          patient = Patient.create!
+
+          physician1 = Physician.first
+          Appointment.create!(physician: physician1, patient: patient)
+          Appointment.create!(physician: physician1, patient: patient)
+
+          physician2 = Physician.last
+          Appointment.create!(physician: physician2, patient: patient)
+
+          expect(patient.physicians).to contain_exactly(physician1, physician2)
         end
       end
     end
@@ -332,6 +389,5 @@ unless SKIP_ACTIVE_RECORD
         end
       end
     end
-
   end
 end
