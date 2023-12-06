@@ -3,38 +3,19 @@ require 'spec_helper'
 unless SKIP_ACTIVE_RECORD
   describe ActiveHash::Base, "active record extensions" do
 
-    before do
-      class Country < ActiveRecord::Base
-        establish_connection :adapter => "sqlite3", :database => ":memory:"
-        connection.create_table(:countries, :force => true) do |t|
-          t.string :name
-        end
-        extend ActiveHash::Associations::ActiveRecordExtensions
-      end
+    def define_ephemeral_class(name, superclass, &block)
+      klass = Class.new(superclass)
+      Object.const_set(name, klass)
+      klass.class_eval(&block) if block_given?
+      @ephemeral_classes << name
+    end
 
-      class School < ActiveRecord::Base
-        establish_connection :adapter => "sqlite3", :database => ":memory:"
-        connection.create_table(:schools, :force => true) do |t|
-          t.integer :country_id
-          t.string :locateable_type
-          t.integer :locateable_id
-          t.integer :city_id
-        end
-        extend ActiveHash::Associations::ActiveRecordExtensions
-      end
-
-      class City < ActiveHash::Base
+    def define_book_classes
+      define_ephemeral_class(:Author, ActiveHash::Base) do
         include ActiveHash::Associations
       end
 
-      class Author < ActiveHash::Base
-        include ActiveHash::Associations
-      end
-
-      class SchoolStatus < ActiveHash::Base
-      end
-
-      class Book < ActiveRecord::Base
+      define_ephemeral_class(:Book, ActiveRecord::Base) do
         establish_connection :adapter => "sqlite3", :database => ":memory:"
         connection.create_table(:books, :force => true) do |t|
           t.integer :author_id
@@ -50,18 +31,87 @@ unless SKIP_ACTIVE_RECORD
       end
     end
 
+    def define_school_classes
+      define_ephemeral_class(:Country, ActiveRecord::Base) do
+        establish_connection :adapter => "sqlite3", :database => ":memory:"
+        connection.create_table(:countries, :force => true) do |t|
+          t.string :name
+        end
+        extend ActiveHash::Associations::ActiveRecordExtensions
+      end
+
+      define_ephemeral_class(:School, ActiveRecord::Base) do
+        establish_connection :adapter => "sqlite3", :database => ":memory:"
+        connection.create_table(:schools, :force => true) do |t|
+          t.integer :country_id
+          t.string :locateable_type
+          t.integer :locateable_id
+          t.integer :city_id
+        end
+
+        extend ActiveHash::Associations::ActiveRecordExtensions
+      end
+
+      define_ephemeral_class(:City, ActiveHash::Base) do
+        include ActiveHash::Associations
+      end
+
+      define_ephemeral_class(:SchoolStatus, ActiveHash::Base)
+    end
+
+    def define_doctor_classes
+      define_ephemeral_class(:Physician, ActiveHash::Base) do
+        include ActiveHash::Associations
+
+        has_many :appointments
+        has_many :patients, through: :appointments
+
+        self.data = [
+          {:id => 1, :name => "ikeda"},
+          {:id => 2, :name => "sato"}
+        ]
+      end
+
+      define_ephemeral_class(:Appointment, ActiveRecord::Base) do
+        establish_connection :adapter => "sqlite3", :database => ":memory:"
+        connection.create_table :appointments, force: true do |t|
+          t.references :physician
+          t.references :patient
+        end
+
+        extend ActiveHash::Associations::ActiveRecordExtensions
+
+        belongs_to :physician
+        belongs_to :patient
+      end
+
+      define_ephemeral_class(:Patient, ActiveRecord::Base) do
+        establish_connection :adapter => "sqlite3", :database => ":memory:"
+        connection.create_table :patients, force: true do |t|
+        end
+
+        extend ActiveHash::Associations::ActiveRecordExtensions
+
+        has_many :appointments
+        has_many :physicians, through: :appointments
+      end
+
+    end
+
+    before do
+      @ephemeral_classes = []
+    end
+
     after do
-      Object.send :remove_const, :City
-      Object.send :remove_const, :Author
-      Object.send :remove_const, :Country
-      Object.send :remove_const, :School
-      Object.send :remove_const, :SchoolStatus
-      Object.send :remove_const, :Book
+      @ephemeral_classes.each do |klass_name|
+        Object.send :remove_const, klass_name
+      end
     end
 
     describe "#has_many" do
-
       context "with ActiveRecord children" do
+        before { define_book_classes }
+
         context "with default options" do
           before do
             @book_1 = Book.create! :author_id => 1, :published => true
@@ -143,10 +193,28 @@ unless SKIP_ACTIVE_RECORD
         end
       end
 
+      describe ":through" do
+        before { define_doctor_classes }
+
+        it "finds ActiveHash records through the join model" do
+          patient = Patient.create!
+
+          physician1 = Physician.first
+          Appointment.create!(physician: physician1, patient: patient)
+          Appointment.create!(physician: physician1, patient: patient)
+
+          physician2 = Physician.last
+          Appointment.create!(physician: physician2, patient: patient)
+
+          expect(patient.physicians).to contain_exactly(physician1, physician2)
+        end
+      end
     end
 
     describe ActiveHash::Associations::ActiveRecordExtensions do
       describe "#belongs_to" do
+        before { define_school_classes }
+
         it "doesn't interfere with AR's procs in belongs_to methods" do
           School.belongs_to :country, lambda { where(name: 'Japan') }
           school = School.new
@@ -210,6 +278,8 @@ unless SKIP_ACTIVE_RECORD
       end
 
       describe "#belongs_to_active_hash" do
+        before { define_school_classes }
+
         context "setting by id" do
           it "finds the correct records" do
             School.belongs_to_active_hash :city
@@ -282,8 +352,9 @@ unless SKIP_ACTIVE_RECORD
     end
 
     describe "#belongs_to" do
-
       context "with an ActiveRecord parent" do
+        before { define_school_classes }
+
         it "find the correct records" do
           City.belongs_to :country
           country = Country.create
@@ -297,12 +368,12 @@ unless SKIP_ACTIVE_RECORD
           expect(city.country).to be_nil
         end
       end
-
     end
 
     describe "#has_one" do
       context "with ActiveRecord children" do
         before do
+          define_book_classes
           Author.has_one :book
         end
 
@@ -318,6 +389,5 @@ unless SKIP_ACTIVE_RECORD
         end
       end
     end
-
   end
 end
