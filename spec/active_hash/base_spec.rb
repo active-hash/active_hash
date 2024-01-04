@@ -928,7 +928,7 @@ describe ActiveHash, "Base" do
         it "raises a NoMethodError" do
           expect {
             Country.find_by_name_and_shoe_size("US", 10)
-          }.to raise_error(NoMethodError, /undefined method `find_by_name_and_shoe_size' (?:for|on) Country/)
+          }.to raise_error(NoMethodError, /undefined method `find_by_name_and_shoe_size' (?:for|on) (class )?Country/)
         end
       end
     end
@@ -957,7 +957,7 @@ describe ActiveHash, "Base" do
         it "raises a NoMethodError" do
           expect {
             Country.find_by_name_and_shoe_size!("US", 10)
-          }.to raise_error(NoMethodError, /undefined method `find_by_name_and_shoe_size!' (?:for|on) Country/)
+          }.to raise_error(NoMethodError, /undefined method `find_by_name_and_shoe_size!' (?:for|on) (class )?Country/)
         end
       end
     end
@@ -1181,7 +1181,7 @@ describe ActiveHash, "Base" do
     it "doesn't blow up if you call a missing dynamic finder when fields haven't been set" do
       expect do
         Country.find_by_name("Foo")
-      end.to raise_error(NoMethodError, /undefined method `find_by_name' (?:for|on) Country/)
+      end.to raise_error(NoMethodError, /undefined method `find_by_name' (?:for|on) (class )?Country/)
     end
   end
 
