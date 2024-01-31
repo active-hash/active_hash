@@ -143,15 +143,10 @@ module ActiveHash
     end
 
     def pluck(*column_names)
-      symbolized_column_names = column_names.map(&:to_sym)
-
-      if symbolized_column_names.length == 1
-        column_name = symbolized_column_names.first
-        all.map { |record| record[column_name] }
+      if column_names.length == 1
+        all.map(&column_names.first.to_sym)
       else
-        all.map do |record|
-          symbolized_column_names.map { |column_name| record[column_name] }
-        end
+        column_names.map { |column_name| all.map(&column_name.to_sym) }.then { |values| :zip.to_proc.(*values) }
       end
     end
 
