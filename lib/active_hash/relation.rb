@@ -146,7 +146,7 @@ module ActiveHash
       if column_names.length == 1
         all.map(&column_names.first.to_sym)
       else
-        column_names.map { |column_name| all.map(&column_name.to_sym) }.then { |values| :zip.to_proc.(*values) }
+        column_names.map { |column_name| all.map(&column_name.to_sym) }.yield_self { |values| :zip.to_proc.(*values) }
       end
     end
 
