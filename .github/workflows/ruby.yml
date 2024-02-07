@@ -3,6 +3,9 @@ concurrency:
   group: "${{github.workflow}}-${{github.ref}}"
   cancel-in-progress: true
 on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 8 * * 3" # At 08:00 on Wednesday # https://crontab.guru/#0_8_*_*_3
   push:
     branches:
       - master
