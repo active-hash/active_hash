@@ -146,7 +146,8 @@ module ActiveHash
       if column_names.length == 1
         all.map(&column_names.first.to_sym)
       else
-        column_names.map { |column_name| all.map(&column_name.to_sym) }.yield_self { |values| :zip.to_proc.(*values) }
+        # `tap with break` can be replaced with yield_self in Ruby 2.5 or then in Ruby 2.6
+        column_names.map { |column_name| all.map(&column_name.to_sym) }.tap { |values| break :zip.to_proc.(*values) }
       end
     end
 
