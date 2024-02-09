@@ -599,6 +599,30 @@ describe ActiveHash, "Base" do
     it "returns an Array of attribute values" do
       expect(Country.pluck(:id)).to match_array([1, 2, 3])
     end
+
+    context 'with the same field name and method name' do
+      before do
+        class CountryWithContinent < ActiveHash::Base
+          self.data = [
+            {:id => 1, :name => "US", continent: 1},
+            {:id => 2, :name => "Canada", continent: 1},
+            {:id => 3, :name => "Mexico", continent: 1},
+            {:id => 4, :name => "Brazil", continent: 2}
+          ]
+
+          # behave like ActiveRecord Enum
+          CONTINENTS = { north_america: 1, south_america: 2, europe: 3, asia: 4, africa: 5, oceania: 6 }
+
+          def continent
+            CONTINENTS.key(self[:continent]).to_sym
+          end
+        end
+      end
+
+      it "returns the value of the method when the field name is the same as the method name" do
+        expect(CountryWithContinent.pluck(:id, :name, :continent)).to match_array([[1, "US", :north_america], [2, "Canada", :north_america], [3, "Mexico", :north_america], [4, "Brazil", :south_america]])
+      end
+    end
   end
 
   describe '.ids' do
@@ -1278,7 +1302,7 @@ describe ActiveHash, "Base" do
           before do
             Country.field :active, :default => false
           end
-    
+
           it "returns the default value when not present" do
             country = Country.new
             expect(country.attributes[:active]).to eq(false)
