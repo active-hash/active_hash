@@ -144,10 +144,10 @@ module ActiveHash
 
     def pluck(*column_names)
       if column_names.length == 1
-        all.map(&column_names.first.to_sym)
+        column_name = column_names.first
+        all.map { |record| record.public_send(column_name) }
       else
-        # `tap with break` can be replaced with yield_self in Ruby 2.5 or then in Ruby 2.6
-        column_names.map { |column_name| all.map(&column_name.to_sym) }.tap { |values| break :zip.to_proc.(*values) }
+        all.map { |record| column_names.map { |column_name| record.public_send(column_name) } }
       end
     end
 
