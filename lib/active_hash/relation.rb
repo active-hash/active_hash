@@ -143,15 +143,11 @@ module ActiveHash
     end
 
     def pluck(*column_names)
-      symbolized_column_names = column_names.map(&:to_sym)
-
-      if symbolized_column_names.length == 1
-        column_name = symbolized_column_names.first
-        all.map { |record| record[column_name] }
+      if column_names.length == 1
+        column_name = column_names.first
+        all.map { |record| record.public_send(column_name) }
       else
-        all.map do |record|
-          symbolized_column_names.map { |column_name| record[column_name] }
-        end
+        all.map { |record| column_names.map { |column_name| record.public_send(column_name) } }
       end
     end
 
