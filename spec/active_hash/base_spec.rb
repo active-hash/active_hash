@@ -1820,4 +1820,22 @@ describe ActiveHash, "Base" do
     end
   end
 
+  context 'in case of ActiveModel is defined' do
+
+    before do
+      module ActiveModel
+        module Translation
+          def some_method; end
+        end
+      end
+    end
+
+    subject { Country }
+
+    it 'includes instance methods of ActiveModel::Translation' do
+      expect(subject.methods).to include(:some_method)
+    end
+
+  end
+
 end

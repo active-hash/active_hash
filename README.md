@@ -606,6 +606,20 @@ Constants are formed by first stripping all non-word characters and then upcasin
 
 The field specified as the _enum_accessor_ must contain unique data values.
 
+## I18n
+
+ActiveHash supports i18n as ActiveModel.
+Put following code in one of your locale file (e.g. `config/locales/LANGUAGE_CODE.yml`)
+
+```yaml
+# for example, inside config/locales/ja.yml
+ja:
+  activemodel:
+    models:
+      # `Country.model_name.human` will evaluates to "国"
+      country: "国"
+```
+
 ## Contributing
 
 If you'd like to become an ActiveHash contributor, the easiest way it to fork this repo, make your changes, run the specs and submit a pull request once they pass.
