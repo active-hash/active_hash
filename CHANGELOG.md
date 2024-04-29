@@ -1,5 +1,22 @@
 # active_hash Changelog
 
+## Version [3.3.0] - <sub><sup>2024-04-30</sup></sub>
+
+### Added
+
+- Ruby 3.3 support [#298](https://github.com/active-hash/active_hash/pull/298) @m-nakamura145
+- Support `has_many :through` associations [#296](https://github.com/active-hash/active_hash/pull/296) @flavorjones
+- Rails 7.1 support [#291](https://github.com/active-hash/active_hash/pull/281) @y-yagi
+
+### Fixed
+
+- Rails 7.1: fix sqlite3 issue [#303](https://github.com/active-hash/active_hash/pull/303) @flavorjones
+- Rails 7.1.3: add missing `has_query_constraints?` [#300](https://github.com/active-hash/active_hash/pull/300) @flavorjones
+- `Array#pluck` supports methods [#299](https://github.com/active-hash/active_hash/pull/299) @iberianpig
+- Prefer `safe_constantize` over `constantize` [#297](https://github.com/active-hash/active_hash/pull/297) @flavorjones
+- Treat `nil` and `blank?` as different values [#295](https://github.com/active-hash/active_hash/pull/295) @kbrock
+- Fix `#where` for string keys [#292](https://github.com/active-hash/active_hash/pull/292) @usernam3
+
 ## Version [3.2.1] - <sub><sup>2023-08-31</sup></sub>
 
 ### Added
@@ -305,9 +322,10 @@
   - Setting data to nil correctly causes .all to return an empty array
   - Added reload(force) method, so that you can force a reload from files in ActiveFile, useful for tests
 
-[HEAD]: https://github.com/active-hash/active_hash/compare/v4.3.0...HEAD
-[4.3.0]: https://github.com/active-hash/active_hash/compare/v3.2.0...v4.3.0
-[4.2.0]: https://github.com/active-hash/active_hash/compare/v3.1.1...v4.2.0
+[HEAD]:  https://github.com/active-hash/active_hash/compare/v3.3.0...HEAD
+[3.3.0]: https://github.com/active-hash/active_hash/compare/v3.2.1...v3.3.0
+[3.2.1]: https://github.com/active-hash/active_hash/compare/v3.2.0...v3.2.1
+[3.2.0]: https://github.com/active-hash/active_hash/compare/v3.1.1...v3.2.0
 [3.1.1]: https://github.com/active-hash/active_hash/compare/v3.1.0...v3.1.1
 [3.1.0]: https://github.com/active-hash/active_hash/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/active-hash/active_hash/compare/v2.3.0...v3.0.0
