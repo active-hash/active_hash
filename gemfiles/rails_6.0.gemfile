@@ -11,7 +11,7 @@ platform :jruby do
 end
 
 platform :ruby do
-  gem 'sqlite3'
+  gem 'sqlite3', '~> 1.4', '< 2.0' # can allow 2.0 once Rails's sqlite adapter allows it
 end
 
 gemspec :path => '../'
