@@ -31,6 +31,32 @@ unless SKIP_ACTIVE_RECORD
       end
     end
 
+    def define_person_classes
+      define_ephemeral_class(:Country, ActiveHash::Base) do
+        self.data = [
+          {:id => 1, :name => "Japan"}
+        ]
+      end
+
+      define_ephemeral_class(:Person, ActiveRecord::Base) do
+        establish_connection :adapter => "sqlite3", :database => ":memory:"
+        connection.create_table(:people, :force => true) do |t|
+        end
+
+        extend ActiveHash::Associations::ActiveRecordExtensions
+      end
+
+      define_ephemeral_class(:Post, ActiveRecord::Base) do
+        establish_connection :adapter => "sqlite3", :database => ":memory:"
+        connection.create_table(:posts, :force => true) do |t|
+          t.integer :person_id
+          t.datetime :created_at
+        end
+
+        belongs_to :person
+      end
+    end
+
     def define_school_classes
       define_ephemeral_class(:Country, ActiveRecord::Base) do
         establish_connection :adapter => "sqlite3", :database => ":memory:"
@@ -207,6 +233,22 @@ unless SKIP_ACTIVE_RECORD
           Appointment.create!(physician: physician2, patient: patient)
 
           expect(patient.physicians).to contain_exactly(physician1, physician2)
+        end
+      end
+
+      describe "with a lambda" do
+        before do
+          define_person_classes
+          now = Time.now
+          @post_1 = Post.create! :person_id => 1, :created_at => now
+          @post_2 = Post.create! :person_id => 1, :created_at => 1.day.ago
+          Post.create! :person_id => 2, :created_at => now
+          Person.has_many :posts, lambda { order(created_at: :asc) }
+        end
+
+        it "should find the correct records" do
+          person = Person.create :id => 1
+          expect(person.posts).to eq([@post_2, @post_1])
         end
       end
     end
