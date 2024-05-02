@@ -6,7 +6,7 @@
 
 - Ruby 3.3 support [#298](https://github.com/active-hash/active_hash/pull/298) @m-nakamura145
 - Support `has_many :through` associations [#296](https://github.com/active-hash/active_hash/pull/296) @flavorjones
-- Rails 7.1 support [#291](https://github.com/active-hash/active_hash/pull/281) @y-yagi
+- Rails 7.1 support [#291](https://github.com/active-hash/active_hash/pull/291) @y-yagi
 
 ### Fixed
 
