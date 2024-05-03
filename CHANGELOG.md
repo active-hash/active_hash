@@ -1,5 +1,12 @@
 # active_hash Changelog
 
+## Version [3.3.1] - <sub><sup>2024-05-03</sup></sub>
+
+### Fixed
+
+- Fix `hash_many :through` associations which specify a scope. [#306](https://github.com/active-hash/active_hash/pull/306) @sontixyou
+
+
 ## Version [3.3.0] - <sub><sup>2024-04-30</sup></sub>
 
 ### Added
