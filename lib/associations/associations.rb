@@ -6,7 +6,7 @@ module ActiveHash
         require_relative 'reflection_extensions'
       end
 
-      def has_many(association_id, **options)
+      def has_many(association_id, scope = nil, **options, &extension)
         if options[:through]
           klass_name = association_id.to_s.classify
           klass =
