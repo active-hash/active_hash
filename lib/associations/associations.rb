@@ -9,12 +9,7 @@ module ActiveHash
       def has_many(association_id, scope = nil, **options, &extension)
         if options[:through]
           klass_name = association_id.to_s.classify
-          klass =
-            begin
-              klass_name.safe_constantize
-            rescue StandardError, LoadError
-              nil
-            end
+          klass = klass_name.safe_constantize
 
           if klass && klass < ActiveHash::Base
             define_method(association_id) do
@@ -33,12 +28,7 @@ module ActiveHash
 
       def belongs_to(name, scope = nil, **options)
         klass_name = options.key?(:class_name) ? options[:class_name] : name.to_s.camelize
-        klass =
-          begin
-            klass_name.safe_constantize
-          rescue StandardError, LoadError
-            nil
-          end
+        klass = klass_name.safe_constantize
 
         if klass && klass < ActiveHash::Base
           options = { class_name: klass_name }.merge(options)
