@@ -39,6 +39,10 @@ describe ActiveHash, "Base" do
       Country.fields :name, :iso_name
     end
 
+    it "registers field_names" do
+      expect(Country.field_names).to eq([:name, :iso_name])
+    end
+
     it "defines a reader for each field" do
       expect(Country.new).to respond_to(:name)
       expect(Country.new).to respond_to(:iso_name)
@@ -103,6 +107,16 @@ describe ActiveHash, "Base" do
       expect do
         Country.field :attributes
       end.to raise_error(ActiveHash::ReservedFieldError)
+    end
+  end
+
+  describe ".fields (string)" do
+    before do
+      Country.fields "name", "iso_name"
+    end
+
+    it "registers field_names" do
+      expect(Country.field_names).to eq([:name, :iso_name])
     end
   end
 
