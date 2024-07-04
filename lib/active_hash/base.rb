@@ -51,7 +51,7 @@ module ActiveHash
       end
 
       def column_names
-        @column_names ||= field_names.map(&:to_s)
+        @column_names ||= field_names.map(&:name)
       end
 
       def the_meta_class
