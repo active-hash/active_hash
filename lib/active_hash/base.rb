@@ -50,6 +50,19 @@ module ActiveHash
         @field_names ||= []
       end
 
+      #
+      # Useful for CSV integration needing column names as strings.
+      #
+      # @return [Array<String>] An array of column names as strings.
+      #
+      # @example Usage
+      #  class Country < ActiveHash::Base
+      #    fields :name, :code
+      #  end
+      #
+      #  Country.column_names
+      #  # => ["id", "name", "code"]
+      #
       def column_names
         @column_names ||= field_names.map(&:name)
       end
