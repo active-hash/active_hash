@@ -64,7 +64,7 @@ module ActiveHash
       #  # => ["id", "name", "code"]
       #
       def column_names
-        @column_names ||= field_names.map(&:name)
+        field_names.map(&:name)
       end
 
       def the_meta_class
