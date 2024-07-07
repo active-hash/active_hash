@@ -64,7 +64,9 @@ module ActiveHash
       #  # => ["id", "name", "code"]
       #
       def column_names
-        field_names.map(&:name)
+        field_names.map do |field|
+          field.respond_to?(:name) ? field.name : field.to_s.freeze
+        end
       end
 
       def the_meta_class
