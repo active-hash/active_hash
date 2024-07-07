@@ -198,7 +198,9 @@ module ActiveHash
       end
 
       def field(field_name, options = {})
+        field_name = field_name.to_sym
         validate_field(field_name)
+
         field_names << field_name
 
         add_default_value(field_name, options[:default]) if options.key?(:default)
@@ -210,7 +212,8 @@ module ActiveHash
       end
 
       def validate_field(field_name)
-        if [:attributes].include?(field_name.to_sym)
+        field_name = field_name.to_sym
+        if [:attributes].include?(field_name)
           raise ReservedFieldError.new("#{field_name} is a reserved field in ActiveHash.  Please use another name.")
         end
       end
@@ -264,7 +267,7 @@ module ActiveHash
       end
 
       def define_getter_method(field, default_value)
-        unless instance_methods.include?(field.to_sym)
+        unless instance_methods.include?(field)
           define_method(field) do
             attributes[field].nil? ? default_value : attributes[field]
           end
