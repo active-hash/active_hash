@@ -106,6 +106,16 @@ describe ActiveHash, "Base" do
     end
   end
 
+  describe ".field_names" do
+    before do
+      Country.fields :name, :iso_name, "size"
+    end
+
+    it "returns an array of field names" do
+      expect(Country.field_names).to eq([:name, :iso_name, :size])
+    end
+  end
+
   describe ".data=" do
     before do
       class Region < ActiveHash::Base
