@@ -26,6 +26,7 @@ module ActiveHash
     if Object.const_defined?(:ActiveModel)
       extend ActiveModel::Naming
       include ActiveModel::Conversion
+      include ActiveModel::Serializers::JSON
     else
       def to_param
         id.present? ? id.to_s : nil

@@ -1830,4 +1830,16 @@ describe ActiveHash, "Base" do
     end
   end
 
+  describe "#as_json" do
+    before do
+      Country.data = [
+        {:id => 1, :name => "US", :language => 'English'}
+      ]
+    end
+
+    it "returns a hash" do
+      country = Country.find(1)
+      expect(country.as_json.stringify_keys).to eq({"id" => 1, "name" => "US", "language" => "English"})
+    end
+  end
 end
