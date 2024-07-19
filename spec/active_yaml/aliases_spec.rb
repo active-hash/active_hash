@@ -45,6 +45,7 @@ describe ActiveYaml::Aliases do
       end
 
       it 'excludes them from column_names' do
+        skip "Not supported in Ruby 3.0.0" if RUBY_VERSION < "3.0.0"
         model.all
         expect(model.column_names).to match_array ["name", "flavor", "price"]
       end
@@ -77,6 +78,7 @@ describe ActiveYaml::Aliases do
       end
 
       it 'excludes them from column_names' do
+        skip "Not supported in Ruby 3.0.0" if RUBY_VERSION < "3.0.0"
         model.all
         expect(model.column_names).to match_array ["name", "flavor", "price", "slogan", "key"]
       end

@@ -122,6 +122,7 @@ describe ActiveHash, "Base" do
     end
 
     it "returns an array of column names" do
+      skip "Not supported in Ruby 3.0.0" if RUBY_VERSION < "3.0.0"
       expect(Country.column_names).to eq(["name", "iso_name", "size"])
     end
   end
