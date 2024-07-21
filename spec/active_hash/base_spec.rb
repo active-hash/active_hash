@@ -1830,4 +1830,28 @@ describe ActiveHash, "Base" do
     end
   end
 
+  describe 'ActiveModel::Translation' do
+    around(:example) do |example|
+      if Object.const_defined?(:ActiveModel)
+        example.run
+      else
+        skip
+      end
+    end
+
+    context 'if the locale is set to :ja' do
+      around(:example) do |example|
+        current_locale = I18n.locale
+        I18n.locale = :ja
+
+        example.run
+
+        I18n.locale = current_locale
+      end
+
+      subject { Country.model_name.human }
+
+      it { is_expected.to eq('国') }
+    end
+  end
 end

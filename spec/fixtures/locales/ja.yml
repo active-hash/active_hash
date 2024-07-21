@@ -1,0 +1,4 @@
+ja:
+  activemodel:
+    models:
+      country: "国"
