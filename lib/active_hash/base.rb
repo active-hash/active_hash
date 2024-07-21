@@ -24,11 +24,7 @@ module ActiveHash
     class_attribute :_data, :dirty, :default_attributes, :scopes
 
     if Object.const_defined?(:ActiveModel)
-      if Object.const_defined?(:I18n)
-        extend ActiveModel::Translation
-      else
-        extend ActiveModel::Naming
-      end
+      extend ActiveModel::Translation
       include ActiveModel::Conversion
     else
       def to_param
