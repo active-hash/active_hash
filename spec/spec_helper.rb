@@ -23,3 +23,5 @@ if !SKIP_ACTIVE_RECORD && ActiveRecord::VERSION::MAJOR < 7
     end
   end
 end
+
+I18n.load_path << File.expand_path("fixtures/locales/ja.yml", __dir__)
