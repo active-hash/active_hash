@@ -135,6 +135,7 @@ module ActiveHash
     end
 
     def count
+      return super if block_given?
       length
     end
 
