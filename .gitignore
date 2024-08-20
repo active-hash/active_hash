@@ -11,4 +11,5 @@ pkg
 rdoc
 vendor/bundle
 gemfiles/.bundle
+gemfiles/vendor
 gemfiles/*.lock
