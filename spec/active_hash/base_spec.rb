@@ -116,6 +116,17 @@ describe ActiveHash, "Base" do
     end
   end
 
+  describe ".column_names" do
+    before do
+      Country.fields :name, :iso_name, "size"
+    end
+
+    it "returns an array of column names" do
+      skip "Not supported in Ruby 3.0.0" if RUBY_VERSION < "3.0.0"
+      expect(Country.column_names).to eq(["name", "iso_name", "size"])
+    end
+  end
+
   describe ".data=" do
     before do
       class Region < ActiveHash::Base
