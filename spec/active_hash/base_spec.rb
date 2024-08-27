@@ -1169,6 +1169,12 @@ describe ActiveHash, "Base" do
       end
     end
 
+    context "when nil is passed" do
+      it "return nil" do
+        expect(Country.exists?(nil)).to be_falsy
+      end
+    end
+
     describe "with matches" do
       context 'for a record argument' do
         it "return true" do
