@@ -79,6 +79,73 @@ describe ActiveHash::Base, "enum" do
       expect(Movie::THE_INFORMANT.name).to eq('The Informant!')
       expect(Movie::IN_OUT.name).to eq('In & Out')
     end
+
+    describe "enum(columns)" do
+      it "defines a predicate method for each value in the enum" do
+        Article = Class.new(ActiveHash::Base) do
+          include ActiveHash::Enum
+
+          self.data = [
+            { name: 'Article 1', status: 'draft'},
+            { name: 'Article 2', status: 'published'},
+            { name: 'Article 3', status: 'archived'}
+          ]
+
+          enum_accessor :name
+
+          enum status: [:draft, :published, :archived]
+        end
+
+        expect(Article::ARTICLE_1.draft?).to be_truthy
+        expect(Article::ARTICLE_1.published?).to be_falsey
+        expect(Article::ARTICLE_1.archived?).to be_falsey
+
+        expect(Article::ARTICLE_2.draft?).to be_falsey
+        expect(Article::ARTICLE_2.published?).to be_truthy
+        expect(Article::ARTICLE_2.archived?).to be_falsey
+
+        expect(Article::ARTICLE_3.draft?).to be_falsey
+        expect(Article::ARTICLE_3.published?).to be_falsey
+        expect(Article::ARTICLE_3.archived?).to be_truthy
+      end
+
+      it "defines a predicate method for each value in the enum" do
+        NotifyType = Class.new(ActiveHash::Base) do
+          include ActiveHash::Enum
+
+          self.data = [
+            { name: 'Like', action: 'LIKE'},
+            { name: 'Comment', action: 'COMMENT'},
+            { name: 'Follow', action: 'FOLLOW'},
+            { name: 'Mention', action: 'MENTION'}
+          ]
+
+          enum_accessor :name
+
+          enum action: { like: 'LIKE', comment: 'COMMENT', follow: 'FOLLOW', mention: 'MENTION' }
+        end
+
+        expect(NotifyType::LIKE.like?).to be_truthy
+        expect(NotifyType::LIKE.comment?).to be_falsey
+        expect(NotifyType::LIKE.follow?).to be_falsey
+        expect(NotifyType::LIKE.mention?).to be_falsey
+
+        expect(NotifyType::COMMENT.like?).to be_falsey
+        expect(NotifyType::COMMENT.comment?).to be_truthy
+        expect(NotifyType::COMMENT.follow?).to be_falsey
+        expect(NotifyType::COMMENT.mention?).to be_falsey
+
+        expect(NotifyType::FOLLOW.like?).to be_falsey
+        expect(NotifyType::FOLLOW.comment?).to be_falsey
+        expect(NotifyType::FOLLOW.follow?).to be_truthy
+        expect(NotifyType::FOLLOW.mention?).to be_falsey
+
+        expect(NotifyType::MENTION.like?).to be_falsey
+        expect(NotifyType::MENTION.comment?).to be_falsey
+        expect(NotifyType::MENTION.follow?).to be_falsey
+        expect(NotifyType::MENTION.mention?).to be_truthy
+      end
+    end
   end
 
   context "ActiveHash with an enum_accessor set" do
