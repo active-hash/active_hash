@@ -19,7 +19,7 @@ module ActiveHash
         columns.each do |column, values|
           values = values.zip(values.map(&:to_s)).to_h if values.is_a?(Array)
           values.each do |method, value|
-            method_definitions << "def #{method}?; #{column} == '#{value}'; end"
+            method_definitions << "def #{method}?; #{column} == #{value.inspect}; end"
           end
         end
         class_eval(method_definitions.uniq.join(";"))

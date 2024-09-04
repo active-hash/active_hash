@@ -109,20 +109,20 @@ describe ActiveHash::Base, "enum" do
         expect(Article::ARTICLE_3.archived?).to be_truthy
       end
 
-      it "defines a predicate method for each value in the enum" do
+      it "multi type data (ex: string, integer and symbol) enum" do
         NotifyType = Class.new(ActiveHash::Base) do
           include ActiveHash::Enum
 
           self.data = [
             { name: 'Like', action: 'LIKE'},
-            { name: 'Comment', action: 'COMMENT'},
-            { name: 'Follow', action: 'FOLLOW'},
+            { name: 'Comment', action: 1},
+            { name: 'Follow', action: :FOLLOW},
             { name: 'Mention', action: 'MENTION'}
           ]
 
           enum_accessor :name
 
-          enum action: { like: 'LIKE', comment: 'COMMENT', follow: 'FOLLOW', mention: 'MENTION' }
+          enum action: { like: 'LIKE', comment: 1, follow: :FOLLOW, mention: 'MENTION' }
         end
 
         expect(NotifyType::LIKE.like?).to be_truthy
