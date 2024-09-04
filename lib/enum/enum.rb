@@ -15,14 +15,17 @@ module ActiveHash
       end
 
       def enum(columns)
-        method_definitions = []
         columns.each do |column, values|
           values = values.zip(values.map(&:to_s)).to_h if values.is_a?(Array)
           values.each do |method, value|
-            method_definitions << "def #{method}?; #{column} == #{value.inspect}; end"
+            class_eval <<~METHOD, __FILE__, __LINE__ + 1
+              # frozen_string_literal: true
+              def #{method}?
+                #{column} == #{value.inspect}
+              end
+            METHOD
           end
         end
-        class_eval(method_definitions.uniq.join(";"))
       end
 
       def insert(record)
