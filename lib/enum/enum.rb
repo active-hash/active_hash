@@ -14,6 +14,20 @@ module ActiveHash
         reload
       end
 
+      def enum(columns)
+        columns.each do |column, values|
+          values = values.zip(values.map(&:to_s)).to_h if values.is_a?(Array)
+          values.each do |method, value|
+            class_eval <<~METHOD, __FILE__, __LINE__ + 1
+              # frozen_string_literal: true
+              def #{method}?
+                #{column} == #{value.inspect}
+              end
+            METHOD
+          end
+        end
+      end
+
       def insert(record)
         super
         set_constant(record) if defined?(@enum_accessors)
