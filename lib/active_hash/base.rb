@@ -444,7 +444,7 @@ module ActiveHash
     end
 
     def id
-      attributes[:id] ? attributes[:id] : nil
+      attributes[:id]
     end
 
     def id=(id)
