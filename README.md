@@ -34,7 +34,11 @@ Other:
 gem install active_hash
 ```
 
-**Currently version 2.x doesn't support Ruby < 2.4 and Rails < 5**. If you use these versions, please use 1.x.
+Requirements:
+
+- v1.x: Ruby >= 1.9.3, Rails >= 2.2.2
+- v2.x, v3.x: Ruby >= 2.4, Rails >= 5
+- upcoming: Ruby >= 3.0, Rails >= 6.1
 
 ```ruby
 gem 'active_hash', '~> 1.5.3'
@@ -633,10 +637,10 @@ If your changes seem reasonable and the specs pass I'll give you commit rights t
 
 ## Releasing a new version
 
-To make users' lives easier, please maintain support for:
+To make users' lives easier, CI will exercise tests for:
 
-  * Ruby 2.4
-  * ActiveRecord/ActiveSupport from 5.0 through edge
+  * Ruby 3.0 through current
+  * ActiveRecord/ActiveSupport from 6.1 through edge
 
 Once appraisal passes in all supported rubies, follow these steps to release a new version of active_hash:
 
