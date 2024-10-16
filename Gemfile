@@ -15,4 +15,4 @@ platforms :ruby do
   gem 'sqlite3', '~> 1.4', '< 2.0' # can allow 2.0 once Rails's sqlite adapter allows it
 end
 
-gem 'activerecord', '>= 5.0.0'
+gem 'activerecord', '>= 6.1.0'
