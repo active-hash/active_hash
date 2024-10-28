@@ -39,6 +39,16 @@ RSpec.describe ActiveHash::Relation do
     end
   end
 
+  describe '#count' do
+    it 'supports a block arg' do
+      expect(subject.count { |s| s.name == "US" }).to eq(1)
+    end
+
+    it 'returns the correct number of items of the relation' do
+      expect(subject.count).to eq(2)
+    end
+  end
+
   describe '#size' do
     it 'returns an Integer' do
       expect(subject.size).to be_an(Integer)
