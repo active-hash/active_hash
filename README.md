@@ -562,7 +562,7 @@ Call `Model.reload(true)` to force reload the data from disk.
 In Rails, you can use this snippet. Please just note it resets the state every request, which may not always be desired.
 
 ```ruby
-before_filter do
+before_action do
   [Model1, Model2, Model3].each { |m| m.reload(true) }
 end
 ```
