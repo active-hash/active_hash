@@ -283,6 +283,8 @@ module ActiveHash
         self.default_attributes[field_name] = default_value
       end
 
+      private :add_default_value
+
       def define_getter_method(field, default_value)
         unless instance_methods.include?(field)
           define_method(field) do
