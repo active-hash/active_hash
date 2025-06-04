@@ -85,12 +85,7 @@ unless SKIP_ACTIVE_RECORD
       define_ephemeral_class(:SchoolStatus, ActiveHash::Base)
     end
 
-    def define_doctor_classes(
-      appointment_to_physician_association_name:,
-      appointment_to_physician_association_options:,
-      patient_to_physician_association_name:,
-      patient_to_physician_association_options:
-    )
+    def define_doctor_classes
       define_ephemeral_class(:Physician, ActiveHash::Base) do
         include ActiveHash::Associations
 
@@ -112,8 +107,7 @@ unless SKIP_ACTIVE_RECORD
 
         extend ActiveHash::Associations::ActiveRecordExtensions
 
-        belongs_to appointment_to_physician_association_name,
-                   **appointment_to_physician_association_options
+        belongs_to :physician
         belongs_to :patient
       end
 
@@ -125,8 +119,7 @@ unless SKIP_ACTIVE_RECORD
         extend ActiveHash::Associations::ActiveRecordExtensions
 
         has_many :appointments
-        has_many patient_to_physician_association_name,
-                 **{ through: :appointments }.merge(patient_to_physician_association_options)
+        has_many :physicians, through: :appointments
       end
 
     end
@@ -227,19 +220,7 @@ unless SKIP_ACTIVE_RECORD
       end
 
       describe ":through" do
-        let(:appointment_to_physician_association_name) { :physician }
-        let(:appointment_to_physician_association_options) { {} }
-        let(:patient_to_physician_association_name) { :physicians }
-        let(:patient_to_physician_association_options) { {} }
-
-        before do
-          define_doctor_classes(
-            appointment_to_physician_association_name: appointment_to_physician_association_name,
-            appointment_to_physician_association_options: appointment_to_physician_association_options,
-            patient_to_physician_association_name: patient_to_physician_association_name,
-            patient_to_physician_association_options: patient_to_physician_association_options
-          )
-        end
+        before { define_doctor_classes }
 
         it "finds ActiveHash records through the join model" do
           patient = Patient.create!
@@ -255,10 +236,9 @@ unless SKIP_ACTIVE_RECORD
         end
 
         describe "with the :source option" do
-          let(:patient_to_physician_association_name) { :doctors }
-          let(:patient_to_physician_association_options) { {source: :physician} }
-
           it "finds ActiveHash records through the join model" do
+            Patient.has_many :doctors, through: :appointments, source: :physician
+
             patient = Patient.create!
 
             physician = Physician.last
@@ -269,11 +249,10 @@ unless SKIP_ACTIVE_RECORD
         end
 
         describe ":through when the join model uses an aliased association" do
-          let(:appointment_to_physician_association_name) { :doctor }
-          let(:appointment_to_physician_association_options) { { class_name: 'Physician', foreign_key: :physician_id } }
-          let(:patient_to_physician_association_name) { :doctors }
-
           it "finds ActiveHash records through the join model" do
+            Appointment.belongs_to :doctor, class_name: 'Physician', foreign_key: :physician_id
+            Patient.has_many :doctors, through: :appointments
+
             patient = Patient.create!
 
             physician = Physician.last
