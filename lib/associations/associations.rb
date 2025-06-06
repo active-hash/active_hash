@@ -8,14 +8,16 @@ module ActiveHash
 
       def has_many(association_id, scope = nil, **options, &extension)
         if options[:through]
-          klass_name = association_id.to_s.classify
-          klass = klass_name.safe_constantize
+          source_association_name = options[:source]&.to_s || association_id.to_s.singularize
+
+          through_klass = reflect_on_association(options[:through])&.klass
+          klass = through_klass&.reflect_on_association(source_association_name)&.klass
 
           if klass && klass < ActiveHash::Base
             define_method(association_id) do
               join_models = send(options[:through])
               join_models.flat_map do |join_model|
-                join_model.send(association_id.to_s.singularize)
+                join_model.send(source_association_name)
               end.uniq
             end
 

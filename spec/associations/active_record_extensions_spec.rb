@@ -234,6 +234,56 @@ unless SKIP_ACTIVE_RECORD
 
           expect(patient.physicians).to contain_exactly(physician1, physician2)
         end
+
+        describe "with the :source option" do
+          before do
+            # NOTE: Removing the Patient#physicians association and adding Patient#doctors
+            Patient._reflections.delete('physicians')
+            Patient.class_eval do
+              define_method(:physicians) { raise NoMethodError, "The #physicians association is removed in this spec, use #doctors" }
+              define_method(:physicians=) { |_| raise NoMethodError, "The #physicians association is removed in this spec, use #doctors" }
+            end
+            Patient.has_many :doctors, through: :appointments, source: :physician
+          end
+
+          it "finds ActiveHash records through the join model" do
+            patient = Patient.create!
+
+            physician = Physician.last
+            Appointment.create!(physician: physician, patient: patient)
+
+            expect(patient.doctors).to contain_exactly(physician)
+          end
+        end
+
+        describe ":through when the join model uses an aliased association" do
+          before do
+            # NOTE: Removing the Appointment#physician association and adding Appointment#doctor
+            Appointment._reflections.delete('physician')
+            Appointment.class_eval do
+              define_method(:physician) { raise NoMethodError, "The #physician association is removed in this spec, use #doctor" }
+              define_method(:physician=) { |_| raise NoMethodError, "The #physician association is removed in this spec, use #doctor" }
+            end
+            Appointment.belongs_to :doctor, class_name: 'Physician', foreign_key: :physician_id
+
+            # NOTE: Removing the Patient#physicians association and adding Patient#doctors
+            Patient._reflections.delete('physicians')
+            Patient.class_eval do
+              define_method(:physicians) { raise NoMethodError, "The #physicians association is removed in this spec, use #doctors" }
+              define_method(:physicians=) { |_| raise NoMethodError, "The #physicians association is removed in this spec, use #doctors" }
+            end
+            Patient.has_many :doctors, through: :appointments
+          end
+
+          it "finds ActiveHash records through the join model" do
+            patient = Patient.create!
+
+            physician = Physician.last
+            Appointment.create!(doctor: physician, patient: patient)
+
+            expect(patient.doctors).to contain_exactly(physician)
+          end
+        end
       end
 
       describe "with a lambda" do
