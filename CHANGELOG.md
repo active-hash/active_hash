@@ -1,5 +1,29 @@
 # active_hash Changelog
 
+## Version [4.0.0] - <sub><sup>2025-07-30</sup></sub>
+
+### Added
+
+- Add i18n support [#230](https://github.com/active-hash/active_hash/pull/230) @ryu-sato @Yuki-Inoue
+- Add `column_names` method [#311](https://github.com/active-hash/active_hash/pull/311) @hatsu38
+- Add block support to `count` [#317](https://github.com/active-hash/active_hash/pull/317) @ashleyHutton
+- Support ruby 3.4 [#328](https://github.com/active-hash/active_hash/pull/328) @flavorjones
+- Add `:alias` to `has_many :through` [#329](https://github.com/active-hash/active_hash/pull/329) @alexgriff
+- Add Active Record 8.0 [#324](https://github.com/active-hash/active_hash/pull/324) @flavorjones
+
+### Fixed
+
+- Fix Do not suppress load errors[#309](https://github.com/active-hash/active_hash/pull/309) @andreynering
+- Ensure `field_names` are all strings [#312](https://github.com/active-hash/active_hash/pull/312) @flavorjones
+- Hide private `add_default_value` [#314](https://github.com/active-hash/active_hash/pull/314) @kbrock
+- Fix `exists?(nil)` [#320](https://github.com/active-hash/active_hash/pull/320) @y-yagi
+- Enance Enum support [#321](https://github.com/active-hash/active_hash/pull/321) @hatsu38
+- Updated docs [#326](https://github.com/active-hash/active_hash/pull/326) @y-yagi
+
+### Removed
+
+- Drop Active Record < 6.1. Ruby < 3.0 [#324](https://github.com/active-hash/active_hash/pull/324) @flavorjones
+
 ## Version [3.3.1] - <sub><sup>2024-05-03</sup></sub>
 
 ### Fixed
@@ -329,7 +353,9 @@
   - Setting data to nil correctly causes .all to return an empty array
   - Added reload(force) method, so that you can force a reload from files in ActiveFile, useful for tests
 
-[HEAD]:  https://github.com/active-hash/active_hash/compare/v3.3.0...HEAD
+[HEAD]:  https://github.com/active-hash/active_hash/compare/v3.4.0...HEAD
+[3.3.2]: https://github.com/active-hash/active_hash/compare/v3.3.1...v3.4.0
+[3.3.1]: https://github.com/active-hash/active_hash/compare/v3.3.0...v3.3.1
 [3.3.0]: https://github.com/active-hash/active_hash/compare/v3.2.1...v3.3.0
 [3.2.1]: https://github.com/active-hash/active_hash/compare/v3.2.0...v3.2.1
 [3.2.0]: https://github.com/active-hash/active_hash/compare/v3.1.1...v3.2.0
