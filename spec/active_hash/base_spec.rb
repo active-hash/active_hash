@@ -369,6 +369,26 @@ describe ActiveHash, "Base" do
     end
   end
 
+  describe ".find_each" do
+    before do
+      Country.field :name
+      Country.field :language
+      Country.data = [
+        {:id => 1, :name => "US", :language => 'English'},
+        {:id => 2, :name => "Canada", :language => 'English'},
+        {:id => 3, :name => "Mexico", :language => 'Spanish'}
+      ]
+    end
+
+    it "iterates over data" do
+      logs = []
+      Country.where(language: 'English').find_each do |country|
+        logs << "visited #{country.name}"
+      end
+      expect(logs).to eq(["visited US", "visited Canada"])
+    end
+  end
+
   describe ".invert_where" do
     before do
       Country.field :name

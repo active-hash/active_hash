@@ -32,6 +32,23 @@ describe ActiveFile::Base do
     end
   end
 
+  describe ".find_each" do
+    before do
+      class Country
+        def self.load_file()
+          [{"name"=>"Niger", "id"=>1}, {"name"=>"Peru", "id"=>2}]
+        end
+      end
+    end
+
+    it "iterates over the data" do
+      first_letters = ""
+      expect do
+        Country.find_each { |country| first_letters += country.name[0] }
+      end.to change { first_letters }.to("NP")
+    end
+  end
+
   describe ".set_filename" do
     before do
       Country.set_filename "foo-izzle"
