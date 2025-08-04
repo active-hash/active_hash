@@ -189,7 +189,7 @@ module ActiveHash
         relation
       end
 
-      delegate :where, :find, :find_by, :find_by!, :find_by_id, :count, :pluck, :ids, :pick, :first, :last, :order, to: :all
+      delegate :where, :find_each, :find, :find_by, :find_by!, :find_by_id, :count, :pluck, :ids, :pick, :first, :last, :order, to: :all
 
       def transaction
         yield

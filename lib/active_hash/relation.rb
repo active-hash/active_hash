@@ -7,6 +7,8 @@ module ActiveHash
     delegate :empty?, :length, :first, :second, :third, :last, to: :records
     delegate :sample, to: :records
 
+    alias find_each each
+
     attr_reader :conditions, :order_values, :klass, :all_records
 
     def initialize(klass, all_records, conditions = nil, order_values = nil)

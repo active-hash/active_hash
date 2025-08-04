@@ -49,7 +49,7 @@ module ActiveFile
       end
       protected :actual_root_path
 
-      [:find, :find_by_id, :all, :where, :method_missing].each do |method|
+      [:find, :find_by_id, :all, :where, :method_missing, :find_each].each do |method|
         define_method(method) do |*args, &block|
           reload unless data_loaded
           return super(*args, &block)
