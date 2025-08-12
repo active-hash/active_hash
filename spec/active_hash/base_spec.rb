@@ -1732,6 +1732,17 @@ describe ActiveHash, "Base" do
 
   end
 
+  describe "#model_name" do
+    # This test reproduces the issue reported in https://github.com/active-hash/active_hash/pull/335,
+    # regarding whether ActiveHash (and its derived models) expose `#model_name`.
+    # Some serializers (e.g., okuramasafumi/alba) use the `#model_name` method internally,
+    # so this test ensures that a NoMethodError is not raised.
+    it "exposes model_name correctly" do
+      instance = Country.new(:id => 1)
+      expect { instance.model_name }.not_to raise_error
+    end
+  end
+
   describe ".transaction" do
 
     it "execute the block given to it" do
