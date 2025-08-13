@@ -5,7 +5,7 @@ unless SKIP_ACTIVE_RECORD
 
     def define_ephemeral_class(name, superclass, &block)
       klass = Class.new(superclass)
-      Object.const_set(name, klass)
+      Kernel::silence_warnings { Object.const_set(name, klass) }
       klass.class_eval(&block) if block_given?
       @ephemeral_classes << name
     end
