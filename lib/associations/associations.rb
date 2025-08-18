@@ -10,8 +10,12 @@ module ActiveHash
         if options[:through]
           source_association_name = options[:source]&.to_s || association_id.to_s.singularize
 
-          through_klass = reflect_on_association(options[:through])&.klass
-          klass = through_klass&.reflect_on_association(source_association_name)&.klass
+          klass = if options[:source_type]
+                    options[:source_type].safe_constantize
+                  else
+                    through_klass = reflect_on_association(options[:through])&.klass
+                    through_klass&.reflect_on_association(source_association_name)&.klass
+                  end
 
           if klass && klass < ActiveHash::Base
             define_method(association_id) do
