@@ -93,4 +93,52 @@ RSpec.describe ActiveHash::Relation do
       expect(out.string).to_not match(/ActiveHash::Relation/)
     end
   end
+
+  describe '#or' do
+    it 'returns the union of two where relations' do
+      r1 = model_class.where(name: "US")
+      r2 = model_class.where(name: "Canada")
+
+      result = r1.or(r2)
+
+      expect(result.pluck(:id)).to match_array([1, 2])
+    end
+
+    it 'deduplicates records by id' do
+      r1 = model_class.where(name: "US")
+      r2 = model_class.where(name: "US")
+
+      result = r1.or(r2)
+
+      expect(result.pluck(:id)).to eq([1])
+    end
+
+    it 'returns a relation that can be chained' do
+      r1 = model_class.where(name: "US")
+      r2 = model_class.where(name: "Canada")
+
+      result = r1.or(r2).where(id: 2)
+
+      expect(result.pluck(:id)).to eq([2])
+    end
+
+    it 'raises when OR-ing relations from different models' do
+      other_model = Class.new(ActiveHash::Base) do
+        self.data = [{ id: 1, name: "X" }]
+      end
+
+      expect {
+        model_class.where(name: "US").or(other_model.where(name: "X"))
+      }.to raise_error(ArgumentError)
+    end
+
+    it 'works with order applied after or' do
+      r1 = model_class.where(id: 1)
+      r2 = model_class.where(id: [2])
+
+      result = r1.or(r2).order(id: :desc)
+
+      expect(result.pluck(:id)).to eq([2, 1])
+    end
+  end
 end
