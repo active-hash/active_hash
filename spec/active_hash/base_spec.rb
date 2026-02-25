@@ -1246,6 +1246,16 @@ describe ActiveHash, "Base" do
         end
       end
     end
+
+    context "when ids are strings" do
+      before do
+        Country.all.each { |c| c.id = c.name }
+      end
+
+      it "return true" do
+        expect(Country.exists?("Canada")).to be_truthy
+      end
+    end
   end
 
   describe "#method_missing" do

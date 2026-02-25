@@ -113,7 +113,7 @@ module ActiveHash
         elsif args.is_a?(Hash)
           all.where(args).present?
         else
-          all.where(id: args.to_i).present?
+          all.where(id: args.to_s).present?
         end
       end
 
