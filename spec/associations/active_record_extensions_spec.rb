@@ -5,7 +5,7 @@ unless SKIP_ACTIVE_RECORD
 
     def define_ephemeral_class(name, superclass, &block)
       klass = Class.new(superclass)
-      Object.const_set(name, klass)
+      Kernel::silence_warnings { Object.const_set(name, klass) }
       klass.class_eval(&block) if block_given?
       @ephemeral_classes << name
     end
@@ -101,13 +101,14 @@ unless SKIP_ACTIVE_RECORD
       define_ephemeral_class(:Appointment, ActiveRecord::Base) do
         establish_connection :adapter => "sqlite3", :database => ":memory:"
         connection.create_table :appointments, force: true do |t|
-          t.references :physician
+          t.references :providerable, polymorphic: true
           t.references :patient
         end
 
         extend ActiveHash::Associations::ActiveRecordExtensions
 
-        belongs_to :physician
+        belongs_to :providerable, polymorphic: true
+        belongs_to :physician, -> { where(:providerable_type => "Physician")}, :foreign_key => :providerable_id
         belongs_to :patient
       end
 
@@ -119,9 +120,8 @@ unless SKIP_ACTIVE_RECORD
         extend ActiveHash::Associations::ActiveRecordExtensions
 
         has_many :appointments
-        has_many :physicians, through: :appointments
+        has_many :physicians, through: :appointments, source: :providerable, source_type: "Physician"
       end
-
     end
 
     before do
@@ -226,11 +226,11 @@ unless SKIP_ACTIVE_RECORD
           patient = Patient.create!
 
           physician1 = Physician.first
-          Appointment.create!(physician: physician1, patient: patient)
-          Appointment.create!(physician: physician1, patient: patient)
+          Appointment.create!(providerable: physician1, patient: patient)
+          Appointment.create!(providerable: physician1, patient: patient)
 
           physician2 = Physician.last
-          Appointment.create!(physician: physician2, patient: patient)
+          Appointment.create!(providerable: physician2, patient: patient)
 
           expect(patient.physicians).to contain_exactly(physician1, physician2)
         end
@@ -264,7 +264,7 @@ unless SKIP_ACTIVE_RECORD
               define_method(:physician) { raise NoMethodError, "The #physician association is removed in this spec, use #doctor" }
               define_method(:physician=) { |_| raise NoMethodError, "The #physician association is removed in this spec, use #doctor" }
             end
-            Appointment.belongs_to :doctor, class_name: 'Physician', foreign_key: :physician_id
+            Appointment.belongs_to :doctor, class_name: 'Physician', foreign_key: :providerable_id
 
             # NOTE: Removing the Patient#physicians association and adding Patient#doctors
             Patient._reflections.delete('physicians')
