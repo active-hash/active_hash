@@ -1,5 +1,17 @@
 # active_hash Changelog
 
+## Version [4.1.0] - <sub><sup>2026-04-01</sup></sub>
+
+### Added
+
+- Add `Relation#or` support [#343](https://github.com/active-hash/active_hash/pull/343) @opsys-saito
+- Alias `Relation#find_each` and `Base#find_each` to `#each` [#333](https://github.com/active-hash/active_hash/pull/333) @DmitryBarskov
+
+### Fixed
+
+- Fix `exists?` to support ids which are strings [#339](https://github.com/active-hash/active_hash/pull/339) @mtmail
+- Fix `model_name` availability when using `ActiveModel::Serialization` [#335](https://github.com/active-hash/active_hash/pull/335) @moznion
+
 ## Version [4.0.0] - <sub><sup>2025-07-30</sup></sub>
 
 ### Added
@@ -353,8 +365,8 @@
   - Setting data to nil correctly causes .all to return an empty array
   - Added reload(force) method, so that you can force a reload from files in ActiveFile, useful for tests
 
-[HEAD]:  https://github.com/active-hash/active_hash/compare/v3.4.0...HEAD
-[3.3.2]: https://github.com/active-hash/active_hash/compare/v3.3.1...v3.4.0
+[HEAD]:  https://github.com/active-hash/active_hash/compare/v4.1.0...HEAD
+[4.1.0]: https://github.com/active-hash/active_hash/compare/v4.0.0...v4.1.0
 [3.3.1]: https://github.com/active-hash/active_hash/compare/v3.3.0...v3.3.1
 [3.3.0]: https://github.com/active-hash/active_hash/compare/v3.2.1...v3.3.0
 [3.2.1]: https://github.com/active-hash/active_hash/compare/v3.2.0...v3.2.1
