@@ -7,6 +7,11 @@ class ActiveHash::Relation::Conditions
     @conditions = conditions
   end
 
+  def initialize_copy(orig)
+    super
+    @conditions = @conditions.dup
+  end
+
   def matches?(record)
     conditions.all? do |condition|
       condition.matches?(record)
