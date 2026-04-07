@@ -124,6 +124,47 @@ unless SKIP_ACTIVE_RECORD
 
     end
 
+    # Physician(AH) <-- Appointment(AR) --> Patient(AR)
+    # polymorphic: providerable on Appointment, source_type targets ActiveHash model
+    def define_polymorphic_doctor_classes
+      define_ephemeral_class(:Physician, ActiveHash::Base) do
+        include ActiveHash::Associations
+
+        self.data = [
+          {:id => 1, :name => "ikeda"},
+          {:id => 2, :name => "sato"}
+        ]
+      end
+
+      define_ephemeral_class(:Appointment, ActiveRecord::Base) do
+        establish_connection :adapter => "sqlite3", :database => ":memory:"
+        connection.create_table :appointments, force: true do |t|
+          t.references :providerable, polymorphic: true
+          t.references :patient
+        end
+
+        extend ActiveHash::Associations::ActiveRecordExtensions
+
+        # AR belongs_to (polymorphic)
+        belongs_to :providerable, polymorphic: true
+        # AR belongs_to
+        belongs_to :patient
+      end
+
+      define_ephemeral_class(:Patient, ActiveRecord::Base) do
+        establish_connection :adapter => "sqlite3", :database => ":memory:"
+        connection.create_table :patients, force: true do |t|
+        end
+
+        extend ActiveHash::Associations::ActiveRecordExtensions
+
+        # AR has_many
+        has_many :appointments
+        # AR has_many :through (source_type points to ActiveHash model)
+        has_many :physicians, through: :appointments, source: :providerable, source_type: "Physician"
+      end
+    end
+
     before do
       @ephemeral_classes = []
     end
@@ -283,6 +324,22 @@ unless SKIP_ACTIVE_RECORD
 
             expect(patient.doctors).to contain_exactly(physician)
           end
+        end
+      end
+
+      describe ":through with a polymorphic source and source_type" do
+        before { define_polymorphic_doctor_classes }
+
+        it "does not raise when defining the association" do
+          expect(Patient.instance_method(:physicians)).to be_a(UnboundMethod)
+        end
+
+        it "returns the correct ActiveHash records" do
+          physician = Physician.find(1)
+          patient = Patient.create!
+          Appointment.create!(providerable_type: "Physician", providerable_id: physician.id, patient_id: patient.id)
+
+          expect(patient.physicians).to contain_exactly(physician)
         end
       end
 
