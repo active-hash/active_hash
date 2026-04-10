@@ -38,7 +38,7 @@ Requirements:
 
 - v1.x: Ruby >= 1.9.3, Rails >= 2.2.2
 - v2.x, v3.x: Ruby >= 2.4, Rails >= 5
-- upcoming: Ruby >= 3.0, Rails >= 6.1
+- v4.x: Ruby >= 3.0, Rails >= 6.1
 
 ```ruby
 gem 'active_hash', '~> 1.5.3'
