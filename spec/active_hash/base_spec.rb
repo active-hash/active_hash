@@ -497,6 +497,12 @@ describe ActiveHash, "Base" do
     it "filters records for multiple conditions" do
       expect(Country.where.not(:id => 1, :name => 'Mexico')).to match_array([Country.find(2)])
     end
+
+    it "does not mutate the parent relation" do
+      english = Country.where(language: 'English')
+      english.where.not(name: 'US')
+      expect(english.map(&:name)).to match_array(%w[US Canada])
+    end
   end
 
   describe ".find_by" do
@@ -573,6 +579,14 @@ describe ActiveHash, "Base" do
 
     it "doesn't finds nil records when searching for ''" do
       expect(Country.find_by(:language => '')).to be_nil
+    end
+
+    it "does not mutate the relation when called multiple times" do
+      countries = Country.all
+      expect(countries.find_by(id: 1).name).to eq("US")
+      expect(countries.find_by(id: 2).name).to eq("Canada")
+      expect(countries.find_by(id: 1).name).to eq("US")
+      expect(countries.length).to eq(4)
     end
   end
 
