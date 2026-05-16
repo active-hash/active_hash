@@ -19,7 +19,7 @@ module ActiveHash
     end
 
     def where(conditions_hash = :chain)
-      return WhereChain.new(self) if conditions_hash == :chain
+      return WhereChain.new(spawn) if conditions_hash == :chain
 
       spawn.where!(conditions_hash)
     end
@@ -80,7 +80,7 @@ module ActiveHash
     end
 
     def spawn
-      self.class.new(klass, all_records, conditions, order_values)
+      self.class.new(klass, all_records, conditions.dup, order_values)
     end
 
     def order!(*options)
