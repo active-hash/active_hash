@@ -12,7 +12,7 @@ platforms :jruby do
 end
 
 platforms :ruby do
-  gem 'sqlite3', '~> 1.4', '< 2.0' # can allow 2.0 once Rails's sqlite adapter allows it
+  gem 'sqlite3', '~> 1.4'
 end
 
 gem 'activerecord', '>= 6.1.0'
