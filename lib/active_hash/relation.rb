@@ -66,6 +66,7 @@ module ActiveHash
     end
 
     def where!(conditions_hash, inverted = false)
+      validate_where_keys!(conditions_hash)
       self.conditions << Condition.new(conditions_hash)
       self
     end
@@ -195,6 +196,23 @@ module ActiveHash
     private
 
     attr_writer :conditions, :order_values, :klass, :all_records
+
+    def validate_where_keys!(conditions_hash)
+      return unless conditions_hash.is_a?(Hash)
+      return unless klass.respond_to?(:strict_where) && klass.strict_where
+
+      valid_fields = klass.field_names + [klass.primary_key.to_sym]
+      invalid_keys = conditions_hash.keys.map(&:to_sym) - valid_fields
+
+      if invalid_keys.any? && klass.respond_to?(:data) && klass.data.is_a?(Array)
+        data_keys = klass.data.flat_map(&:keys).map(&:to_sym).uniq
+        invalid_keys -= data_keys
+      end
+
+      if invalid_keys.any?
+        raise ArgumentError, "Unknown field(s): #{invalid_keys.map(&:to_s).join(', ')}. Valid fields are: #{valid_fields.map(&:to_s).join(', ')}"
+      end
+    end
 
     def apply_conditions(records, conditions)
       return records if conditions.blank?

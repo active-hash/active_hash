@@ -49,11 +49,16 @@ module ActiveHash
         super
 
         define_method(name) do
-          klass = klass_name.safe_constantize
-          if klass && klass < ActiveHash::Base
-            klass.send("find_by_#{klass.primary_key}", send(foreign_key))
+          fk_value = send(foreign_key)
+          if fk_value.nil?
+            nil
           else
-            super()
+            klass = klass_name.safe_constantize
+            if klass && klass < ActiveHash::Base
+              klass.send("find_by_#{klass.primary_key}", fk_value)
+            else
+              super()
+            end
           end
         end
 
@@ -78,7 +83,8 @@ module ActiveHash
         options[:shortcuts] = [options[:shortcuts]] unless options[:shortcuts].kind_of?(Array)
 
         define_method(association_id) do
-          options[:class_name].safe_constantize.send("find_by_#{options[:primary_key]}", send(options[:foreign_key]))
+          fk_value = send(options[:foreign_key])
+          fk_value.nil? ? nil : options[:class_name].safe_constantize.send("find_by_#{options[:primary_key]}", fk_value)
         end
 
         define_method("#{association_id}=") do |new_value|
@@ -179,7 +185,8 @@ module ActiveHash
           if scope.respond_to?(:scoped) && options[:conditions]
             scope = scope.scoped(:conditions => options[:conditions])
           end
-          scope.send("find_by_#{options[:foreign_key]}", send(options[:primary_key]))
+          pk_value = send(options[:primary_key])
+          pk_value.nil? ? nil : scope.send("find_by_#{options[:foreign_key]}", pk_value)
         end
       end
 
@@ -193,7 +200,8 @@ module ActiveHash
         field options[:foreign_key].to_sym
 
         define_method(association_id) do
-          options[:class_name].safe_constantize.send("find_by_#{options[:primary_key]}", send(options[:foreign_key]))
+          fk_value = send(options[:foreign_key])
+          fk_value.nil? ? nil : options[:class_name].safe_constantize.send("find_by_#{options[:primary_key]}", fk_value)
         end
 
         define_method("#{association_id}=") do |new_value|

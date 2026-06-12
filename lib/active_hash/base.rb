@@ -21,7 +21,7 @@ module ActiveHash
   end
 
   class Base
-    class_attribute :_data, :dirty, :default_attributes, :scopes
+    class_attribute :_data, :dirty, :default_attributes, :scopes, :strict_where
 
     if Object.const_defined?(:ActiveModel)
       extend ActiveModel::Naming
@@ -233,6 +233,13 @@ module ActiveHash
         field_name = field_name.to_sym
         if [:attributes].include?(field_name)
           raise ReservedFieldError.new("#{field_name} is a reserved field in ActiveHash.  Please use another name.")
+        end
+
+        if method_defined?(field_name) || private_method_defined?(field_name)
+          warn(
+            "ActiveHash: Field :#{field_name} on #{name} conflicts with an existing method. " \
+            "The field will not override the existing method, and accessing it may return unexpected results."
+          )
         end
       end
 
