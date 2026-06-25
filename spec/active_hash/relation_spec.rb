@@ -39,6 +39,94 @@ RSpec.describe ActiveHash::Relation do
     end
   end
 
+  describe '#exists?' do
+    context "when data are exists and no arguments is passed" do
+      it "return true" do
+        expect(subject.exists?).to be_truthy
+      end
+    end
+
+    context "when no data are exists and no arguments is passed" do
+      it "return false" do
+        expect(model_class.where(name: "Mexico").exists?).to be_falsy
+      end
+    end
+
+    context "when false is passed" do
+      it "return false" do
+        expect(subject.exists?(false)).to be_falsy
+      end
+    end
+
+    context "when nil is passed" do
+      it "return nil" do
+        expect(subject.exists?(nil)).to be_falsy
+      end
+    end
+
+    describe "with matches" do
+      context 'for a record argument' do
+        it "return true" do
+          expect(subject.exists?(model_class.new({ id: 1, name: "US" }))).to be_truthy
+        end
+      end
+
+      context "for an integer argument" do
+        it "return true" do
+          expect(subject.exists?(1)).to be_truthy
+        end
+      end
+
+      context "for a string argument" do
+        it "return true" do
+          expect(subject.exists?("1")).to be_truthy
+        end
+      end
+
+      context "for a hash argument" do
+        it "return true" do
+          expect(subject.exists?(name: "US")).to be_truthy
+        end
+      end
+    end
+
+    describe "without matches" do
+      context 'for a record argument' do
+        it "return false" do
+          expect(subject.exists?(model_class.new({ id: 3, name: "Mexico" }))).to be_falsy
+        end
+      end
+
+      context "for an integer argument" do
+        it "return false" do
+          expect(subject.exists?(3)).to be_falsy
+        end
+      end
+
+      context "for a string argument" do
+        it "return false" do
+          expect(subject.exists?("3")).to be_falsy
+        end
+      end
+
+      context "for a hash argument" do
+        it "return false" do
+          expect(subject.exists?(name: "Mexico")).to be_falsy
+        end
+      end
+    end
+
+    context "when ids are strings" do
+      before do
+        model_class.all.each { |record| record.id = record.name }
+      end
+
+      it "return true" do
+        expect(model_class.all.exists?("Canada")).to be_truthy
+      end
+    end
+  end
+
   describe '#count' do
     it 'supports a block arg' do
       expect(subject.count { |s| s.name == "US" }).to eq(1)

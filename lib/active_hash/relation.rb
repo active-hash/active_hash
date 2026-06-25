@@ -152,6 +152,20 @@ module ActiveHash
       record if conditions.matches?(record)
     end
 
+    def exists?(args = :none)
+      if args.respond_to?(:id)
+        find_by_id(args.id).present?
+      elsif !args
+        false
+      elsif args == :none
+        records.present?
+      elsif args.is_a?(Hash)
+        where(args).present?
+      else
+        where(id: args.to_s).present?
+      end
+    end
+
     def count
       return super if block_given?
       length
