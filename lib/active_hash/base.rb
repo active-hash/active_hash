@@ -103,20 +103,6 @@ module ActiveHash
         end
       end
 
-      def exists?(args = :none)
-        if args.respond_to?(:id)
-          record_index[args.id.to_s].present?
-        elsif !args
-          false
-        elsif args == :none
-          all.present?
-        elsif args.is_a?(Hash)
-          all.where(args).present?
-        else
-          all.where(id: args.to_s).present?
-        end
-      end
-
       def insert(record)
         @records ||= []
         record[:id] ||= next_id
@@ -190,7 +176,7 @@ module ActiveHash
         relation
       end
 
-      delegate :where, :find_each, :find, :find_by, :find_by!, :find_by_id, :count, :pluck, :ids, :pick, :first, :last, :order, to: :all
+      delegate :exists?, :where, :find_each, :find, :find_by, :find_by!, :find_by_id, :count, :pluck, :ids, :pick, :first, :last, :order, to: :all
 
       def transaction
         yield
